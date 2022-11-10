@@ -1,0 +1,8 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<form action="" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% bootstrap_button button_type='submit' content='문의 작성' button_class='btn btn-primary' %}
+</form>
