@@ -1,0 +1,14 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <h1>수정하기</h1>
+  <form action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form meeting_form %}
+    <a href="{% url 'meetings:update' meeting.pk %}" class="btn btn-outline-primary" method="POST">수정</a>
+  </form>
+</div>
+{% endblock content %}

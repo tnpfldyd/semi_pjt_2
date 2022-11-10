@@ -19,6 +19,7 @@ import os
 
 load_dotenv()  # .env 파일에서 환경 변수를 불러옵니다.
 
+
 # 기존 SECRET_KEY 대신 사용합니다.
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -35,8 +36,24 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
 INSTALLED_APPS = [
     "cards",
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.kakao",
+    "vocies",
+    "accounts",
+    "meetings",
+    "widget_tweaks",
+    "storages",
+    "imagekit",
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -45,7 +62,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+LOGIN_REDIRECT_URL = "accounts:index"  # 로그인 후 리디렉션할 페이지
+ACCOUNT_LOGOUT_REDIRECT_URL = "accounts:index"  # 로그아웃 후 리디렉션 할 페이지
+ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 버튼 클릭 시 자동 로그아웃
 
+SITE_ID = 1
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -129,6 +150,7 @@ STATIC_URL = "/static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 if DEBUG:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
@@ -149,7 +171,9 @@ else:
         AWS_REGION,
     )
     STATIC_ROOT = BASE_DIR / "static"
-# AUTH_USER_MODEL = "accounts.User"
+
+AUTH_USER_MODEL = "accounts.User"
+
 from django.contrib import messages
 
 MESSAGE_TAGS = {
