@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+<div class='d-flex justify-content-center'>
+    <div style='width:30rem;'>
+        <h1 class='text-center my-4'>회원가입</h1>
+        <form action="{% url 'accounts:signup' %}" method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            <select class="form-select form-select-lg mb-3" name='gender'>
+                <option value="1">남자</option>
+                <option value="0">여자</option>
+            </select>
+            <input type="date" name='age'>
+            {% bootstrap_form form %}
+            <div class='d-grid'>
+                <input type="submit" value="회원가입" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock  %}
