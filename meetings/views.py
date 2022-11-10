@@ -70,8 +70,14 @@ def detail(request, meeting_pk):
         "comment": comment,
         "commentform": form,
     }
-
-    return render(request, "meetings/detail.html", context)
+    
+    if request.POST.get('password') == meeting.password:
+      print("로직")
+      return render(request, "meetings/detail.html", context)
+    
+    else:
+    
+      return redirect("meetings:index")
 
 
 def update(request):

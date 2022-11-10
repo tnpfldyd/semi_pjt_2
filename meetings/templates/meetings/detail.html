@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<h1>디테일페이지</h1>
+<div class="container">
+  
+  {% for i in meetings %}
+    {{ i.title }}
+    {{ i.content }}
+  {% endfor %}
+</div>
+
+{% endblock content %}
