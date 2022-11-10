@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.auth0",
     "allauth.socialaccount.providers.kakao",
     "vocies",
+    "accounts",
+    "meetings",
     "widget_tweaks",
     "storages",
     "imagekit",
@@ -168,7 +170,9 @@ else:
         AWS_REGION,
     )
     STATIC_ROOT = BASE_DIR / "static"
+    
 # AUTH_USER_MODEL = "accounts.User"
+
 from django.contrib import messages
 
 MESSAGE_TAGS = {
