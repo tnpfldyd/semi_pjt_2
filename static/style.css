@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "JUA";
+  src: url("BMJUA_ttf-_1_.woff") format("woff");
+  font-weight: normal;
+}
+
+* {
+  font-family: 'JUA';
+}
