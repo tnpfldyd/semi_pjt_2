@@ -11,16 +11,36 @@ class MeetingForm(forms.ModelForm):
             "password",
         ]
 
+        labels = {
+            "title": "제목",
+            "content": "내용",
+            "image": "이미지",
+            "password": "비밀번호",
+        }
+
+        help_texts = {
+            "title": '이름을 입력해 주세요.',
+            "content": "내용을 입력해 주세요.",
+            "image": "이미지를 추가해 주세요.",
+            "password": "비밀번호를 추가해 주세요.",
+        }
+
+class UpdateMeetingForm(forms.ModelForm):
+    class Meta:
+        model = Meeting
+        exclude = ['password']
+
+        labels = {
+            "title": "제목",
+            "content": "내용",
+            "image": "이미지",
+        }
+
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = [
             "content",
         ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["content"].widget.attrs = {
-            "placeholder": "댓글을 작성해 주세요",
-        }
-        self.fields["content"].help_text = None

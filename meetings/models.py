@@ -16,7 +16,7 @@ class Meeting(models.Model):
     )
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     is_closed = models.BooleanField(default=True)
-    password = models.CharField(max_length=4, blank=True, null=True)
+    password = models.CharField(max_length=4, default=None, blank=True, null=True)
 
 
 class Comment(models.Model):
