@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <div class="container">
+    <h1>글 작성</h1>
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <!-- is_closed -->
+      <!-- password -->
+      {% bootstrap_form meeting_form %}
+      <input class="btn btn-outline-primary" type="submit" value="작성">
+    </form>
+  </div>
+{% endblock content %}
