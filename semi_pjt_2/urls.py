@@ -22,7 +22,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("cards/", include("cards.urls")),
     path("vocies/", include("vocies.urls")),
-    path("account/", include("allauth.urls")),
     path("accounts/", include("accounts.urls")),
     path("meetings/", include("meetings.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

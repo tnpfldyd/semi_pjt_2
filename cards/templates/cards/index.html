@@ -12,9 +12,11 @@
 
 
 {% for card in cards %}
-  {{ card.pk }}
-  <a href="{% url 'cards:detail' card.pk %}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
-  <br>
+  {% if card.is_private == 0%}
+    {{ card.pk }}
+    <a href="{% url 'cards:detail' card.pk %}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
+    <br>
+  {% endif %}
 {% endfor%}
 
 
