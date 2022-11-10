@@ -1,13 +1,38 @@
 from django.shortcuts import render, redirect
 from .models import Meeting
 from .forms import MeetingForm, CommentForm
+from django.core.paginator import Paginator
+from django.contrib import messages
 
 # Create your views here.
 
 def index(request):
     meetings = Meeting.objects.order_by("-pk")
+    
+    # 페이지네이션
+    Paginator = Paginator(meetings, 10)
+    page_number = request.GET.get("page")
+    page_obj = Paginator.get_page(page_number)
+    # 
+
+    # 지역별
+    meetings_local = ""
+
+    if request.POST.get('노원구'):
+      meetings_local = Meeting.objects.filter(location__contains="노원구")
+    elif request.POST.get('송파구'):
+      meetings_local = Meeting.objects.filter(location__contains="송파구")
+    elif request.POST.get('reset'):
+      meetings_local = Meeting.objects.order_by('-pk')
+
+    # 모임이 몇개 개설됐는지
+    meetings_count = Meeting.objects.all().count()
+
     context = {
-        "meetings":meetings,
+        "meetings": meetings,
+        "page_obj": page_obj,
+        "meetings_local": meetings_local,
+        "meetings_count": meetings_count,
     }
     return render(request, "meetings/index.html", context)
 
@@ -46,18 +71,20 @@ def update(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     if request.user == meeting.user:
         if request.method == "POST":
+            password = request.POST.get('password', '') # 비밀번호 값이 있으면 해당 값을 가져오고, 없으면 공백으로 가져옴
             meeting_form = MeetingForm(request.POST, request.FILES, instance=meeting)
-            if meeting_form.is_valid():
+            if meeting_form.is_valid() and password == meeting.password: # 유효성 체크 및 비밀번호 검증
                 meeting_form.save()
                 return redirect("meetings:detail", meeting_pk)
         else:
             meeting_form = MeetingForm(instance=meeting)
+            meeting_form.password = ""
 
         context = {
             "meeting_form": meeting_form,
         }
-
         return render(request, "meetings/update.html", context)
+
     else:
         return redirect("meetings:detail", meeting.pk)
 
@@ -66,5 +93,8 @@ def delete(request, meeting_pk):
     if request.user == meeting.user:
         meeting.delete()
         return redirect("meetings:index")
+    else:
+        messages.warning(request, "작성자만 삭제할 수 있습니다.")
+        return redirect('meetings:index')
 
 
