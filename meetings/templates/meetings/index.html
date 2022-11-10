@@ -1,40 +1,53 @@
 
+{% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
 
 {% block content %}
 
-{% comment %} 지역별 목록 {% endcomment %}
-<div class="d-flex">
-  <form action="{% url 'meetings:index'%}" method="POST">
-    <button name="노원구" type="submit" value="노원구" >
-      노원구
-    </button>
-  </form>
-  
-  <div></div>
-  <div></div>
-  <div></div>
-</div>
 
 {% comment %} 모임생성 버튼 및 숫자 {% endcomment %}
-<div>
-  지금까지 총 {{ meetings_count }}개의 모임이 개설됐어요!
+<div class="container">
+  <div>
+    지금까지 총 {{ meetings_count }}개의 모임이 개설됐어요!
+  </div>
 </div>
-<div>
-  <a href="{% url 'meetings:create' %}">나도 모임 생성하기</a>
-</div>
-
 {% comment %} 모임 목록 {% endcomment %}
-<div>
-  {% for meeting in meetings %}
-  {% if meeting.image %}
-    <img src="{{ meeting.image.url }}" alt="">
-  {% elif %}
-    <img src="https://dummyimage.com/1200x960/000000/c4c4c4" class="my4-2" style="width: 250; height: 250px;">
-  {% endif %}
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1>모임 목록</h1>
+    <div>
+      <a href="{% url 'meetings:create' %}">나도 모임 생성하기</a>
+    </div>
+  </div>
+  {% comment %} 지역별 목록 {% endcomment %}
+  <div class="container p-0">
+    <div class="d-flex">
+      {% for local in meetings_local_list %}
+      <form action="{% url 'meetings:index'%}" method="POST" class="m-1">
+        {% csrf_token %}
+        <button name="{{ local }}" type="submit" value="{{ local }}">
+          {{ local }}
+        </button>
+      </form>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="mt-3">
+    {{ meetings_local_name }}에 위치한 모임들
+    <hr/>
+  </div>
+  {% for meeting in meetings_local %}
+    {% comment %} {% if meeting.image %}
+      <img src="{{ meeting.image.url }}" alt=""> {% endcomment %}
+    {% comment %} {% elif %}
+      <img src="https://dummyimage.com/1200x960/000000/c4c4c4" class="my4-2" style="width: 250; height: 250px;">
+    {% endif %} {% endcomment %}
   <div> {{ meeting.title }}</div>
   <div> {{ meeting.content }}</div>
+  {% endfor %}
+  <hr/>
 </div>
 
 {% comment %} 페이지네이션  {% endcomment %}
@@ -56,6 +69,6 @@
       {% endif %}
     </span>
   </div>
-</div>
+</div> 
 
 {% endblock content %}
