@@ -171,7 +171,7 @@ else:
     )
     STATIC_ROOT = BASE_DIR / "static"
     
-# AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "accounts.User"
 
 from django.contrib import messages
 
