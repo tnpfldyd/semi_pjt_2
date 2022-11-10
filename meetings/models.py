@@ -16,8 +16,17 @@ class Meeting(models.Model):
     )
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     is_closed = models.BooleanField(default=True)
-    password = models.CharField(max_length=4, default=None, blank=True, null=True)
-
+    password = models.CharField(max_length=4, blank=True, null=True)
+    location_choices = [
+      ('선택', None),
+      ('노원구', '노원구'),
+      ('송파구', '송파구'),
+    ]
+    location = models.CharField(
+      max_length=20,
+      choices = location_choices, 
+      default='선택',
+    )
 
 class Comment(models.Model):
     content = models.TextField()

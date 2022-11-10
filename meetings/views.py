@@ -1,13 +1,38 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Meeting
 from .forms import MeetingForm, CommentForm, UpdateMeetingForm
+from django.core.paginator import Paginator
+from django.contrib import messages
 
 # Create your views here.
 
 def index(request):
     meetings = Meeting.objects.order_by("-pk")
+    
+    # 페이지네이션
+    Paginator = Paginator(meetings, 10)
+    page_number = request.GET.get("page")
+    page_obj = Paginator.get_page(page_number)
+    # 
+
+    # 지역별
+    meetings_local = ""
+
+    if request.POST.get('노원구'):
+      meetings_local = Meeting.objects.filter(location__contains="노원구")
+    elif request.POST.get('송파구'):
+      meetings_local = Meeting.objects.filter(location__contains="송파구")
+    elif request.POST.get('reset'):
+      meetings_local = Meeting.objects.order_by('-pk')
+
+    # 모임이 몇개 개설됐는지
+    meetings_count = Meeting.objects.all().count()
+
     context = {
-        "meetings":meetings,
+        "meetings": meetings,
+        "page_obj": page_obj,
+        "meetings_local": meetings_local,
+        "meetings_count": meetings_count,
     }
     return render(request, "meetings/index.html", context)
 
@@ -42,6 +67,7 @@ def detail(request, meeting_pk):
 
     return render(request, "meetings/detail.html", context)
 
+
 def update(request):
     if request.method == 'POST' and 'id' in request.POST:
         meeting = get_object_or_404(Meeting, pk=request.POST.get('id'))
@@ -65,7 +91,6 @@ def delete(request, meeting_pk):
         if meeting.password == request.POST.get('password'):
             meeting.delete()
             return redirect('meetings:index')
-
 
 def comment_create(request, meeting_pk):
     meeting_data = Meeting.objects.get(pk=meeting_pk)
@@ -91,6 +116,5 @@ def comment_delete(request, meeting_pk, comment_pk):
         comment_data.delete()
     
     return redirect("meetings:detail", meeting_data.pk)
-
 
 

@@ -14,5 +14,3 @@ urlpatterns = [
     path("<int:meeting_pk>/comment/create/", views.comment_create, name="comment_create"),
     path("<int:meeting_pk>/comment/<int:comment_pk>/delete/", views.comment_delete, name="comment_delete"),
 ]
-
-
