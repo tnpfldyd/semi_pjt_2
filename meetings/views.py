@@ -122,5 +122,3 @@ def comment_delete(request, meeting_pk, comment_pk):
         comment_data.delete()
     
     return redirect("meetings:detail", meeting_data.pk)
-
-
