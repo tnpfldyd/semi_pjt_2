@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "storages",
     "imagekit",
-    'extensions',
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
