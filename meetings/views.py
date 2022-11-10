@@ -10,18 +10,22 @@ def index(request):
     meetings = Meeting.objects.order_by("-pk")
     
     # 페이지네이션
-    Paginator = Paginator(meetings, 10)
+    paginator = Paginator(meetings, 10)
     page_number = request.GET.get("page")
-    page_obj = Paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
     # 
 
     # 지역별
     meetings_local = ""
+    meetings_local_name = ""
+    meetings_local_list = ["강남구","서초구","강동구","성동구", "노원구", "송파구", "용산구",]
 
     if request.POST.get('노원구'):
       meetings_local = Meeting.objects.filter(location__contains="노원구")
+      meetings_local_name = "노원구"
     elif request.POST.get('송파구'):
       meetings_local = Meeting.objects.filter(location__contains="송파구")
+      meetings_local_name = "송파구"
     elif request.POST.get('reset'):
       meetings_local = Meeting.objects.order_by('-pk')
 
@@ -32,7 +36,9 @@ def index(request):
         "meetings": meetings,
         "page_obj": page_obj,
         "meetings_local": meetings_local,
+        "meetings_local_name": meetings_local_name,
         "meetings_count": meetings_count,
+        "meetings_local_list": meetings_local_list,
     }
     return render(request, "meetings/index.html", context)
 
