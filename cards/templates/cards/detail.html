@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-{% block body %} 
+{% load static %}
+{% block content %} 
 
 <h1> {{ cards.title }} </h1>
 <h1> {{ cards.content }} </h1>
-<h1> {{ cards.category }} </h1>
+
+<div class>
+  <img src="{%static 'images/벽난로.jpg' %}">
+</div>
 
 <a href="{% url 'cards:comment_create' cards.pk %}" class="text-decoration-none text-dark"> 댓글 남기기 </a>
 
