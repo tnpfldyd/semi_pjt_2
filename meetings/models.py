@@ -28,7 +28,6 @@ class Meeting(models.Model):
       default='선택',
     )
 
-
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now=False, auto_now_add=False)

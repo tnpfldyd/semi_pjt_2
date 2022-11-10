@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Meeting
-from .forms import MeetingForm, CommentForm
+from .forms import MeetingForm, CommentForm, UpdateMeetingForm
 from django.core.paginator import Paginator
 from django.contrib import messages
 
@@ -67,34 +67,54 @@ def detail(request, meeting_pk):
 
     return render(request, "meetings/detail.html", context)
 
-def update(request, meeting_pk):
-    meeting = Meeting.objects.get(pk=meeting_pk)
-    if request.user == meeting.user:
-        if request.method == "POST":
-            password = request.POST.get('password', '') # 비밀번호 값이 있으면 해당 값을 가져오고, 없으면 공백으로 가져옴
-            meeting_form = MeetingForm(request.POST, request.FILES, instance=meeting)
-            if meeting_form.is_valid() and password == meeting.password: # 유효성 체크 및 비밀번호 검증
-                meeting_form.save()
-                return redirect("meetings:detail", meeting_pk)
-        else:
-            meeting_form = MeetingForm(instance=meeting)
-            meeting_form.password = ""
 
+def update(request):
+    if request.method == 'POST' and 'id' in request.POST:
+        meeting = get_object_or_404(Meeting, pk=request.POST.get('id'))
+        password = request.POST.get('password', '') # 비밀번호 값이 있으면 해당 값을 가져오고 없으면 공백으로 가져옴
+        form = UpdateMeetingForm(request.POST, instance=meeting)
+        if form.is_valid() and password == meeting.password: # 유효성 체크 및 비밀번호 검증
+            meeting = form.save()
+    elif request.method == 'GET':
+        meeting = get_object_or_404(Meeting, pk=request.GET.get('id'))
+        form = MeetingForm(instance=meeting)
+        form.password = ""
         context = {
-            "meeting_form": meeting_form,
+            "form":form,
         }
-        return render(request, "meetings/update.html", context)
-
-    else:
-        return redirect("meetings:detail", meeting.pk)
+        return render(request, 'meetings/update.html', context)
+    return redirect('meetings:detail')
 
 def delete(request, meeting_pk):
-    meeting = Meeting.objects.get(pk=meeting_pk)
-    if request.user == meeting.user:
-        meeting.delete()
-        return redirect("meetings:index")
+    meeting = get_object_or_404(Meeting, pk=meeting_pk)
+    if request.method == 'POST' and 'password' in request.POST:
+        if meeting.password == request.POST.get('password'):
+            meeting.delete()
+            return redirect('meetings:index')
+
+def comment_create(request, meeting_pk):
+    meeting_data = Meeting.objects.get(pk=meeting_pk)
+
+    if request.user.is_authenticated:
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.meeting = meeting_data
+            comment.user = request.user
+            comment.save()
+
+        return redirect('meetings:detail', meeting_data.pk)
     else:
-        messages.warning(request, "작성자만 삭제할 수 있습니다.")
-        return redirect('meetings:index')
+        return redirect("accounts:login")
+
+def comment_delete(request, meeting_pk, comment_pk):
+    meeting_data = Meeting.objects.get(pk=meeting_pk)
+    comment_data = meeting_data.comment_set.get(pk=comment_pk)
+
+    if request.user == comment_data.user:
+        comment_data.delete()
+    
+    return redirect("meetings:detail", meeting_data.pk)
 
 
