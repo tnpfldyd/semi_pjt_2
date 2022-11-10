@@ -1,15 +1,16 @@
-<form action="" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <label for="your_name">제목:
-  </label>
-  <input id="title" type="text" name="title" value="{{ meeting.title }}">
-  <input id="content" type="text" name="content" value="{{ meeting.content }}">
-  <input type="images" name="images" value="{{ meeting.image }}">
-  <!-- is_closed -->
-  {% if request.user == user %}
-    <input type="text" name="is_closed" value="{{ meeting.is_closed }}">
-  {% else %}
-  {% endif %}
-  <!-- password -->
-  <input type="submit" value="OK">
-</form>
+{% extends 'base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <div class="container">
+    <h1>글 작성</h1>
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <!-- is_closed -->
+      <!-- password -->
+      {% bootstrap_form meeting_form %}
+      <input class="btn btn-outline-primary" type="submit" value="작성">
+    </form>
+  </div>
+{% endblock content %}
