@@ -42,6 +42,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 INSTALLED_APPS = [
+    "cards",
     "django.contrib.sites",
     "allauth",
     "allauth.account",

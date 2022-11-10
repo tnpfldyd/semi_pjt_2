@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+
+{% block body %}
+
+<form class="p-4 my-2" action="" method="POST">
+  {% csrf_token %}
+  {% bootstrap_form comment_form %}
+  <input class="btn" type="submit" value="제출하기">
+</form>
+
+{% endblock %}
