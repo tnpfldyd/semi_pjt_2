@@ -27,12 +27,16 @@ def create(request):
 
 def detail(request, pk):
     vocie = get_object_or_404(Vocie, pk=pk)
-    context = {
-        "vocie": vocie,
-        "form": CommentForm(),
-        "comments": vocie.vocie_comment.all(),
-    }
-    return render(request, "vocies/detail.html", context)
+    if request.user == vocie.user or request.user.is_superuser:
+        context = {
+            "vocie": vocie,
+            "form": CommentForm(),
+            "comments": vocie.vocie_comment.all(),
+        }
+        return render(request, "vocies/detail.html", context)
+    else:
+        messages.warning(request, "작성자만 접근할 수 있습니다.")
+        return redirect("vocies:index")
 
 
 def comment(request, pk):
