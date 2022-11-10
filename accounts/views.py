@@ -63,6 +63,13 @@ def kakao_request(request):
     return redirect(f"{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}")
 
 
+def kakao_request(request):
+    kakao_api = "https://kauth.kakao.com/oauth/authorize?response_type=code"
+    redirect_uri = "http://localhost:8000/accounts/kakao/login/callback/"
+    client_id = os.getenv("KAKAO_ID")
+    return redirect(f"{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}")
+
+
 def kakao_callback(request):
     data = {
         "grant_type": "authorization_code",
@@ -78,7 +85,7 @@ def kakao_callback(request):
     headers = {"Authorization": f"bearer ${access_token}"}
     kakao_user_api = "https://kapi.kakao.com/v2/user/me"
     kakao_user_information = requests.get(kakao_user_api, headers=headers).json()
-    print(kakao_user_information)
+
     kakao_id = kakao_user_information["id"]
     kakao_nickname = kakao_user_information["properties"]["nickname"]
     kakao_profile_image = kakao_user_information["properties"]["profile_image"]
