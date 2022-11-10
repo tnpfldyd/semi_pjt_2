@@ -36,6 +36,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "cards",
+    "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -147,7 +149,7 @@ else:
         AWS_REGION,
     )
     STATIC_ROOT = BASE_DIR / "static"
-AUTH_USER_MODEL = "accounts.User"
+# AUTH_USER_MODEL = "accounts.User"
 from django.contrib import messages
 
 MESSAGE_TAGS = {
