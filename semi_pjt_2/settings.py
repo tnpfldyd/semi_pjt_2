@@ -19,6 +19,7 @@ import os
 
 load_dotenv()  # .env 파일에서 환경 변수를 불러옵니다.
 
+
 # 기존 SECRET_KEY 대신 사용합니다.
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.auth0",
     "allauth.socialaccount.providers.kakao",
     "vocies",
     "accounts",
@@ -61,8 +61,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-LOGIN_REDIRECT_URL = "home"  # 로그인 후 리디렉션할 페이지
-ACCOUNT_LOGOUT_REDIRECT_URL = "home"  # 로그아웃 후 리디렉션 할 페이지
+LOGIN_REDIRECT_URL = "accounts:index"  # 로그인 후 리디렉션할 페이지
+ACCOUNT_LOGOUT_REDIRECT_URL = "accounts:index"  # 로그아웃 후 리디렉션 할 페이지
 ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 버튼 클릭 시 자동 로그아웃
 
 SITE_ID = 1
@@ -170,8 +170,8 @@ else:
         AWS_REGION,
     )
     STATIC_ROOT = BASE_DIR / "static"
-    
-# AUTH_USER_MODEL = "accounts.User"
+
+AUTH_USER_MODEL = "accounts.User"
 
 from django.contrib import messages
 
