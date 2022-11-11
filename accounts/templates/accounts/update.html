@@ -6,11 +6,30 @@
     <h1 class='text-center my-5'>업데이트 페이지</h1>
       <form action="{% url 'accounts:update' %}" method='POST', enctype='multipart/form-data'>
         {% csrf_token %}
-        {% bootstrap_form form %}
+        {{ form.nickname }}
+        {{ form.gender }}
+        {{ form.email }}
+        {{ form.introduce }}
+        {% if request.user.age_range %}
+        <p id='test'>나이</p>
+        {{ form.age_range }}
+        {% else %}
+        <p id='test'>나이</p>
+        {{ form.age_range }}
+        {% endif %}
+        {{ form.profileimage }}
         <div class="d-grid">
           <input type="submit" value="업데이트" class="btn btn-primary">
         </div>
     </form>
   </div>
-</div>
+</div>  
+<script>
+    const ran = document.querySelector('#customRange3')
+    ran.addEventListener('click', function() {
+      console.log(ran.value)
+      const test = document.querySelector('#test')
+      test.innerText = String(ran.value) + '세'
+    })
+</script>
 {% endblock %}
