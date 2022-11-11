@@ -28,6 +28,7 @@
         {{ form.profileimage }}
         <div class="d-grid">
           <input type="submit" value="업데이트" class="btn btn-primary">
+          <a href="{% url 'accounts:delete' %}" class="btn btn-danger mt-2">계정삭제</a>
         </div>
     </form>
   </div>

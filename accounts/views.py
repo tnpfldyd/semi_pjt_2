@@ -133,3 +133,30 @@ def update(request):
         "form": form,
     }
     return render(request, "accounts/update.html", context)
+
+
+import json, requests
+
+
+def delete(request):
+    data = {
+        "grant_type": "authorization_code",
+        "client_id": os.getenv("KAKAO_ID"),
+        "redirect_uri": "http://localhost:8000/accounts/kakao/login/callback/",
+        "code": request.GET.get("code"),
+        "client_secret": os.getenv("KAKAO_SECRET"),
+    }
+    kakao_token_api = "https://kauth.kakao.com/oauth/token"
+    temp = requests.post(kakao_token_api, data=data).json()
+    print(temp)
+    access_token = temp["access_token"]
+    url = ("https://kapi.kakao.com/v1/user/unlink",)
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": f"Bearer ${access_token}",
+    }
+    response = request.POST(url, headers=headers)
+    print(response)
+    request.user.session = 1
+    auth_logout(request)
+    return redirect("accounts:index")
