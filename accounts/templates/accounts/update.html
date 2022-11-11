@@ -7,16 +7,31 @@
       <form action="{% url 'accounts:update' %}" method='POST', enctype='multipart/form-data'>
         {% csrf_token %}
         {{ form.nickname }}
-        {{ form.gender }}
+        
         {{ form.email }}
-        {{ form.introduce }}
+
         {% if request.user.age_range %}
-        <p id='test'>나이</p>
-        {{ form.age_range }}
+        <p>
+            나이 :
+            <span id="value2"></span>
+        </p>
+            {{ form.age_range }}
         {% else %}
-        <p id='test'>나이</p>
-        {{ form.age_range }}
+        <p>
+            나이 : 
+            <span id="value2"></span>
+        </p>
+            {{ form.age_range }}
         {% endif %}
+
+        {% if request.user.gender %}
+            {{ form.gender }}
+        {% else %}
+            {{ form.gender }}
+        {% endif %}
+
+        {{ form.introduce }}
+
         {{ form.profileimage }}
         <div class="d-grid">
           <input type="submit" value="업데이트" class="btn btn-primary">
@@ -24,12 +39,4 @@
     </form>
   </div>
 </div>  
-<script>
-    const ran = document.querySelector('#customRange3')
-    ran.addEventListener('click', function() {
-      console.log(ran.value)
-      const test = document.querySelector('#test')
-      test.innerText = String(ran.value) + '세'
-    })
-</script>
 {% endblock %}

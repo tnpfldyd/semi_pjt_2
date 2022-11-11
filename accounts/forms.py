@@ -34,6 +34,7 @@ class UpdateForm(UserChangeForm):
                     "max": "100",
                     "step": "1",
                     "id": "customRange3",
+                    "oninput": "document.getElementById('value2').innerHTML=this.value;",
                 }
             ),
         }
