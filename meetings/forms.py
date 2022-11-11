@@ -27,19 +27,6 @@ class MeetingForm(forms.ModelForm):
             "password": "비밀번호를 추가해 주세요.",
         }
 
-class UpdateMeetingForm(forms.ModelForm):
-    class Meta:
-        model = Meeting
-        exclude = ['password']
-
-        labels = {
-            "title": "제목",
-            "content": "내용",
-            "image": "이미지",
-        }
-
-
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
