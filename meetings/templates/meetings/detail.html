@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <div class="container">
+    <h1>{{ meeting.title }}</h1>
+    {{ meeting.content }}
+  </div>
+
+  <!-- 수정 삭제 -->
+  <div>
+    <a class=" btn btn-outline-secondary m-1" href="{% url 'meetings:index' %}">목록</a>
+    {% if request.user == meeting.user %}
+      <a class="float-end btn btn-outline-primary m-1" href="{% url 'meetings:update' meeting.pk %}">
+        수정
+      </a>
+      <a class="float-end btn btn-outline-danger m-1" href="{% url 'meetings:delete' meeting.pk %}">
+        삭제
+      </a>
+    {% endif %}
+  </div>
+{% endblock content %}
