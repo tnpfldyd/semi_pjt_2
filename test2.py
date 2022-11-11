@@ -7,5 +7,6 @@ headers = {
     "Authorization": "Bearer " + "it1PZ1fo4tIxXDGRXC6L6wYob4SX0peFGchUlg3ICj10EQAAAYRkCNGb",
 }
 
-response = requests.post(url, headers=headers)
+response = requests.post(url, headers=headers).json()
+
 print(response)

@@ -88,6 +88,8 @@ def kakao_callback(request):
 
     if get_user_model().objects.filter(username=kakao_id).exists():
         kakao_user = get_user_model().objects.get(username=kakao_id)
+        kakao_user.refresh_token = temp["refresh_token"]
+        kakao_user.save()
     else:
         kakao_login_user = get_user_model().objects.create(
             username=kakao_id,
@@ -96,6 +98,7 @@ def kakao_callback(request):
             email=kakao_email,
             age_range=kakao_age_range,
             gender=kakao_gender,
+            refresh_token=temp["refresh_token"],
         )
         kakao_login_user.set_password(str(state_token))
         kakao_login_user.save()
@@ -139,24 +142,23 @@ import json, requests
 
 
 def delete(request):
+    url = "https://kauth.kakao.com/oauth/token"
+
     data = {
-        "grant_type": "authorization_code",
+        "grant_type": "refresh_token",
         "client_id": os.getenv("KAKAO_ID"),
-        "redirect_uri": "http://localhost:8000/accounts/kakao/login/callback/",
-        "code": request.GET.get("code"),
+        "refresh_token": request.user.refresh_token,
         "client_secret": os.getenv("KAKAO_SECRET"),
     }
-    kakao_token_api = "https://kauth.kakao.com/oauth/token"
-    temp = requests.post(kakao_token_api, data=data).json()
-    print(temp)
-    access_token = temp["access_token"]
-    url = ("https://kapi.kakao.com/v1/user/unlink",)
+
+    response = requests.post(url, data=data).json()
+    access_token = response["access_token"]
+    url = "https://kapi.kakao.com/v1/user/unlink"
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": f"Bearer ${access_token}",
     }
-    response = request.POST(url, headers=headers)
-    print(response)
-    request.user.session = 1
+    response = requests.post(url, headers=headers)
+    request.user.delete()
     auth_logout(request)
     return redirect("accounts:index")
