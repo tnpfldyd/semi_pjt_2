@@ -9,11 +9,7 @@ from django.contrib import messages
 def index(request):
     meetings = Meeting.objects.order_by("-pk")
     
-    # 페이지네이션
-    paginator = Paginator(meetings, 10)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-    # 
+    
 
     # 지역별
     meetings_local = ""
@@ -23,6 +19,7 @@ def index(request):
     if request.POST.get('노원구'):
       meetings_local = Meeting.objects.filter(location__contains="노원구").order_by("-pk")
       meetings_local_name = "노원구"
+      
     elif request.POST.get('송파구'):
       meetings_local = Meeting.objects.filter(location__contains="송파구").order_by("-pk")
       meetings_local_name = "송파구"
@@ -31,6 +28,12 @@ def index(request):
 
     # 모임이 몇개 개설됐는지
     meetings_count = Meeting.objects.all().count()
+
+    # 페이지네이션
+    paginator = Paginator(meetings_local, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    # 
 
     context = {
         "meetings": meetings,
@@ -42,6 +45,7 @@ def index(request):
     }
     return render(request, "meetings/index.html", context)
 
+dic = {'0':'zero', '1':'one', '2':'two', '3':'three', '4':'four', '5':'five', '6':'six', '7':'seven', '8':'eight', '9':'nine'}
 
 def create(request):
     if request.method == "POST":
@@ -49,6 +53,13 @@ def create(request):
         if meeting_form.is_valid():
             meeting = meeting_form.save(commit=False)
             meeting.user = request.user
+            
+            
+            meeting.save()
+            temp = ''
+            for i in str(meeting.pk):
+                temp += dic[i]
+            meeting.text = temp
             meeting.save()
             return redirect("meetings:index")
     else:
@@ -59,6 +70,8 @@ def create(request):
     }
 
     return render(request, "meetings/create.html", context)
+
+
 
 def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)

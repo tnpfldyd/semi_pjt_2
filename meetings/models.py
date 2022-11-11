@@ -27,6 +27,7 @@ class Meeting(models.Model):
       choices = location_choices, 
       default='선택',
     )
+    text = models.TextField(blank=True)
 
 class Comment(models.Model):
     content = models.TextField()
