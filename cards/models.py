@@ -26,3 +26,4 @@ class Comment(models.Model):
         related_name="card_comment",
     )
     ribbons = models.IntegerField()
+    id_text = models.TextField(blank=True)
