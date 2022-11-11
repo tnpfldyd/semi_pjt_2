@@ -111,3 +111,22 @@ def mypage(request):
         "accounts/mypage.html",
         {"user": get_user_model().objects.get(pk=request.user.pk)},
     )
+
+
+def logout(request):
+    auth_logout(request)
+    return redirect("accounts:index")
+
+
+def update(request):
+    if request.method == "POST":
+        form = UpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("accounts:index")
+    else:
+        form = UpdateForm(instance=request.user)
+    context = {
+        "form": form,
+    }
+    return render(request, "accounts/update.html", context)
