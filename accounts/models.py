@@ -12,7 +12,7 @@ class User(AbstractUser):
     blocking = models.ManyToManyField(
         "self", symmetrical=False, related_name="blockers"
     )
-    secession = models.BooleanField(default=False)
+    session = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     profileimage = models.ImageField(upload_to="profile/", blank=True)
     gender = models.CharField(blank=True, max_length=10)
