@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %} 
+
+<h1> 어떤 거 만들래요? </h1>
+
+<a href="{% url 'cards:createindiv' %}" class="text-decoration-none text-dark"> 개인용</a>
+<hr>
+<a href="{% url 'cards:creategroup' %}" class="text-decoration-none text-dark"> 그룹용</a>
+<hr>
+
+
+{% for card in cards %}
+  {{ card.pk }}
+  <a href="{% url 'cards:detail' card.pk %}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
+  <br>
+{% endfor%}
+
+
+
+
+
+
+{% endblock %}

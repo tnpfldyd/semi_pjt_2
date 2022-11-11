@@ -2,15 +2,17 @@
 {% load django_bootstrap5 %}
 {% block content %}
 <div class='d-flex justify-content-center'>
-    <div style='width:30rem' class='my-5'>
-        <h1 class='text-center my-5'>로그인 페이지</h1>
-        <form action="{% url 'accounts:login' %}" method='POST'>
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            <div class="d-grid">
-                <input type="submit" value="로그인" class="btn btn-primary">
-            </div>
-        </form>
-    </div>
+  <div style='width:30rem' class='my-5'>
+    <h1 class='text-center my-5'>로그인 페이지</h1>
+      <form action="{% url 'accounts:login' %}" method='POST'>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="d-grid">
+          <input type="submit" value="로그인" class="btn btn-primary">
+        </div>
+    </form>
+  </div>
 </div>
-{% endblock  %}
+{% load socialaccount %}
+<a href="{% url 'accounts:kakao' %}">카카오</a>
+{% endblock %}

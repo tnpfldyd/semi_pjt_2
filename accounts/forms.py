@@ -9,6 +9,5 @@ class SignupForm(UserCreationForm):
             "password1",
             "password2",
             "email",
-            "profileimg",
         )
         model = get_user_model()
