@@ -7,4 +7,12 @@
 <br>
 닉네임{{user.nickname}}
 <br>
-프로필 이미지<img src="{{user.profileimage}}">
+
+{% comment %} 프로필 이미지 if 처리 {% endcomment %}
+{% if user.profileimage.url != None %}
+    프로필 이미지<img src="{{user.profileimage.url}}">
+{% elif user.profileimage != None %}
+    프로필 이미지<img src="{{user.profileimage}}">
+{% else %}
+    이미지 없음
+{% endif %}
