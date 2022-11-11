@@ -72,19 +72,19 @@ def kakao_callback(request):
     }
     kakao_token_api = "https://kauth.kakao.com/oauth/token"
     temp = requests.post(kakao_token_api, data=data).json()
+    print(temp["access_token"], temp["refresh_token"])
     access_token = temp["access_token"]
 
     headers = {"Authorization": f"bearer ${access_token}"}
     kakao_user_api = "https://kapi.kakao.com/v2/user/me"
     kakao_user_information = requests.get(kakao_user_api, headers=headers).json()
-    print(kakao_user_information)
+
     kakao_id = kakao_user_information["id"]
     kakao_nickname = kakao_user_information["properties"]["nickname"]
     kakao_profile_image = kakao_user_information["properties"]["profile_image"]
     kakao_email = kakao_user_information["kakao_account"].get("email")
     kakao_age_range = kakao_user_information["kakao_account"].get("age_range")
     kakao_gender = kakao_user_information["kakao_account"].get("gender")
-    print(kakao_user_information)
 
     if get_user_model().objects.filter(username=kakao_id).exists():
         kakao_user = get_user_model().objects.get(username=kakao_id)
@@ -123,7 +123,9 @@ def update(request):
         print(request.POST)
         form = UpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            temp = form.save(commit=False)
+            temp.age_range = temp.age_range[-2:-1] + "0~" + temp.age_range[-2:-1] + "9"
+            temp.save()
             return redirect("accounts:index")
     else:
         form = UpdateForm(instance=request.user)
