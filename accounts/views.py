@@ -78,7 +78,6 @@ def kakao_callback(request):
     headers = {"Authorization": f"bearer ${access_token}"}
     kakao_user_api = "https://kapi.kakao.com/v2/user/me"
     kakao_user_information = requests.get(kakao_user_api, headers=headers).json()
-
     kakao_id = kakao_user_information["id"]
     kakao_nickname = kakao_user_information["properties"]["nickname"]
     kakao_profile_image = kakao_user_information["properties"]["profile_image"]
