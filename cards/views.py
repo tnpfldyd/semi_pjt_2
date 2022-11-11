@@ -16,7 +16,11 @@ def createindiv(request):
         form = CardForm(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
-            # temp.user = request.user
+            temp.user = request.user
+            # 라디오 버튼 'name'='id'로 들어옴
+            # name==choice, id=1,2,3으로 설정
+            temp.socks = request.POST["choice_sock"]
+            temp.chimneys = request.POST["choice_chim"]
             # 개인이면 is_indiv에 1
             temp.is_indiv = 1
             temp.save()
@@ -36,7 +40,7 @@ def creategroup(request):
         form = CardForm(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
-            # temp.user = request.user
+            temp.user = request.user
             # 그룹이면 is_indiv에 0
             temp.is_indiv = 0
             temp.save()
@@ -54,10 +58,24 @@ def detail(request, pk):
     cards = Card.objects.get(pk=pk)
     context = {
         "cards": cards,
-        'comments' : cards.comment_set.all(),
+        "comments": cards.comment_set.all(),
     }
 
     return render(request, "cards/detail.html", context)
+
+
+dic = {
+    "0": "zero",
+    "1": "one",
+    "2": "two",
+    "3": "three",
+    "4": "four",
+    "5": "five",
+    "6": "six",
+    "7": "seven",
+    "8": "eight",
+    "9": "nine",
+}
 
 
 def comment_create(request, pk):
@@ -66,10 +84,15 @@ def comment_create(request, pk):
         comment_form = CommentForm(request.POST, request.FILES)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
-            # comment.user = request.user
+            comment.user = request.user
             comment.card = card
+            comment.ribbons = request.POST["choice_ribbon"]
             comment.save()
-            comment_form.save()
+            temp = ""
+            for i in str(comment.pk):
+                temp += dic[i]
+            comment.id_text = temp
+            comment.save()
         return redirect("cards:detail", pk)
     else:
         comment_form = CommentForm()
