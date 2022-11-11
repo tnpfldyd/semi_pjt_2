@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container">
+  <h1>디테일페이지</h1>
+  
+  <div>{{ meeting.title }}</div>
+  <div>{{ meeting.content }}</div>
+</div>
+
+{% endblock content %}
