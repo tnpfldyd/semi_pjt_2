@@ -169,6 +169,7 @@ MESSAGE_TAGS = {
     messages.WARNING: "alert-warning",
     messages.ERROR: "alert-danger",
 }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
