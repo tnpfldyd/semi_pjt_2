@@ -37,11 +37,11 @@
 
 {% for comment in comments %}
   {% if comment.ribbons == 1 %}
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
       <img src="{%static 'images/리본1.png' %}">
     </button>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
@@ -57,14 +57,14 @@
 
   
   {% elif comment.ribbons == 2%}
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
       <img src="{%static 'images/리본2.png' %}">
     </button>
 
   {% endif %}
   <h2> {{ comment.content }} | {{ comment.created_at }} | {{comment.ribbons}} </h2>
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">

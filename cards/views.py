@@ -64,6 +64,20 @@ def detail(request, pk):
     return render(request, "cards/detail.html", context)
 
 
+dic = {
+    "0": "zero",
+    "1": "one",
+    "2": "two",
+    "3": "three",
+    "4": "four",
+    "5": "five",
+    "6": "six",
+    "7": "seven",
+    "8": "eight",
+    "9": "nine",
+}
+
+
 def comment_create(request, pk):
     if request.method == "POST":
         card = Card.objects.get(pk=pk)
@@ -74,7 +88,11 @@ def comment_create(request, pk):
             comment.card = card
             comment.ribbons = request.POST["choice_ribbon"]
             comment.save()
-            comment_form.save()
+            temp = ""
+            for i in str(comment.pk):
+                temp += dic[i]
+            comment.id_text = temp
+            comment.save()
         return redirect("cards:detail", pk)
     else:
         comment_form = CommentForm()
