@@ -4,13 +4,11 @@
 
 {% block content %}
 
-<h1>디테일페이지</h1>
 <div class="container">
+  <h1>디테일페이지</h1>
   
-  {% for i in meetings %}
-    {{ i.title }}
-    {{ i.content }}
-  {% endfor %}
+  <div>{{ meeting.title }}</div>
+  <div>{{ meeting.content }}</div>
 </div>
 
 {% endblock content %}
