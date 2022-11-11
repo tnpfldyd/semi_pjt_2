@@ -9,7 +9,6 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 import requests
-from django.http import JsonResponse
 from django.contrib import messages
 
 # Create your views here.
@@ -85,19 +84,34 @@ def kakao_callback(request):
     headers = {"Authorization": f"bearer ${access_token}"}
     kakao_user_api = "https://kapi.kakao.com/v2/user/me"
     kakao_user_information = requests.get(kakao_user_api, headers=headers).json()
-
     kakao_id = kakao_user_information["id"]
     kakao_nickname = kakao_user_information["properties"]["nickname"]
     kakao_profile_image = kakao_user_information["properties"]["profile_image"]
+    kakao_email = kakao_user_information["kakao_account"].get("email")
+    kakao_age_range = kakao_user_information["kakao_account"].get("age_range")
+    kakao_gender = kakao_user_information["kakao_account"].get("gender")
+    print(kakao_user_information)
 
-    if get_user_model().objects.filter(kakao_id=kakao_id).exists():
-        kakao_user = get_user_model().objects.get(kakao_id=kakao_id)
+    if get_user_model().objects.filter(username=kakao_id).exists():
+        kakao_user = get_user_model().objects.get(username=kakao_id)
     else:
-        kakao_login_user = get_user_model()()
-        kakao_login_user.username = kakao_nickname
-        kakao_login_user.kakao_id = kakao_id
+        kakao_login_user = get_user_model().objects.create(
+            username=kakao_id,
+            nickname=kakao_nickname,
+            profileimage=kakao_profile_image,
+            email=kakao_email,
+            age_range=kakao_age_range,
+            gender=kakao_gender,
+        )
         kakao_login_user.set_password(str(state_token))
         kakao_login_user.save()
-        kakao_user = get_user_model().objects.get(kakao_id=kakao_id)
+        kakao_user = get_user_model().objects.get(username=kakao_id)
     auth_login(request, kakao_user, backend="django.contrib.auth.backends.ModelBackend")
     return redirect(request.GET.get("next") or "accounts:index")
+
+
+@login_required
+def mypage(request):
+    return render(
+        request, "accounts/mypage.html", {"user": get_user_model().objects.get(pk=request.user.pk)}
+    )
