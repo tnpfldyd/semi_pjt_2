@@ -24,6 +24,12 @@
   {% comment %} 지역별 목록 {% endcomment %}
   <div class="container p-0">
     <div class="d-flex">
+      <form action="{% url 'meetings:index'%}" method="POST" class="m-1">
+        {% csrf_token %}
+        <button name="reset" value="reset">
+          모두보기
+        </button>
+      </form>
       {% for local in meetings_local_list %}
       <form action="{% url 'meetings:index'%}" method="POST" class="m-1">
         {% csrf_token %}
@@ -35,32 +41,43 @@
     </div>
   </div>
   <div class="mt-3">
-    {{ meetings_local_name }}에 위치한 모임들
+    {{ meetings_local_name }}에 위치한 모임들 
     <hr/>
   </div>
   {% for meeting in meetings_local %}
-    {% comment %} {% if meeting.image %}
-      <img src="{{ meeting.image.url }}" alt=""> {% endcomment %}
-    {% comment %} {% elif %}
+    {% if meeting.image %}
+      <img src="{{ meeting.image.url }}" alt="" style="width: 250px; height: 250px;">
+    {% else %}
       <img src="https://dummyimage.com/1200x960/000000/c4c4c4" class="my4-2" style="width: 250; height: 250px;">
-    {% endif %} {% endcomment %}
+    {% endif %}
     <div> {{ meeting.title }}</div>
-    <div> {{ meeting.content }}</div>
+    <div> {{ meeting.content|truncatewords:14 }}</div>
+
+    {% comment %} is_closed 로직 {% endcomment %}
+    {% if meeting.is_closed == True %}
+    <div> {{ meeting.is_closed }} => 열려있음</div>
+    {% else %}
+    <div> 닫혀있음</div>
+    {% endif %}
+    {% comment %}  {% endcomment %}
+
+    {% comment %} 패스워드가 있으면 {% endcomment %}
     {% if meeting.password %}
     <div>🔒</div>
+    <button method="POST" onClick="" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">입장하기</button>
     {% else %}
     <div>🔓</div>
+    <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary">입장하기</a>
     {% endif %}
-    <button method="POST" onClick="" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">입장하기</button>
+    {% comment %} {% endcomment %}
     <hr/>
-  {% endfor %}
-  {% for meeting in meetings_local %}
+
     {% comment %} 모달 {% endcomment %}
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="{{meeting.text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">비밀번호 입력하기</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">{{meeting.content}} 비밀번호 입력하기</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="modal-footer">
             <form action="{% url 'meetings:detail' meeting.pk %}" method="POST">
@@ -72,9 +89,9 @@
         </div>
       </div>
     </div>
+    <hr/>
+  </div>
   {% endfor %}
-  <hr/>
-</div>
 
 {% comment %} 페이지네이션  {% endcomment %}
 <div class="d-flex justify-content-center">
@@ -90,8 +107,10 @@
       </span>
 
       {% if page_obj.has_next %}
+      
       <a href="?page={{ page_obj.next_page_number }}">다음</a>
       <a href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+
       {% endif %}
     </span>
   </div>
