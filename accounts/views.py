@@ -123,7 +123,9 @@ def update(request):
         print(request.POST)
         form = UpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            temp = form.save(commit=False)
+            temp.age_range = temp.age_range[-2:-1] + "0~" + temp.age_range[-2:-1] + "9"
+            temp.save()
             return redirect("accounts:index")
     else:
         form = UpdateForm(instance=request.user)
