@@ -33,4 +33,5 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=False)
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     meeting_id = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
     
