@@ -44,8 +44,34 @@
     {% comment %} {% elif %}
       <img src="https://dummyimage.com/1200x960/000000/c4c4c4" class="my4-2" style="width: 250; height: 250px;">
     {% endif %} {% endcomment %}
-  <div> {{ meeting.title }}</div>
-  <div> {{ meeting.content }}</div>
+    <div> {{ meeting.title }}</div>
+    <div> {{ meeting.content }}</div>
+    {% if meeting.password %}
+    <div>🔒</div>
+    {% else %}
+    <div>🔓</div>
+    {% endif %}
+    <button method="POST" onClick="" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">입장하기</button>
+    <hr/>
+  {% endfor %}
+  {% for meeting in meetings_local %}
+    {% comment %} 모달 {% endcomment %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">비밀번호 입력하기</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-footer">
+            <form action="{% url 'meetings:detail' meeting.pk %}" method="POST">
+              {% csrf_token %}
+              <input type="password" name="password" id="password">
+              <input type="submit">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   {% endfor %}
   <hr/>
 </div>
@@ -70,5 +96,6 @@
     </span>
   </div>
 </div> 
+
 
 {% endblock content %}

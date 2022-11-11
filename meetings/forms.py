@@ -10,6 +10,7 @@ class MeetingForm(forms.ModelForm):
             "image",
             "location",
             "password",
+            "location",
         ]
 
         labels = {
@@ -18,6 +19,7 @@ class MeetingForm(forms.ModelForm):
             "image": "이미지",
             "location": "지역",
             "password": "비밀번호",
+            "location": "지역"
         }
 
         help_texts = {

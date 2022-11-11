@@ -21,10 +21,10 @@ def index(request):
     meetings_local_list = ["강남구","서초구","강동구","성동구", "노원구", "송파구", "용산구",]
 
     if request.POST.get('노원구'):
-      meetings_local = Meeting.objects.filter(location__contains="노원구")
+      meetings_local = Meeting.objects.filter(location__contains="노원구").order_by("-pk")
       meetings_local_name = "노원구"
     elif request.POST.get('송파구'):
-      meetings_local = Meeting.objects.filter(location__contains="송파구")
+      meetings_local = Meeting.objects.filter(location__contains="송파구").order_by("-pk")
       meetings_local_name = "송파구"
     elif request.POST.get('reset'):
       meetings_local = Meeting.objects.order_by('-pk')
@@ -70,8 +70,13 @@ def detail(request, meeting_pk):
         "comment": comment,
         "commentform": form,
     }
-
-    return render(request, "meetings/detail.html", context)
+    
+    if request.POST.get('password') == meeting.password:
+      print("로직")
+      return render(request, "meetings/detail.html", context)
+    
+    else:
+      return redirect("meetings:index")
 
 
 def update(request, meeting_pk):

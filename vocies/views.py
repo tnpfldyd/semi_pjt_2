@@ -11,10 +11,12 @@ def index(request):
     return render(request, "vocies.index.html")
 
 
+@login_required
 def myvocie(request):
     return render(request, "vocies/myvocie.html", {"vocies": request.user.vocies.all()})
 
 
+@login_required
 def create(request):
     form = VocieForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -25,6 +27,7 @@ def create(request):
     return render(request, "vocies/create.html", {"form": form})
 
 
+@login_required
 def detail(request, pk):
     vocie = get_object_or_404(Vocie, pk=pk)
     if request.user == vocie.user or request.user.is_superuser:
@@ -34,20 +37,24 @@ def detail(request, pk):
             "comments": vocie.vocie_comment.all(),
         }
         return render(request, "vocies/detail.html", context)
-    else:
-        messages.warning(request, "작성자만 접근할 수 있습니다.")
-        return redirect("vocies:index")
+    messages.warning(request, "작성자만 접근할 수 있습니다.")
+    return redirect("vocies:index")
 
 
+@login_required
 def comment(request, pk):
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        temp = form.save(commit=False)
-        temp.vocie = Vocie.objects.get(pk=pk)
-        temp.manager = request.user
-        temp.save()
-        return redirect("vocies:detail", pk)
+    if request.user.is_superuser:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            temp = form.save(commit=False)
+            temp.vocie = Vocie.objects.get(pk=pk)
+            temp.manager = request.user
+            temp.save()
+            return redirect("vocies:detail", pk)
+    messages.warning(request, "관리자만 접근할 수 있습니다.")
+    return redirect("vocies:index")
 
 
+@login_required
 def manage_page(request):
     return render(request, "vocies/manage_page.html", {"vocies": Vocie.objects.order_by("-pk")})
