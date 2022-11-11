@@ -6,7 +6,22 @@
 <form class="p-4 my-2" action="" method="POST">
   {% csrf_token %}
   {% bootstrap_form comment_form %}
+  
+  <div class="cc-selector">
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="choice_ribbon" id="1" value="1">
+      <label class="drinkcard-cc ribbon1" for="ribbon1"></label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="choice_ribbon" id="2" value="2">
+      <label class="drinkcard-cc ribbon2" for="ribbon2"> </label>
+    </div>
+  </div>
+  
   <input class="btn" type="submit" value="제출하기">
+
+
+
 </form>
 
 {% endblock %}
