@@ -120,6 +120,7 @@ def logout(request):
 
 def update(request):
     if request.method == "POST":
+        print(request.POST)
         form = UpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
