@@ -19,6 +19,20 @@
     {% bootstrap_css %}
 
 <body>
+  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header d-flex flex-column">
+          <h1 class='text-center my-5'>카카오 로그인</h1>
+          <div class="d-grid">
+            <a href="{% url 'accounts:kakao' %}">
+              <img src="{% static 'images/kakao_login.jpg' %}" alt="카카오 간편로그인" style='width:30rem' class='rounded-3'>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'meetings:home' %}">???</a>
@@ -45,17 +59,15 @@
           </li>
           {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+            <button type="button" class="nav-link border-0 bg-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              로그인
+            </button>
           </li>
           {% endif %}
         </ul>
       </div> 
     </div>
   </nav>
-
-
-
-
 
     {% if messages %}
     <div class="text-center"> {% for message in messages %}

@@ -14,7 +14,7 @@
 </div>
 {% comment %} 모임 목록 {% endcomment %}
 
-<div class="container mt-5">
+<div class="container mt-2">
   <div class="d-flex justify-content-between align-items-center">
     <h1>모임 목록</h1>
     <div>
@@ -31,12 +31,9 @@
         </button>
       </form>
       {% for local in meetings_local_list %}
-      <form action="{% url 'meetings:index'%}" method="POST" class="m-1">
-        {% csrf_token %}
-        <button name="{{ local }}" type="submit" value="{{ local }}">
-          {{ local }}
-        </button>
-      </form>
+      <a href="?local={{local}}" class="mx-2">
+        {{ local }}
+      </a>
       {% endfor %}
     </div>
   </div>
@@ -44,77 +41,167 @@
     {{ meetings_local_name }}에 위치한 모임들 
     <hr/>
   </div>
-  {% for meeting in meetings_local %}
-    {% if meeting.image %}
-      <img src="{{ meeting.image.url }}" alt="" style="width: 250px; height: 250px;">
-    {% else %}
-      <img src="https://dummyimage.com/1200x960/000000/c4c4c4" class="my4-2" style="width: 250; height: 250px;">
-    {% endif %}
-    <div> {{ meeting.title }}</div>
-    <div> {{ meeting.content|truncatewords:14 }}</div>
-
-    {% comment %} is_closed 로직 {% endcomment %}
-    {% if meeting.is_closed == True %}
-    <div> {{ meeting.is_closed }} => 열려있음</div>
-    {% else %}
-    <div> 닫혀있음</div>
-    {% endif %}
-    {% comment %}  {% endcomment %}
-
-    {% comment %} 패스워드가 있으면 {% endcomment %}
-    {% if meeting.password %}
-    <div>🔒</div>
-    <button method="POST" onClick="" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">입장하기</button>
-    {% else %}
-    <div>🔓</div>
-    <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary">입장하기</a>
-    {% endif %}
-    {% comment %} {% endcomment %}
-    <hr/>
-
-    {% comment %} 모달 {% endcomment %}
-    <div class="modal fade" id="{{meeting.text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">{{meeting.content}} 비밀번호 입력하기</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <div class="modal-footer">
-            <form action="{% url 'meetings:detail' meeting.pk %}" method="POST">
-              {% csrf_token %}
-              <input type="password" name="password" id="password">
-              <input type="submit">
-            </form>
+  
+<div class="d-flex">
+  {% for meeting in page_obj %}
+  <div class="row row-cols-1 row-cols-md-2">
+    <div class="col">
+      <div class="card mb-4" style="width: 21rem; height:550px;">
+        {% if meeting.image %}
+        <img src="{{ meeting.image.url }}" class="card-img-top" alt="...">
+        {% else %}
+          <img src="https://dummyimage.com/600x360/000000/c4c4c4" class="my4-2">
+        {% endif %}
+        <div class="card-body" style="min-height:100px;">
+          <h5 class="card-title">{{ meeting.title }}</h5>
+          <p class="card-text">{{ meeting.content|truncatewords:14 }}</p>
+        </div>
+        <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          {% comment %} 패스워드 로직 {% endcomment %}
+          <div>
+            {% if meeting.password %}
+            <button method="POST" onClick="" type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
+              <span>🔒</span>
+              <span>입장하기</span>
+            </button>
+            {% else %}
+            <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
+              <span>🔓</span>
+              <span>입장하기</span>
+            </a>
+            {% endif %}
+            {% comment %}  {% endcomment %}
+          </div>
+          <div>
+            {% comment %} is_closed 로직 {% endcomment %}
+            {% if meeting.is_closed == True %}
+            <small> 자리가 있어요!</small>
+            {% else %}
+            <small> 자리가 없어요!</small>
+            {% endif %}
+            {% comment %}  {% endcomment %}
           </div>
         </div>
       </div>
     </div>
-    <hr/>
   </div>
+      
+
+            {% comment %} 모달 {% endcomment %}
+            <div class="modal fade" id="{{meeting.text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{meeting.title}}
+                      <div>비밀번호 입력하기
+                      </div>
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-footer">
+                    <form action="{% url 'meetings:detail' meeting.pk %}" method="POST">
+                      {% csrf_token %}
+                      <input type="password" name="password" id="password" style="width:400px;">
+                      <input type="submit">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
   {% endfor %}
+  </div>
+
+{% comment %} 노원구 {% endcomment %}
+
 
 {% comment %} 페이지네이션  {% endcomment %}
 <div class="d-flex justify-content-center">
   <div class="paginagtion">
     <span class="step-links">
+    {% comment %} {% for local in meetings_local_list %} {% endcomment %}
+      
+      {% if at_all %}
       {% if page_obj.has_previous %}
-      <a href="?page=1"></a>
-      <a href="?page={{ page.obj.previous_page_number }}">이전</a>
+      <a href="?local={{ page_obj }}">&laquo; 처음</a>
+      <a href="?local={{ page_obj.previous_page_number }}">이전</a>
       {% endif %}
 
       <span class="current">
-        Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
       </span>
 
       {% if page_obj.has_next %}
       
-      <a href="?page={{ page_obj.next_page_number }}">다음</a>
-      <a href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+      <a href="?local={{ page_obj.next_page_number }}">다음</a>
+      <a href="?local={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
 
       {% endif %}
+      {% endif %}
+
+
+      {% comment %} 노원구라면 {% endcomment %}
+      {% if nw %}
+      {% if page_obj.has_previous %}
+      <a href="?local={{nw}}{{ page_obj }}">&laquo; 처음</a>
+      <a href="?local={{nw}}{{ page_obj.previous_page_number }}">이전</a>
+      {% endif %}
+
+      <span class="current">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+      
+      <a href="?local={{nw}}{{ page_obj.next_page_number }}">다음</a>
+      <a href="?local={{nw}}{{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+
+      {% endif %}
+      {% endif %}
+
+      {% comment %} 송파구라면 {% endcomment %}
+
+      {% if sp %}
+      {% if page_obj.has_previous %}
+      <a href="?local={{sp}}{{ page_obj }}">&laquo; 처음</a>
+      <a href="?local={{sp}}{{ page_obj.previous_page_number }}">이전</a>
+      {% endif %}
+
+      <span class="current">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+      
+      <a href="?local={{sp}}{{ page_obj.next_page_number }}">다음</a>
+      <a href="?local={{sp}}{{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+
+      {% endif %}
+      {% endif %}
+      {% comment %}  {% endcomment %}
+      
+      {% comment %} 송파구 {% endcomment %}
+      {% comment %} {% if local == '송파구' %}
+        {% if page_obj.has_previous %}
+        <a href="?local={{ page_obj }}">&laquo; 처음</a>
+        <a href="?local={{ page_obj.previous_page_number }}">이전</a>
+        {% endif %}
+
+        <span class="current">
+          {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        
+        <a href="?local={{ page_obj.next_page_number }}">다음</a>
+        <a href="?local={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+
+        {% endif %}
+      {% endif %} {% endcomment %}
+      {% comment %}  {% endcomment %}
+
+    {% comment %} {% endfor %} {% endcomment %}
     </span>
   </div>
 </div> 
-
-
 {% endblock content %}
