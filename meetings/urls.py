@@ -5,6 +5,7 @@ app_name = "meetings"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("home/", views.home, name="home"),
     path("create/", views.create, name="create"),
     path("<int:meeting_pk>/", views.detail, name="detail"),
     path("<int:meeting_pk>/update/", views.update, name="update"),

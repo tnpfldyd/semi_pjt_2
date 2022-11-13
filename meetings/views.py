@@ -6,6 +6,10 @@ from django.contrib import messages
 
 # Create your views here.
 
+def home(request):
+    return render(request, "meetings/home.html")
+
+
 def index(request):
     meetings = Meeting.objects.order_by("-pk")
     
