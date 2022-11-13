@@ -18,7 +18,6 @@ class Meeting(models.Model):
     is_closed = models.BooleanField(default=True)
     password = models.CharField(max_length=4, blank=True, null=True)
     location_choices = [
-      ('선택', None),
       ('노원구', '노원구'),
       ('송파구', '송파구'),
     ]
@@ -28,6 +27,7 @@ class Meeting(models.Model):
       default='선택',
     )
     text = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Comment(models.Model):
     content = models.TextField()
