@@ -3,7 +3,6 @@
 {% load static %}
 {% block content %} 
 
-
 <a href="{% url 'cards:comment_create' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
 
 <div>
@@ -15,6 +14,9 @@
   <h1> 양말id : {{ cards.socks }} </h1>
   <h1> 벽난로id :{{ cards.chimneys }} </h1>
 </div>
+
+<img src="{%static 'images/산타가방.jpg' %}">
+
 
 <div class>
   {% if cards.socks == 1 %}
@@ -55,7 +57,6 @@
     </div>
 
 
-  
   {% elif comment.ribbons == 2%}
     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
       <img src="{%static 'images/리본2.png' %}">
