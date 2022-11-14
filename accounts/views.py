@@ -1,6 +1,6 @@
 from multiprocessing import AuthenticationError
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model, update_session_auth_hash
@@ -72,7 +72,6 @@ def kakao_callback(request):
     }
     kakao_token_api = "https://kauth.kakao.com/oauth/token"
     temp = requests.post(kakao_token_api, data=data).json()
-    print(temp["access_token"], temp["refresh_token"])
     access_token = temp["access_token"]
 
     headers = {"Authorization": f"bearer ${access_token}"}
@@ -103,6 +102,11 @@ def kakao_callback(request):
         kakao_login_user.save()
         kakao_user = get_user_model().objects.get(username=kakao_id)
     auth_login(request, kakao_user, backend="django.contrib.auth.backends.ModelBackend")
+    if request.user.blockers.count() > 9:
+        auth_logout(request)
+        messages.error(request, "누적 신고 횟수가 많아 로그인 할 수 없어요.😥")
+    else:
+        messages.success(request, "오셔서 환영합니다.😀")
     return redirect(request.GET.get("next") or "accounts:index")
 
 
@@ -137,7 +141,7 @@ def update(request):
     return render(request, "accounts/update.html", context)
 
 
-import json, requests
+import requests
 
 
 def delete(request):
@@ -161,3 +165,41 @@ def delete(request):
     request.user.delete()
     auth_logout(request)
     return redirect("accounts:index")
+
+
+@login_required
+def follow(request, pk):
+    user = get_object_or_404(get_user_model(), pk=pk)
+    if user != request.user:
+        if user.followers.filter(pk=request.user.pk).exists():
+            user.followers.remove(request.user)
+            user.save()
+        else:
+            user.followers.add(request.user)
+            user.save()
+    return redirect("accounts:profile", user.username)
+
+
+@login_required
+def block(request, pk):
+    user = get_object_or_404(get_user_model(), pk=pk)
+    if user != request.user:
+        if user.blockers.filter(pk=request.user.pk).exists():
+            user.blockers.remove(request.user)
+            user.save()
+        else:
+            user.blockers.add(request.user)
+            user.save()
+    return redirect("accounts:profile", user.username)
+
+
+@login_required
+def block_user(request):
+    block_users = request.user.blocking.all()
+    return render(request, "accounts/block_user.html", {"block_users": block_users})
+
+
+@login_required
+def profile(request, username):
+    user = get_object_or_404(get_user_model(), username=username)
+    return render(request, "accounts/profile.html", {"user": user})
