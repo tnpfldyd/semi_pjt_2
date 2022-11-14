@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <section class="entry bg">
+    <div class="container">
+      <div class=" row align-content-center justify-content-center align-items-center">
+        <div class="col-6">
+          <h1 class="text-white">커뮤니티 모닥불</h1>
+          <p class="text-white">말을 해주세요</p>
+          <p class="text-white">무엇을 써 볼까요?</p>
+        </div>
+        <div class="col-6 text-center">
+          <a href="{% url 'cards:index' %}"><img src="{%static 'images/난로.png'%}" style="width:500px; height:400px;" alt=""></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry2">
+    <h1>aa</h1>
+  </section>
+  <section class="entry bg">
+    <div class="container">
+      <div class=" row align-content-center justify-content-center align-items-center">
+        <div class="col-6">
+          <h1 class="text-white">소개팅?</h1>
+          <p class="text-white">말을 해주세요</p>
+          <p class="text-white">무엇을 써 볼까요?</p>
+        </div>
+        <div class="col-6 text-center">
+          <a href="{% url 'meetings:index' %}"><img src="{%static 'images/연인.png'%}" style="width:400px; height:400px;" alt=""></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry2">
+    <h1>여긴 내 영역입니다.</h1>
+  </section>
+  <footer>
+    <h1>footer 영역</h1>
+  </footer>
+
+  <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+  <script>
+    new Snowflakes();
+  </script>
+{% endblock content %}
