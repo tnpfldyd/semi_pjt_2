@@ -39,4 +39,74 @@ body {
 }
 a {
   color: #fff;
+
+.cc-selector input {
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.sock1 {
+  background-image: url("images/양말1.png");
+}
+
+.sock2 {
+  background-image: url("images/양말2.png");
+}
+
+.sock3 {
+  background-image: url("images/양말3.png");
+}
+
+.chim1 {
+  background-image: url("images/벽난로1.jpg");
+}
+
+.chim2 {
+  background-image: url("images/벽난로2.jpg");
+}
+
+.chim3 {
+  background-image: url("images/벽난로3.jpg");
+}
+
+.ribbon1 {
+  background-image: url("images/리본1.png");
+}
+
+.ribbon2 {
+  background-image: url("images/리본2.png");
+}
+
+.cc-selector input:active+.drinkcard-cc {
+  opacity: .5;
+}
+
+.cc-selector input:checked+.drinkcard-cc {
+  -webkit-filter: none;
+  -moz-filter: none;
+  filter: none;
+}
+
+.drinkcard-cc {
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  width: 100px;
+  height: 70px;
+  -webkit-transition: all 100ms ease-in;
+  -moz-transition: all 100ms ease-in;
+  transition: all 100ms ease-in;
+  -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+  -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+  filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+
+.drinkcard-cc:hover {
+  -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+  -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+  filter: brightness(1.2) grayscale(.5) opacity(.9);
 }
