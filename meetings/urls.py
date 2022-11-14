@@ -10,6 +10,8 @@ urlpatterns = [
     path("<int:meeting_pk>/", views.detail, name="detail"),
     path("<int:meeting_pk>/update/", views.update, name="update"),
     path("<int:meeting_pk>/delete/", views.delete, name="delete"),
+    path("<int:pk>/belong_meeting/", views.belong_meeting, name="belong_meeting"),
+
 
     # comment
     path("<int:meeting_pk>/comment/create/", views.comment_create, name="comment_create"),

@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import get_user_model
 from .models import Meeting
 from .forms import MeetingForm, CommentForm
 from django.core.paginator import Paginator
 from django.contrib import messages
+
 
 # Create your views here.
 
@@ -120,12 +122,20 @@ def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all()
     form = CommentForm()
+    
+    belong = Meeting.objects.get(pk=meeting_pk)
 
+
+    print(belong.belong_meeting) # accounts.User.None
+    print(belong.user.pk) # 1
     context = {
         "meeting": meeting,
         "comments": comments,
         "commentform": form,
     }
+    # if int(belong.user.pk) in int(meeting_pk):
+    #   print("들어와짐")
+    #   return render(request, "meetings/detail.html", context)
 
     if request.POST.get('password') == meeting.password:
       print("로직")
@@ -186,3 +196,12 @@ def comment_delete(request, meeting_pk, comment_pk):
         comment_data.delete()
     
     return redirect("meetings:detail", meeting_pk)
+
+def belong_meeting(request, pk):
+  meeting = Meeting.objects.get(pk=pk)
+  if request.user in meeting.belong_meeting.all():
+    meeting.belong_meeting.remove(request.user)
+  else:
+    meeting.belong_meeting.add(request.user)
+  
+  return redirect("meetings:detail", pk)
