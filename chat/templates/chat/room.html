@@ -2,12 +2,32 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<textarea id="chat-log" cols="100" rows="20"></textarea><br>
-<input id="chat-message-input" type="text" size="100"><br>
-<input id="chat-message-submit" type="button" value="Send">
+<div class='d-flex justify-content-center'>
+    <div class='width:40rem'>
+        <h1 class='my-5 text-center'>채팅방</h1>
+        <textarea id="chat-log" cols="100" rows="20" class='form-control my-2'></textarea>
+        <input id="chat-message-input" type="text" size="100" class='form-control my-1'>
+        <div class="d-grid">
+            <input id="chat-message-submit" type="button" value="전송하기" class='btn btn-primary my-2 mb-5'>
+        </div>
+    </div>
+</div>
+<textarea id='userList' hidden=hidden>
+</textarea>
+<textarea id='users'>
+</textarea>
+
+{% if request.user.nickname %}
+{{ user|json_script:"user" }}
+{% endif %}
+{{ userid|json_script:"userid" }}
+
 {{ room_name|json_script:"room-name" }}
 <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+    const userList = document.querySelector('#userList')
+    const users = document.querySelector('#users')
 
     const chatSocket = new WebSocket(
         'ws://'
@@ -19,7 +39,24 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        document.querySelector('#chat-log').value += (data.message + '\n');
+        if (data.user) {
+            document.querySelector('#chat-log').value += (data.user + ' : ' + data.message + '\n');
+        }
+        else {
+            document.querySelector('#chat-log').value += (data.userid + ' : ' + data.message + '\n');
+        }
+        if (userList.value.includes(data.userid)) {
+            
+        }
+        else {
+            userList.value += (data.userid + '\n')
+            if (data.user) {
+                users.value += (data.user + '\n')
+            }
+            else {
+                users.value += (data.userid + '\n')
+            }
+        }
     };
 
     chatSocket.onclose = function(e) {
@@ -35,9 +72,14 @@
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
         const messageInputDom = document.querySelector('#chat-message-input');
+        const user = document.getElementById('user').value;
+        const userid = document.getElementById('userid').value;
+
         const message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
-            'message': message
+            'message': message,
+            'user' : user,
+            'userid' : userid,
         }));
         messageInputDom.value = '';
     };
