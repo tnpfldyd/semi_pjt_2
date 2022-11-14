@@ -11,7 +11,7 @@
     rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'style.css' %}?{% now 'U'%}" />
     {% comment %} 폰트 {% endcomment %}
-    <title>Document</title>
+    <title>이름 정하기</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
   </div>
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">???</a>
+      <a class="navbar-brand" href="#">이름 정하기</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -69,6 +69,11 @@
     </div>
   </nav>
 
+  <audio controls>
+    <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
+  </audio>
+
+  
     {% if messages %}
     <div class="text-center"> {% for message in messages %}
       {{ message.tags }} {{message.message }}

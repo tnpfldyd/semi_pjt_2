@@ -3,12 +3,23 @@
 
 {% block content %} 
 
-<h1> 어떤 거 만들래요? </h1>
+<h1> 우리 트리 트라이  </h1>
 
-<a href="{% url 'cards:createindiv' %}" class="text-decoration-none text-dark"> 개인용</a>
-<hr>
-<a href="{% url 'cards:creategroup' %}" class="text-decoration-none text-dark"> 그룹용</a>
-<hr>
+<h1> {{ user.nickname }} 님의 트리 </h1> 
+
+<div>
+{% if user.card_created == 0%}
+  <div>
+    <a href="{% url 'cards:createindiv' %}" class="btn btn-primary"> 개인 트리 만들기</a>
+  </div>
+{% else %}
+<div>
+  <a href="{% url 'cards:indivdetail' %}" class="btn btn-primary"> 트리 보러 가기</a>
+</div>
+{% endif %}
+<a href="{% url 'cards:creategroup' %}" class="btn btn-warning"> 그룹 트리 만들기</a>
+</div>
+
 
 
 {% for card in cards %}
@@ -17,6 +28,7 @@
     <a href="{% url 'cards:detail' card.pk %}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
     <br>
   {% endif %}
+
 {% endfor%}
 
 
