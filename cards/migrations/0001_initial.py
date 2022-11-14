@@ -15,28 +15,63 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Card',
+            name="Card",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=20)),
-                ('content', models.TextField()),
-                ('is_private', models.BooleanField()),
-                ('is_indiv', models.BooleanField()),
-                ('socks', models.IntegerField()),
-                ('chimneys', models.IntegerField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='card', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=20)),
+                ("content", models.TextField()),
+                ("is_private", models.BooleanField()),
+                ("is_indiv", models.BooleanField()),
+                ("socks", models.IntegerField()),
+                ("chimneys", models.IntegerField()),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="card",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.TextField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('ribbons', models.IntegerField()),
-                ('id_text', models.TextField(blank=True)),
-                ('card', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cards.card')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='card_comment', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("ribbons", models.IntegerField()),
+                ("id_text", models.TextField(blank=True)),
+                (
+                    "card",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="cards.card"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="card_comment",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
