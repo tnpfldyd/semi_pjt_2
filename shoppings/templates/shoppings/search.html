@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block content %}
+
+<form action="{% url 'shoppings:search' 1 %}" class="text-center">
+  <input class="form-control-sm" type="text" name="keyword">
+  <button class="btn btn-outline-primary" type="submit">검색</button>
+</form>
+<div class="container text-center">
+  <div class="row row-cols-4">
+    {% for item in items %}
+    <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
+      <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
+      <div class="card-body">
+        <h5 class="card-title">{{item.title}}</h5>
+      </div>
+      <div class="card-footer">
+        <p class="card-text">가격 {{item.lprice}}원</p>
+        <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
