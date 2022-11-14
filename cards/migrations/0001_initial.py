@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="Vocie",
+            name="Card",
             fields=[
                 (
                     "id",
@@ -26,15 +26,17 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("title", models.CharField(max_length=100)),
+                ("title", models.CharField(max_length=20)),
                 ("content", models.TextField()),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
-                ("image", models.ImageField(blank=True, upload_to="vocie/")),
+                ("is_private", models.BooleanField()),
+                ("is_indiv", models.BooleanField()),
+                ("socks", models.IntegerField()),
+                ("chimneys", models.IntegerField()),
                 (
                     "user",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="vocies",
+                        related_name="card",
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
@@ -54,19 +56,20 @@ class Migration(migrations.Migration):
                 ),
                 ("content", models.TextField()),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("ribbons", models.IntegerField()),
+                ("id_text", models.TextField(blank=True)),
                 (
-                    "manager",
+                    "card",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to=settings.AUTH_USER_MODEL,
+                        on_delete=django.db.models.deletion.CASCADE, to="cards.card"
                     ),
                 ),
                 (
-                    "vocie",
+                    "user",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="vocie_comment",
-                        to="vocies.vocie",
+                        related_name="card_comment",
+                        to=settings.AUTH_USER_MODEL,
                     ),
                 ),
             ],
