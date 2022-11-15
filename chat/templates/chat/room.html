@@ -2,9 +2,16 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<div class='d-flex justify-content-center'>
+<style>
+   body {
+    background-image : url('{% static 'images/채팅방.jpg' %}');
+    background-repeat : no-repeat;
+    background-size : cover;
+   }
+</style>
+<div class='d-flex justify-content-center' style='opacity:0.9;'>
     <div style='width:40rem' class='me-3'>
-        <h1 class='my-5 text-center'>채팅방</h1>
+        <h1 class='my-5 text-center text-light'>채팅방</h1>
         <textarea id="chat-log" cols="100" rows="20" class='form-control my-2'></textarea>
         <input id="chat-message-input" type="text" size="100" class='form-control my-1'>
         <div class="d-grid">
@@ -12,7 +19,7 @@
         </div>
     </div>
     <div style='width:10rem'>
-        <h1 class='my-5 text-center'>유저</h1>
+        <h1 class='my-5 text-center text-light'>유저</h1>
         <textarea id="userList" rows="24" class='form-control my-2'></textarea>
     </div>
 </div>
@@ -77,4 +84,9 @@
         messageInputDom.value = '';
     }
 </script>
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
+
 {% endblock  %}
