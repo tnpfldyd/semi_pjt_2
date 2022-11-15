@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
-from .forms import CardForm, CommentForm, UserCardForm , GroupCardForm,
-from .models import Card, Comment, UserCard,  Groupcard,
+from .forms import *
+from .models import *
 
 import requests, os, json
 from django.contrib.auth.decorators import login_required
@@ -31,7 +31,6 @@ def create_indiv(request):
             # name==choice, id=1,2,3으로 설정
             temp.socks = request.POST["choice_sock"]
             temp.chimneys = request.POST["choice_chim"]
-            # 개인이면 is_indiv에 1
             temp.user = request.user
             temp.save()
             return redirect("cards:index")
@@ -85,7 +84,7 @@ def group_detail(request, pk):
 
 
 def card_update(request, pk):
-    cards = Card.objects.get(user_id=request.user.pk, is_indiv=1)
+    cards = Card.objects.get(user_id=request.user.pk)
     if request.method == "POST":
         form = CardForm(request.POST, instance=cards)
         if form.is_valid():
@@ -96,10 +95,6 @@ def card_update(request, pk):
                 # name==choice, id=1,2,3으로 설정
                 temp.socks = request.POST["choice_sock"]
                 temp.chimneys = request.POST["choice_chim"]
-                # 개인이면 is_indiv에 1
-                temp.is_indiv = 1
-                request.user.card_created = True
-                request.user.save()
                 temp.save()
                 return redirect("cards:indiv_detail")
     else:
@@ -108,11 +103,29 @@ def card_update(request, pk):
     return render(request, "cards/card_update.html", context=context)
 
 
-def card_delete(request):
-    card = Card.objects.get(user_id=request.user.pk, is_indiv=1)
+def groupcard_update(request, pk):
+    cards = Groupcard.objects.get(pk=pk)
+    if request.method == "POST":
+        form = GroupCardForm(request.POST, instance=cards)
+        if form.is_valid():
+            if form.is_valid():
+                temp = form.save(commit=False)
+                temp.user = request.user
+                # 라디오 버튼 'name'='id'로 들어옴
+                # name==choice, id=1,2,3으로 설정
+                temp.socks = request.POST["choice_sock"]
+                temp.chimneys = request.POST["choice_chim"]
+                temp.save()
+                return redirect("cards:group_detail", cards.pk)
+    else:
+        form = GroupCardForm(instance=cards)
+    context = {"form": form}
+    return render(request, "cards/groupcard_update.html", context=context)
+
+
+def groupcard_delete(request, pk):
+    card = Groupcard.objects.get(pk=pk)
     card.delete()
-    request.user.card_created = 0
-    request.user.save()
     return redirect("cards:index")
 
 
@@ -120,7 +133,7 @@ def group_detail(request, pk):
     groupcards = Groupcard.objects.get(pk=pk)
     context = {
         "cards": groupcards,
-        "comments": groupcards.groupcard_comment_set.all(),
+        "comments": groupcards.groupcomment_set.all(),
     }
 
     return render(request, "cards/group_detail.html", context)
@@ -182,3 +195,31 @@ def comment_create(request, pk):
     context = {"comment_form": comment_form}
 
     return render(request, "cards/comment_create.html", context)
+
+
+def gcomment_create(request, pk):
+    groupcard = Groupcard.objects.get(pk=pk)
+    comment_form = GroupCommentForm(request.POST, request.FILES)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.user = request.user
+        comment.groupcard = groupcard
+        comment.ribbons = request.POST["choice_ribbon"]
+        comment.save()
+        temp = ""
+        for i in str(comment.pk):
+            temp += dic[i]
+        comment.id_text = temp
+        comment.save()
+        return redirect("cards:group_detail", pk)
+    else:
+        comment_form = GroupCommentForm()
+    context = {"comment_form": comment_form}
+
+    return render(request, "cards/comment_create.html", context)
+
+
+def gcomments_delete(request, cards_pk, comment_pk):
+    comment = Groupcomment.objects.get(pk=comment_pk)
+    comment.delete()
+    return redirect("cards:group_detail", cards_pk)
