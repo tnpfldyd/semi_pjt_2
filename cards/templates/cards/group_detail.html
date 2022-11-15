@@ -3,6 +3,8 @@
 {% load static %}
 {% block content %} 
 
+<a href="{% url 'cards:card_update' cards.pk %}" class="text-decoration-none"> 트리 바꾸기 </a>
+<a href="{% url 'cards:card_delete'%}" class="text-decoration-none"> 트리 없애기 </a>
 <a href="{% url 'cards:comment_create' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
 
 <div>
@@ -15,8 +17,8 @@
   <h1> 벽난로id :{{ cards.chimneys }} </h1>
 </div>
 
-<img src="{%static 'images/산타가방.jpg' %}">
 
+<img src="{%static 'images/산타가방.jpg' %}">
 
 <div class>
   {% if cards.socks == 1 %}
