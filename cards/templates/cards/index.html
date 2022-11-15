@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-
+{% load static %}
 {% block content %} 
 
 <h1 class='text-center my-5'> 벽난로 만들기 배너 이미지 </h1>
@@ -37,6 +37,7 @@
       <p class="card-text">1번 굴뚝</p>
     </div>
   </div>
+
   {% else %}
   <p class='text-center my-5'> 개인 벽난로를 생성해주세요! </p>
   {% endif %}
@@ -57,16 +58,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 {% for card in cards %}
   {% if card.is_private == 0%}
     {{ card.pk }}
@@ -76,6 +67,27 @@
 
 {% endfor%}
 
+<h2> 그룹 트리 </h2>
+
+<div class="row">
+  {% for card in groupcards %}
+  <div class="card" style="width: 18rem;">
+    {% if card.chimneys == 1%}
+    <img src="{%static 'images/벽난로1.jpg' %}" class="card-img-top" alt="...">
+    {% elif card.chimneys == 2%}
+    <img src="{%static 'images/벽난로2.jpg' %}" class="card-img-top" alt="...">
+    {% elif card.chimneys == 3%}
+    <img src="{%static 'images/벽난로3.jpg' %}" class="card-img-top" alt="...">
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{ card.title }}</h5>
+      <p class="card-text">{{card.content}}</p>
+      <a href="{% url 'cards:group_detail' card.pk %}" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+  {% endfor%}
+  <br>
+</div>
 
 
 

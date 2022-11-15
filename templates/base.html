@@ -65,19 +65,20 @@
             </button>
           </li>
           {% endif %} 
+              <audio controls>
+                <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
+              </audio>
+              {% for message in messages %}
+              <div class="alert {{ message.tags }} alert-auto-dismissible text-center" role="alert">
+            {{ message }}
+              </div>
+              {% endfor %}
         </ul>
       </div> 
     </div>
   </nav>
 
-  <audio controls>
-    <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
-  </audio>
-  {% for message in messages %}
-  <div class="alert {{ message.tags }} alert-auto-dismissible text-center" role="alert">
-{{ message }}
-  </div>
-  {% endfor %}
+
 
 
     {% block content %}
