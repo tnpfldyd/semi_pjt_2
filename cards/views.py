@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import CardForm, CommentForm
-from .models import Card, Comment
+
+from .forms import *
+from .models import *
+
 import requests, os, json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -12,15 +14,16 @@ from django.contrib.auth import get_user_model
 @login_required
 def index(request):
     cards = Card.objects.order_by("-pk")
+    groupcards = Groupcard.objects.order_by("-pk")
     user = get_user_model().objects.get(pk=request.user.pk)
-    context = {"cards": cards, "user": user}
+    context = {"cards": cards, "groupcards": groupcards, "user": user}
     return render(request, "cards/index.html", context)
 
 
 @login_required
 def create_indiv(request):
     if request.method == "POST":
-        form = CardForm(request.POST)
+        form = UserCardForm(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
             temp.user = request.user
@@ -29,24 +32,21 @@ def create_indiv(request):
             temp.socks = request.POST["choice_sock"]
             temp.chimneys = request.POST["choice_chim"]
             # 개인이면 is_indiv에 1
-            temp.is_indiv = 1
-            request.user.card_created = 1
-            request.user.save()
+            temp.user = request.user
             temp.save()
             return redirect("cards:index")
     else:
-        form = CardForm()
+        form = UserCardForm()
     context = {
         "form": form,
     }
-
     return render(request, "cards/create_indiv.html", context)
 
 
 @login_required
 def create_group(request):
     if request.method == "POST":
-        form = CardForm(request.POST)
+        form = GroupCardForm(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
             temp.user = request.user
@@ -54,12 +54,10 @@ def create_group(request):
             # name==choice, id=1,2,3으로 설정
             temp.socks = request.POST["choice_sock"]
             temp.chimneys = request.POST["choice_chim"]
-            # 개인이면 is_indiv에 1
-            temp.is_indiv = 0
             temp.save()
             return redirect("cards:index")
     else:
-        form = CardForm()
+        form = GroupCardForm()
     context = {
         "form": form,
     }
@@ -68,14 +66,22 @@ def create_group(request):
 
 
 def indiv_detail(request):
-    cards = Card.objects.get(user_id=request.user.pk, is_indiv=1)
-
+    cards = get_user_model().usercard.objects.all()
     context = {
         "cards": cards,
         "comments": cards.comment_set.all(),
     }
-
     return render(request, "cards/indiv_detail.html", context)
+
+
+def group_detail(request, pk):
+    groupcards = Groupcard.objects.get(pk=pk)
+    context = {
+        "groupcards": groupcards,
+        "comments": groupcards.groupcomment_set.all(),
+    }
+
+    return render(request, "cards/group_detail.html", context)
 
 
 def card_update(request, pk):
@@ -111,10 +117,10 @@ def card_delete(request):
 
 
 def group_detail(request, pk):
-    cards = Card.objects.get(pk=pk)
+    groupcards = Groupcard.objects.get(pk=pk)
     context = {
-        "cards": cards,
-        "comments": cards.comment_set.all(),
+        "cards": groupcards,
+        "comments": groupcards.groupcard_comment_set.all(),
     }
 
     return render(request, "cards/group_detail.html", context)

@@ -19,4 +19,3 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=40, blank=True)
     introduce = models.CharField(blank=True, max_length=200)
     refresh_token = models.TextField(blank=True)
-    card_created = models.BooleanField(default=0)

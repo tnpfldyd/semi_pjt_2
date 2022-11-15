@@ -1,80 +1,60 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-
+{% load static %}
 {% block content %} 
 
-<h1> 우리 트리 트라이  </h1>
+<h1 class='text-center my-5'> 벽난로 만들기 배너 이미지 </h1>
 
-<h1> {{ user.nickname }} 님의 트리 </h1> 
+<h1 class='text-center my-5'> {{ user.nickname }} 님의 벽난로 </h1> 
 
 
 
 
 <div>
-{% if user.card_created == 0%}
-  <div>
-    <a href="{% url 'cards:create_indiv' %}" class="btn btn-primary"> 개인 트리 만들기</a>
-  </div>
+{% if user.usercard %}
+<div>
+  <a href="{% url 'cards:indiv_detail' %}" class="btn btn-primary"> 개인 벽난로 보러 가기</a>
+</div>
 {% else %}
 <div>
-  <a href="{% url 'cards:indiv_detail' %}" class="btn btn-primary"> 트리 보러 가기</a>
+  <a href="{% url 'cards:create_indiv' %}" class="btn btn-primary"> 개인 벽난로 만들기</a>
 </div>
 {% endif %}
 
 
-<a href="{% url 'cards:create_group' %}" class="btn btn-warning"> 그룹 트리 만들기</a>
+<a href="{% url 'cards:create_group' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>
 </div>
 
 
 
+<div class='my-5'>
 
-<h1> 개인 트리 </h1>
-{% if user.card_created == 1%}
-  {% if user.card_set.chimneys == 1%}
+  <h1 class='text-center my-5'> 개인 벽난로 </h1>
+  {% if user.usercard %}
   <div class="card" style="width: 18rem;">
     <img src="..." class="card-img-top" alt="...">
     <div class="card-body">
       <p class="card-text">1번 굴뚝</p>
     </div>
   </div>
-  {% endif%}
-{% else %}
-<h1> 트리를 생성해주세요! </h1>
 
-
-{% endif %}
-
-
-
-
-
-
-
-<hr>
-
-<h2> 그룹 트리 </h2>
-<div class="card" style="width: 18rem;">
-  <img src="..." class="card-img-top" alt="...">
-  <div class="card-body">
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-  </div>
+  {% else %}
+  <p class='text-center my-5'> 개인 벽난로를 생성해주세요! </p>
+  {% endif %}
+  
 </div>
 
+<div class='my-5'>
 
-{% for card in user.card_set.all %}
-
-<h1> {{ card.chimneys }} </h1>
-
-{% endfor %}
-
-
-
-
-
-
-
-
-
+  <h2> 그룹 벽난로 </h2>
+  <div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+  </div>
+  
+</div>
 
 
 
@@ -87,6 +67,27 @@
 
 {% endfor%}
 
+<h2> 그룹 트리 </h2>
+
+<div class="row">
+  {% for card in groupcards %}
+  <div class="card" style="width: 18rem;">
+    {% if card.chimneys == 1%}
+    <img src="{%static 'images/벽난로1.jpg' %}" class="card-img-top" alt="...">
+    {% elif card.chimneys == 2%}
+    <img src="{%static 'images/벽난로2.jpg' %}" class="card-img-top" alt="...">
+    {% elif card.chimneys == 3%}
+    <img src="{%static 'images/벽난로3.jpg' %}" class="card-img-top" alt="...">
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{ card.title }}</h5>
+      <p class="card-text">{{card.content}}</p>
+      <a href="{% url 'cards:group_detail' card.pk %}" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+  {% endfor%}
+  <br>
+</div>
 
 
 
