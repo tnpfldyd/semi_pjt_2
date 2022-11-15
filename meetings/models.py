@@ -5,6 +5,7 @@ from django.conf import settings
 
 # Create your models here.
 
+
 class Meeting(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
@@ -15,26 +16,31 @@ class Meeting(models.Model):
         format="JPEG",
         options={"quality": 90},
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="meeting")
-    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="meeting"
+    )
+
     is_closed = models.BooleanField(default=True)
     password = models.CharField(max_length=4, blank=True, null=True)
     location_choices = [
-      ('노원구', '노원구'),
-      ('송파구', '송파구'),
+        ("노원구", "노원구"),
+        ("송파구", "송파구"),
     ]
     location = models.CharField(
-      max_length=20,
-      choices = location_choices, 
-      default='선택',
+        max_length=20,
+        choices=location_choices,
+        default="선택",
     )
     text = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    belong_meeting = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="belong_meetinger")
+    belong = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="belongs", blank=True)
+
 
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="meeting_comment")
-    meeting_id = models.ForeignKey(Meeting, on_delete=models.CASCADE)
-    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="meeting_comment"
+    )
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey("self", on_delete=models.CASCADE, null=True)

@@ -59,19 +59,29 @@
         <div class="card-footer d-flex justify-content-between align-items-center">
           {% comment %} 패스워드 로직 {% endcomment %}
           <div>
-            {% if meeting.password %}
+            {% if request.user in meeting.belong.all %}
+            <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
+              <span>🔓</span>
+              <span>1입장하기</span>
+            </a>
+            {% elif meeting.password %}
             <button method="POST" onClick="" type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
               <span>🔒</span>
-              <span>입장하기</span>
+              <span>2입장하기</span>
             </button>
             {% else %}
             <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
               <span>🔓</span>
-              <span>입장하기</span>
+              <span>3입장하기</span>
             </a>
             {% endif %}
             {% comment %}  {% endcomment %}
           </div>
+          {% if request.user in meeting.belong.all %}
+          <div>
+            ❤️
+          </div>
+          {% endif %}
           <div>
             {% comment %} is_closed 로직 {% endcomment %}
             {% if meeting.is_closed == True %}
@@ -177,29 +187,7 @@
 
       {% endif %}
       {% endif %}
-      {% comment %}  {% endcomment %}
       
-      {% comment %} 송파구 {% endcomment %}
-      {% comment %} {% if local == '송파구' %}
-        {% if page_obj.has_previous %}
-        <a href="?local={{ page_obj }}">&laquo; 처음</a>
-        <a href="?local={{ page_obj.previous_page_number }}">이전</a>
-        {% endif %}
-
-        <span class="current">
-          {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-        </span>
-
-        {% if page_obj.has_next %}
-        
-        <a href="?local={{ page_obj.next_page_number }}">다음</a>
-        <a href="?local={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
-
-        {% endif %}
-      {% endif %} {% endcomment %}
-      {% comment %}  {% endcomment %}
-
-    {% comment %} {% endfor %} {% endcomment %}
     </span>
   </div>
 </div>

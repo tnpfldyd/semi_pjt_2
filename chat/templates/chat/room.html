@@ -2,32 +2,45 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<div class='d-flex justify-content-center'>
-    <div class='width:40rem'>
-        <h1 class='my-5 text-center'>채팅방</h1>
+<style>
+   body {
+    background-image : url('{% static 'images/채팅방.jpg' %}');
+    background-repeat : no-repeat;
+    background-size : cover;
+   }
+</style>
+<div class='d-flex justify-content-center' style='opacity:0.9;'>
+    <div style='width:40rem' class='me-3'>
+        <h1 class='my-5 text-center text-light'>채팅방</h1>
         <textarea id="chat-log" cols="100" rows="20" class='form-control my-2'></textarea>
         <input id="chat-message-input" type="text" size="100" class='form-control my-1'>
         <div class="d-grid">
             <input id="chat-message-submit" type="button" value="전송하기" class='btn btn-primary my-2 mb-5'>
         </div>
     </div>
+    <div style='width:10rem'>
+        <h1 class='my-5 text-center text-light'>유저</h1>
+        <textarea id="userList" rows="24" class='form-control my-2'></textarea>
+    </div>
 </div>
-<textarea id='userList' hidden=hidden>
-</textarea>
-<textarea id='users'>
-</textarea>
 
-{% if request.user.nickname %}
+<input type="text" id="user" value='{{ user }}' hidden=hidden>
+<input type="text" id="userid" value='{{ userid }}' hidden=hidden>
+
+<textarea id="useridList" cols="30" rows="10" hidden=hidden></textarea>
+
 {{ user|json_script:"user" }}
-{% endif %}
 {{ userid|json_script:"userid" }}
-
 {{ room_name|json_script:"room-name" }}
+
 <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const user = document.getElementById('user').value
+    const userid = document.getElementById('userid').value
 
-    const userList = document.querySelector('#userList')
-    const users = document.querySelector('#users')
+    const userList = document.getElementById('userList')
+    const useridList = document.getElementById('useridList')
+
 
     const chatSocket = new WebSocket(
         'ws://'
@@ -39,24 +52,13 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        if (data.user) {
             document.querySelector('#chat-log').value += (data.user + ' : ' + data.message + '\n');
-        }
-        else {
-            document.querySelector('#chat-log').value += (data.userid + ' : ' + data.message + '\n');
-        }
-        if (userList.value.includes(data.userid)) {
-            
-        }
-        else {
-            userList.value += (data.userid + '\n')
-            if (data.user) {
-                users.value += (data.user + '\n')
+            if (useridList.value.includes(data.userid)) {
             }
             else {
-                users.value += (data.userid + '\n')
+                useridList.value += (data.userid + '\n');
+                userList.value += (data.user + '\n');
             }
-        }
     };
 
     chatSocket.onclose = function(e) {
@@ -72,16 +74,19 @@
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
         const messageInputDom = document.querySelector('#chat-message-input');
-        const user = document.getElementById('user').value;
-        const userid = document.getElementById('userid').value;
-
         const message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
             'message': message,
             'user' : user,
             'userid' : userid,
         }));
+    
         messageInputDom.value = '';
-    };
+    }
 </script>
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
+
 {% endblock  %}

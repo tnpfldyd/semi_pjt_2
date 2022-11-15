@@ -15,32 +15,32 @@
       {% if request.user.is_authenticated %}
         <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
           {% csrf_token %}
-          <input type="text">
+          <input type="text" name="content">
           <button class="btn btn-outline-primary ">작성</button>
         </form>
       {% endif %}
     </div>
 
-    
-    <form id="belong-form" data-user-id="{{ request.user.pk }}" method="POST">
-      {% if request.user.is_authenticated %}
+    <div class="d-flex">
+      이 방에 참여한 유저들: 
+      <div>
+      {% for user in user_list %}
+        <a href="">{{ user.nickname }}</a>
+      {% endfor %}
+      </div>
+    </div>
+
+    <form action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
       {% csrf_token %}
-      {% if request.user in user.belongings.all %}
-      <input class="btn btn-dark btn-lg" type="submit" value="모임참여 취소" style="width: 120px;">
-      {% else %}
-      <input class="btn btn-dark btn-lg" type="submit" value="모임참여" style="width: 120px;">
-      {% endif %}
-      {% endif %}
+      <button name="belong_id" value="belong_id">
+        참여
+      </button>
     </form>
-    {% if request.user in meeting.belong_meeting.all %}
-    <a href="{% url 'meetings:belong_meeting' meeting.pk %}" class="btn btn-outline-danger my-3 mx-1">즐겨찾기 취소</a>
-    {% else %}
-    <a href="{% url 'meetings:belong_meeting' meeting.pk %}" class="btn btn-outline-danger my-3 mx-1">즐겨찾기 등록</a>
+    {% if meeting.belong %}
+    {{ meeting.belong.count }}
+
     {% endif %}
-    <small>즐겨찾기 등록을 하시면 비밀번호 입력없이 들어올 수 있습니다.</small>
-    {% for i in meeting.belong_meeting.all %}
-    {{ i.pk }}
-    {% endfor %}
+    <small>참여버튼을 누르시면 비밀번호 입력없이 들어올 수 있습니다.</small>
 
     <div class="my-3">
       댓글 수 :
@@ -55,11 +55,10 @@
       <p>{{ comment.content }}</p>
 
       {% if request.user == comment.user %}
-        <form action="{% url 'mettings:comment_delete' metting.pk comment.pk %}" method="POST">
+        <form action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
           {% csrf_token %}
-          <button>삭제</button>
+          <button type="submit">삭제</button>
         </form>
-      {% else %}
       {% endif %}
       <hr>
       {% empty %}
@@ -78,6 +77,7 @@
       {% endif %}
     </div>
   </div>
+
 
   {% comment %} js {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
