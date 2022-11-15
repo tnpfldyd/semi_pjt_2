@@ -39,11 +39,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "shoppings",
     "daphne",
-    "channels",
     "chat",
     "cards",
     "vocies",
-    "daphne",
     "channels",
     "accounts",
     "meetings",
