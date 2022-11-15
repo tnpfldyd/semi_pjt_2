@@ -21,7 +21,15 @@
       {% endif %}
     </div>
 
-    
+    <div class="d-flex">
+      이 방에 참여한 유저들: 
+      <div>
+      {% for user in user_list %}
+        <a href="">{{ user.nickname }}</a>
+      {% endfor %}
+      </div>
+    </div>
+
     <form action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
       {% csrf_token %}
       <button name="belong_id" value="belong_id">
