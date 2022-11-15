@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block content %} 
+
+<a href="{% url 'cards:comment_create' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
+
+<div>
+  <h1> 성별 : {{ cards.user.gender }} </h1>
+  <h1> 이름 : {{ cards.user.nickname }} </h1>
+  <img src="{{ cards.user.profileimage }}" class="rounded-circle">
+  <h1> 제목 : {{ cards.title }} </h1>
+  <h1> 내용 : {{ cards.content }} </h1>
+  <h1> 양말id : {{ cards.socks }} </h1>
+  <h1> 벽난로id :{{ cards.chimneys }} </h1>
+</div>
+
+<img src="{%static 'images/산타가방.jpg' %}">
+
+
+<div class>
+  {% if cards.socks == 1 %}
+    <img src="{%static 'images/양말1.png' %}">
+  {% elif cards.socks == 2 %}
+    <img src="{%static 'images/양말2.png' %}">
+  {% elif cards.socks == 3 %}
+    <img src="{%static 'images/양말3.png' %}">
+  {% endif %}
+
+  {% if cards.chimneys == 1 %}
+  <img src="{%static 'images/벽난로1.jpg' %}">
+  {% elif cards.chimneys == 2 %}
+  <img src="{%static 'images/벽난로2.jpg' %}">
+  {% elif cards.chimneys == 3 %}
+  <img src="{%static 'images/벽난로3.jpg' %}">
+  {% endif %}
+</div>
+
+
+{% for comment in comments %}
+  {% if comment.ribbons == 1 %}
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
+      <img src="{%static 'images/리본1.png' %}">
+    </button>
+
+    <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            {{ comment.content }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  {% elif comment.ribbons == 2%}
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
+      <img src="{%static 'images/리본2.png' %}">
+    </button>
+
+  {% endif %}
+  <h2> {{ comment.content }} | {{ comment.created_at }} | {{comment.ribbons}} </h2>
+
+  <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          {{ comment.content }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endfor %}
+
+{% endblock %}
