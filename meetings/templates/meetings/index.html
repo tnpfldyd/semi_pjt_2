@@ -6,54 +6,64 @@
 
 
 {% comment %} 모임생성 버튼 및 숫자 {% endcomment %}
-<div class="container">
-  <div>
-    지금까지 총 {{ meetings_count }}개의 모임이 개설됐어요!
-  </div>
-</div>
+
 {% comment %} 모임 목록 {% endcomment %}
 
-<div class="container mt-2">
+<div class="container mt-2 m-3">
   <div class="d-flex justify-content-between align-items-center">
-    <h1>모임 목록</h1>
-    <div>
-      <a class="text-decoration-none" href="{% url 'meetings:create' %}">나도 모임 생성하기</a>
+    <div class="fs-3">모임 목록 ({{ meetings_count }})</div>
+    <div class="btn btn-warning">
+      <a style="text-decoration:none" class="text-dark" href="{% url 'meetings:create' %}">나도 모임 생성하기</a>
     </div>
   </div>
   {% comment %} 지역별 목록 {% endcomment %}
   <div class="container p-0">
-    <div class="d-flex">
-      <form action="{% url 'meetings:index'%}" method="POST" class="m-1">
-        {% csrf_token %}
-        <button name="reset" value="reset">
-          모두보기
-        </button>
-      </form>
-      {% for local in meetings_local_list %}
-      <a href="?local={{local}}" class="mx-2">
-        {{ local }}
-      </a>
-      {% endfor %}
-    </div>
+    
   </div>
   <div class="mt-3">
-    {{ meetings_local_name }}에 위치한 모임들 
+    <span class="fw-bold" style="color: #da2c38">{{ meetings_local_name }}</span>에 위치한 모임들 
     <hr/>
   </div>
   
+  <div class="d-flex align-items-center">
+    <form custom-form action="{% url 'meetings:index'%}" method="POST" class="m-1">
+      {% csrf_token %}
+      <button id="custom-btn" name="reset" value="reset">
+        모두보기
+      </button>
+    </form>
+    {% for local in meetings_local_list %}
+    <span class="mx-1">|
+      <a href="?local={{local}}" class="mx-1 custom-link" style="text-decoration:none">
+      {{ local }}
+      </a>
+    </span>
+    {% endfor %}
+  </div>
+  <hr/>
 <div class="d-flex">
   {% for meeting in page_obj %}
-  <div class="row row-cols-1 row-cols-md-2">
-    <div class="col">
+  <div class="row row-cols-1 row-cols-md-2 mx-1">
+    <div class="card-header">
+      {% if request.user in meeting.belong.all %}
+          <div class="JJim fs-3" >
+            ❤️
+          </div>
+      {% endif %}
       <div class="card mb-4" style="width: 21rem; height:550px;">
         {% if meeting.image %}
-        <img src="{{ meeting.image.url }}" class="card-img-top" alt="...">
+        <img src="{{ meeting.image.url }}" class="card-img-top" alt="..." style="height:300px;">
         {% else %}
           <img src="https://dummyimage.com/600x360/000000/c4c4c4" class="my4-2">
         {% endif %}
         <div class="card-body" style="min-height:100px;">
           <h5 class="card-title">{{ meeting.title }}</h5>
+          <hr/>
           <p class="card-text">{{ meeting.content|truncatewords:14 }}</p>
+        </div>
+        {% comment %} 방장 {% endcomment %}
+        <div class="d-flex justify-content-end">
+          방장 프로필:<a class="mx-2" href="{% url 'accounts:profile' meeting.user.username %}">{{ meeting.user.nickname }}</a>
         </div>
         <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small>
         <div class="card-footer d-flex justify-content-between align-items-center">
@@ -61,13 +71,13 @@
           <div>
             {% if request.user in meeting.belong.all %}
             <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
-              <span>🔒</span>
-              <span>1입장하기</span>
+              <span></span>
+              <span>입장하기</span>
             </a>
             {% elif meeting.password %}
-            <button method="POST" onClick="" type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
+            <button action="{% url 'meetings:password' meeting.pk %}" method="POST" onClick="" type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
               <span>🔒</span>
-              <span>2입장하기</span>
+              <span>입장하기</span>
             </button>
             {% else %}
             <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
@@ -77,11 +87,7 @@
             {% endif %}
             {% comment %}  {% endcomment %}
           </div>
-          {% if request.user in meeting.belong.all %}
-          <div>
-            ❤️
-          </div>
-          {% endif %}
+          
           <div>
             {% comment %} is_closed 로직 {% endcomment %}
             {% if meeting.is_closed == True %}
@@ -95,7 +101,8 @@
       </div>
     </div>
   </div>
-      
+  
+  
 
             {% comment %} 모달 {% endcomment %}
             <div class="modal fade" id="{{meeting.text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -109,7 +116,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-footer">
-                    <form action="{% url 'meetings:detail' meeting.pk %}" method="POST">
+                    <form action="{% url 'meetings:password' meeting.pk %}" method="POST">
                       {% csrf_token %}
                       <input type="password" name="password" id="password" style="width:400px;">
                       <input type="submit">
@@ -118,8 +125,31 @@
                 </div>
               </div>
             </div>
+    
   {% endfor %}
+  {% comment %} 내가참여한 모임들 {% endcomment %}
+  <div class="card d-flex align-items-center" style="min-width: 150px;">
+    <div>참여신청한 모임들</div>
+    {% for meeting in meetings_all %}
+    <div class="d-flex align-items-center">
+        {% if request.user in meeting.belong.all %}
+          <a style="text-decoration:none;" href="{% url 'meetings:detail' meeting.pk %}" class="text-dark">{{ meeting.title }}</a>
+          <form id="custom-form" action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
+            {% csrf_token %}
+            <button id="custom-btn"name="belong_id2" value="belong_id2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+              </svg>
+            </button>
+          </form>
+        {% endif %}
+      </div>
+      {% endfor %}
   </div>
+</div>
+
+  
+
 
 {% comment %} 노원구 {% endcomment %}
 

@@ -16,6 +16,7 @@ def home(request):
 def index(request):
     meetings = Meeting.objects.order_by("-pk")
     meetings_all = Meeting.objects.all()
+
     # 모임이 몇개 개설됐는지
     meetings_count = Meeting.objects.all().count()
 
@@ -49,6 +50,7 @@ def index(request):
       context = {
         "nw": nw,
         "meetings": meetings,
+        "meetings_all": meetings_all,
         "page_obj": page_obj,
         "meetings_local": meetings_local,
         "meetings_local_name": meetings_local_name,
@@ -71,6 +73,7 @@ def index(request):
         "sp": sp,
         "meetings": meetings,
         "page_obj": page_obj,
+        "meetings_all": meetings_all,
         "meetings_local": meetings_local,
         "meetings_local_name": meetings_local_name,
         "meetings_count": meetings_count,
@@ -85,6 +88,7 @@ def index(request):
           "at_all": at_all,
           "meetings": meetings,
           "page_obj": page_obj,
+          "meetings_all": meetings_all,
           "meetings_local": meetings_local,
           "meetings_local_name": meetings_local_name,
           "meetings_count": meetings_count,
@@ -118,16 +122,38 @@ def create(request):
 
     return render(request, "meetings/create.html", context)
 
+def password(request, meeting_pk):
+    meeting = Meeting.objects.get(pk=meeting_pk)
+    print(meeting.password)
+    print(request.POST.get('password'))
+    if request.POST.get('password') == meeting.password:
+
+      return detail(request, meeting_pk)
+    else:
+      messages.warning(request, "비밀번호가 일치하지 않습니다.😀")
+      return redirect("meetings:index") 
+
 
 def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all()
     form = CommentForm()
-    session_id = request.session.session_key
+
 
     user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
+
     user = request.user # request.user => 현재 로그인한 유저
+
+    if request.POST.get("belong_id2"):
+      if meeting.belong.filter(id = user.id).exists(): # 이미 참여를 누른 유저일 때
+        meeting.belong.remove(user)
+        messages.error(request, "참여 취소😀")
+      else: # 참여를 누르지 않은 유저일 때
+        meeting.belong.add(user) # belong 필드에 현재 유저 삭제
+        messages.success(request, "참여 성공😀")
+      return redirect("meetings:index")
+
     if request.POST.get("belong_id"):    
       if meeting.belong.filter(id = user.id).exists(): # 이미 참여를 누른 유저일 때
         meeting.belong.remove(user)
@@ -146,31 +172,14 @@ def detail(request, meeting_pk):
       }
       return render(request, "meetings/detail.html", context)
     
-    # DB에 없는데 패스워드가 일치하다면
-    elif request.POST.get('password') == meeting.password:
-      
-      context = {
-        "user_list": user_list,
-        "meeting": meeting,
-        "comments": comments,
-        "commentform": form,
-        }
-      return render(request, "meetings/detail.html", context)
-    
-    # 이미 방에 들와본 경험이 있어서 session_id가 있다면
-    elif session_id:
-
-      context = {
-        "user_list": user_list,
-        "meeting": meeting,
-        "comments": comments,
-        "commentform": form,
-        }
-      return render(request, "meetings/detail.html", context)
-
-
     else:
-      return redirect("meetings:index")
+      context = {
+        "user_list": user_list,
+        "meeting": meeting,
+        "comments": comments,
+        "commentform": form,
+        }
+      return render(request, "meetings/detail.html", context)
 
 
 
