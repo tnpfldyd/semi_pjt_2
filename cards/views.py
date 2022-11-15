@@ -18,7 +18,7 @@ def index(request):
 
 
 @login_required
-def createindiv(request):
+def create_indiv(request):
     if request.method == "POST":
         form = CardForm(request.POST)
         if form.is_valid():
@@ -43,13 +43,18 @@ def createindiv(request):
     return render(request, "cards/create_indiv.html", context)
 
 
-def creategroup(request):
+@login_required
+def create_group(request):
     if request.method == "POST":
         form = CardForm(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
             temp.user = request.user
-            # 그룹이면 is_indiv에 0
+            # 라디오 버튼 'name'='id'로 들어옴
+            # name==choice, id=1,2,3으로 설정
+            temp.socks = request.POST["choice_sock"]
+            temp.chimneys = request.POST["choice_chim"]
+            # 개인이면 is_indiv에 1
             temp.is_indiv = 0
             temp.save()
             return redirect("cards:index")
@@ -58,21 +63,23 @@ def creategroup(request):
     context = {
         "form": form,
     }
+
     return render(request, "cards/create_group.html", context)
 
 
-def indivdetail(request):
-    cards = request.user.card.all()
+def indiv_detail(request):
+    cards = Card.objects.get(user_id=request.user.pk, is_indiv=1)
+
     context = {
         "cards": cards,
         "comments": cards.comment_set.all(),
     }
 
-    return render(request, "cards/indivdetail.html", context)
+    return render(request, "cards/indiv_detail.html", context)
 
 
-def cardupdate(request, pk):
-    cards = Card.objects.get(pk=request.user.pk)
+def card_update(request, pk):
+    cards = Card.objects.get(user_id=request.user.pk, is_indiv=1)
     if request.method == "POST":
         form = CardForm(request.POST, instance=cards)
         if form.is_valid():
@@ -88,29 +95,29 @@ def cardupdate(request, pk):
                 request.user.card_created = True
                 request.user.save()
                 temp.save()
-                return redirect("cards:indivdetail")
+                return redirect("cards:indiv_detail")
     else:
         form = CardForm(instance=cards)
     context = {"form": form}
-    return render(request, "cards/cardupdate.html", context=context)
+    return render(request, "cards/card_update.html", context=context)
 
 
-def carddelete(request):
-    card = Card.objects.get(pk=request.user.pk)
+def card_delete(request):
+    card = Card.objects.get(user_id=request.user.pk, is_indiv=1)
     card.delete()
     request.user.card_created = 0
     request.user.save()
     return redirect("cards:index")
 
 
-def detail(request, pk):
+def group_detail(request, pk):
     cards = Card.objects.get(pk=pk)
     context = {
         "cards": cards,
         "comments": cards.comment_set.all(),
     }
 
-    return render(request, "cards/detail.html", context)
+    return render(request, "cards/group_detail.html", context)
 
 
 dic = {
@@ -163,7 +170,7 @@ def comment_create(request, pk):
                 )
             }
             response = requests.post(url, headers=headers, data=data)
-            return redirect("cards:detail", pk)
+            return redirect("cards:indiv_detail", pk)
     else:
         comment_form = CommentForm()
     context = {"comment_form": comment_form}

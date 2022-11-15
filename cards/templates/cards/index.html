@@ -7,25 +7,81 @@
 
 <h1> {{ user.nickname }} 님의 트리 </h1> 
 
+
+
+
 <div>
 {% if user.card_created == 0%}
   <div>
-    <a href="{% url 'cards:createindiv' %}" class="btn btn-primary"> 개인 트리 만들기</a>
+    <a href="{% url 'cards:create_indiv' %}" class="btn btn-primary"> 개인 트리 만들기</a>
   </div>
 {% else %}
 <div>
-  <a href="{% url 'cards:indivdetail' %}" class="btn btn-primary"> 트리 보러 가기</a>
+  <a href="{% url 'cards:indiv_detail' %}" class="btn btn-primary"> 트리 보러 가기</a>
 </div>
 {% endif %}
-<a href="{% url 'cards:creategroup' %}" class="btn btn-warning"> 그룹 트리 만들기</a>
+
+
+<a href="{% url 'cards:create_group' %}" class="btn btn-warning"> 그룹 트리 만들기</a>
 </div>
+
+
+
+
+<h1> 개인 트리 </h1>
+{% if user.card_created == 1%}
+  {% if user.card_set.chimneys == 1%}
+  <div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <p class="card-text">1번 굴뚝</p>
+    </div>
+  </div>
+  {% endif%}
+{% else %}
+<h1> 트리를 생성해주세요! </h1>
+
+
+{% endif %}
+
+
+
+
+
+
+
+<hr>
+
+<h2> 그룹 트리 </h2>
+<div class="card" style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+  <div class="card-body">
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div>
+
+
+{% for card in user.card_set.all %}
+
+<h1> {{ card.chimneys }} </h1>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
 
 
 
 {% for card in cards %}
   {% if card.is_private == 0%}
     {{ card.pk }}
-    <a href="{% url 'cards:detail' card.pk %}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
+    <a href="{% url 'cards:indiv_detail'%}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
     <br>
   {% endif %}
 

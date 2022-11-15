@@ -3,8 +3,8 @@
 {% load static %}
 {% block content %} 
 
-<a href="{% url 'cards:cardupdate' user.pk %}" class="text-decoration-none"> 트리 바꾸기 </a>
-<a href="{% url 'cards:carddelete'%}" class="text-decoration-none"> 트리 없애기 </a>
+<a href="{% url 'cards:card_update' user.pk %}" class="text-decoration-none"> 트리 바꾸기 </a>
+<a href="{% url 'cards:card_delete'%}" class="text-decoration-none"> 트리 없애기 </a>
 <a href="{% url 'cards:comment_create' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
 
 <div>
