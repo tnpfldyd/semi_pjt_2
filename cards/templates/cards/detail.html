@@ -3,47 +3,39 @@
 {% load static %}
 {% block content %} 
 
-<a href="{% url 'cards:usercard_update' request.user.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
-<a href="{% url 'cards:usercard_delete'%}" class="text-decoration-none"> 벽난로 없애기 </a>
-<a href="{% url 'cards:usercard_comment' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
+<a href="{% url 'cards:comment_create' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
 
-<p class=' my-5 fs-1 ms-5'>벽난로 개인 프로필</p>
-<div class='row'>
-  <div class='col-3 ms-5'>
-    <img src="{{ cards.user.profileimage }}" class="rounded-2" style='width:10rem;'>
-  </div>
-  <div class='col-2'>
-    <p> 이름 : {{ cards.user.nickname }} </p>
-    <p> 성별 : {{ cards.user.gender }} </p>
-    <p> 나이 : {{ cards.user.age_range }}</p>
-  </div>
-
+<div>
+  <h1> 성별 : {{ cards.user.gender }} </h1>
+  <h1> 이름 : {{ cards.user.nickname }} </h1>
+  <img src="{{ cards.user.profileimage }}" class="rounded-circle">
+  <h1> 제목 : {{ cards.title }} </h1>
+  <h1> 내용 : {{ cards.content }} </h1>
+  <h1> 양말id : {{ cards.socks }} </h1>
+  <h1> 벽난로id :{{ cards.chimneys }} </h1>
 </div>
 
-<p class=' my-5 fs-1 ms-5'>벽난로 내용</p>
-<div class='ms-5'>
-  <p> 제목 : {{ cards.title }} </p>
-  <p> 내용 : {{ cards.content }} </p>
-  <img src="{%static 'images/산타가방.jpg' %}">
-  
-  <div class>
-    {% if cards.chimneys %}
-      {% if cards.socks %}
-      <div style='position:relative'>
-        <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
-        <div style='position: absolute; top:2rem; left:2rem;'>
-          <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
-        </div>
-      </div>
-      {% else %}
-      <div>
-        <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
-      </div>
-      {% endif %}
-    {% endif %}
-  
-  </div>
+<img src="{%static 'images/산타가방.jpg' %}">
+
+
+<div class>
+  {% if cards.socks == 1 %}
+    <img src="{%static 'images/양말1.png' %}">
+  {% elif cards.socks == 2 %}
+    <img src="{%static 'images/양말2.png' %}">
+  {% elif cards.socks == 3 %}
+    <img src="{%static 'images/양말3.png' %}">
+  {% endif %}
+
+  {% if cards.chimneys == 1 %}
+  <img src="{%static 'images/벽난로1.jpg' %}">
+  {% elif cards.chimneys == 2 %}
+  <img src="{%static 'images/벽난로2.jpg' %}">
+  {% elif cards.chimneys == 3 %}
+  <img src="{%static 'images/벽난로3.jpg' %}">
+  {% endif %}
 </div>
+
 
 {% for comment in comments %}
   {% if comment.ribbons == 1 %}

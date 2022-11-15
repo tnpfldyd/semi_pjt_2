@@ -17,7 +17,7 @@ class MeetingForm(forms.ModelForm):
             "content": "내용",
             "image": "이미지",
             "password": "비밀번호",
-            "location": "지역"
+            "location": "지역",
         }
 
         help_texts = {

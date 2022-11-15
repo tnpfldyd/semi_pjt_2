@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load django_bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<h1> 수정 화면 </h1>
+<form action="" method="POST">
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+    <div class="cc-selector">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="choice_sock" id="1" value="1">
+        <label class="drinkcard-cc sock1" for="sock1"></label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="choice_sock" id="2" value="2">
+        <label class="drinkcard-cc sock2" for="sock2"> </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="choice_sock" id="3" value="3">
+        <label class="drinkcard-cc sock3" for="sock3"></label>
+      </div>
+    </div>
+  
+    <div class="cc-selector">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="choice_chim" id="1" value="1">
+        <label class="drinkcard-cc chim1" for="chim1"></label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="choice_chim" id="2" value="2">
+        <label class="drinkcard-cc chim2" for="chim2"> </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="choice_chim" id="3" value="3">
+        <label class="drinkcard-cc chim3" for="chim3"></label>
+      </div>
+    </div>
+  
+  
+    <br>
+
+    {% bootstrap_button "저장" button_type="submit" button_class="btn-primary" %}
+</form>
+{% endblock%}

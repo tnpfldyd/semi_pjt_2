@@ -28,4 +28,5 @@ urlpatterns = [
     path("meetings/", include("meetings.urls")),
     path("chat/", include("chat.urls")),
     path("shoppings/", include("shoppings.urls")),
+    path("notes/", include("notes.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

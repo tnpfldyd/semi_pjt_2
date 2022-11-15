@@ -7,22 +7,9 @@ from django.conf import settings
 class UserCard(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="usercard"
-    )
-    socks = models.IntegerField()
-    chimneys = models.IntegerField()
-
-
-class Card(models.Model):
-    title = models.CharField(max_length=20)
-    content = models.TextField()
-    is_private = models.BooleanField()
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="card"
-    )
-    socks = models.IntegerField()
-    chimneys = models.IntegerField()
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    socks = models.IntegerField(blank=True)
+    chimneys = models.IntegerField(blank=True)
 
 
 class Groupcard(models.Model):
@@ -34,10 +21,22 @@ class Groupcard(models.Model):
     chimneys = models.IntegerField()
 
 
+class UserComment(models.Model):
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    usercard = models.ForeignKey(UserCard, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    ribbons = models.IntegerField()
+    id_text = models.TextField(blank=True)
+
+
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    card = models.ForeignKey(UserCard, on_delete=models.CASCADE)
+    usercard = models.ForeignKey(UserCard, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

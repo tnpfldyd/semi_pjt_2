@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block content %}
+{% for note in notes %}
+<div id="{{note.pk}}">
+<a href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a>
+{{ note.created_at }}
+<form id="del" data-note-id="{{ note.pk }}">
+  {% csrf_token %}
+  <button type="submit">삭제</button>
+</form>
+</div>
+{% endfor %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+  const del = document.querySelectorAll('#del')
+  del.addEventListener('submit', function(event) {
+    var delete_warning = confirm('쪽지를 삭제하시겠습니까?');
+    if (delete_warning == true) {
+      axios({
+        method: 'post',
+        url: `/notes/${event.target.dataset.noteId}/delete/`,
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'note_pk': event.target.dataset.noteId}
+      })
+      .then(response => {
+        console.log(response)
+      })
+    }
+  })
+</script>
+{% endblock %}
