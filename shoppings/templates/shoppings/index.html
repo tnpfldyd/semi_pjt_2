@@ -3,8 +3,8 @@
 {% load static %}
 {% block content %}
 
-<form action="{% url 'shoppings:search' 1 %}">
-  <input type="text" name="keyword">
+<form action="{% url 'shoppings:search' 1 %}" class="text-center">
+  <input class="form-control-sm" type="text" name="keyword">
   <button class="btn btn-outline-primary" type="submit">검색</button>
 </form>
 <div class="container text-center">
