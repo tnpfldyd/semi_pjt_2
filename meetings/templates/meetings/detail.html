@@ -22,25 +22,17 @@
     </div>
 
     
-    <form id="belong-form" data-user-id="{{ request.user.pk }}" method="POST">
-      {% if request.user.is_authenticated %}
+    <form action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
       {% csrf_token %}
-      {% if request.user in user.belongings.all %}
-      <input class="btn btn-dark btn-lg" type="submit" value="모임참여 취소" style="width: 120px;">
-      {% else %}
-      <input class="btn btn-dark btn-lg" type="submit" value="모임참여" style="width: 120px;">
-      {% endif %}
-      {% endif %}
+      <button name="belong_id" value="belong_id">
+        참여
+      </button>
     </form>
-    {% if request.user in meeting.belong_meeting.all %}
-    <a href="{% url 'meetings:belong_meeting' meeting.pk %}" class="btn btn-outline-danger my-3 mx-1">즐겨찾기 취소</a>
-    {% else %}
-    <a href="{% url 'meetings:belong_meeting' meeting.pk %}" class="btn btn-outline-danger my-3 mx-1">즐겨찾기 등록</a>
+    {% if meeting.belong %}
+    {{ meeting.belong.count }}
+
     {% endif %}
-    <small>즐겨찾기 등록을 하시면 비밀번호 입력없이 들어올 수 있습니다.</small>
-    {% for i in meeting.belong_meeting.all %}
-    {{ i.pk }}
-    {% endfor %}
+    <small>참여버튼을 누르시면 비밀번호 입력없이 들어올 수 있습니다.</small>
 
     <div class="my-3">
       댓글 수 :
@@ -78,6 +70,7 @@
       {% endif %}
     </div>
   </div>
+
 
   {% comment %} js {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

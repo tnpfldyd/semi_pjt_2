@@ -4,7 +4,8 @@ from .models import Meeting
 from .forms import MeetingForm, CommentForm
 from django.core.paginator import Paginator
 from django.contrib import messages
-
+from django.http import HttpResponse,JsonResponse
+import json
 
 # Create your views here.
 
@@ -30,6 +31,7 @@ def index(request):
     paginator = Paginator(meetings, 4)
     page_number = request.GET.get("local") 
     page_obj = paginator.get_page(page_number) 
+
 
     if request.POST.get("reset"):
       return redirect('meetings:index')
@@ -117,32 +119,46 @@ def create(request):
     return render(request, "meetings/create.html", context)
 
 
-
 def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all()
     form = CommentForm()
-    
-    belong = Meeting.objects.get(pk=meeting_pk)
 
-
-    print(belong.belong_meeting) # accounts.User.None
-    print(belong.user.pk) # 1
-    context = {
+    user = request.user # request.user => 현재 로그인한 유저
+    if request.POST.get("belong_id"):    
+      if meeting.belong.filter(id = user.id).exists(): # 이미 참여를 누른 유저일 때
+        meeting.belong.remove(user)
+        
+        messages.error(request, "참여 취소😀")
+      else: # 참여를 누르지 않은 유저일 때
+        meeting.belong.add(user) # belong 필드에 현재 유저 삭제
+        messages.success(request, "참여 성공😀")
+        
+    if meeting.belong.filter(id = user.id).exists():
+      
+      
+      context = {
         "meeting": meeting,
         "comments": comments,
         "commentform": form,
-    }
-    # if int(belong.user.pk) in int(meeting_pk):
-    #   print("들어와짐")
-    #   return render(request, "meetings/detail.html", context)
-
-    if request.POST.get('password') == meeting.password:
-      print("로직")
+      }
       return render(request, "meetings/detail.html", context)
     
     else:
-      return redirect("meetings:index")
+      if request.POST.get('password') == meeting.password:
+        print("로직?")
+
+        context = {
+        "meeting": meeting,
+        "comments": comments,
+        "commentform": form,
+        }
+
+        return render(request, "meetings/detail.html", context)
+    
+      else:
+        return redirect("meetings:index")
+
 
 
 def update(request, meeting_pk):

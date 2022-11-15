@@ -30,7 +30,7 @@ class Meeting(models.Model):
     )
     text = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    belong_meeting = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="belong_meetinger")
+    belong = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="belongs", blank=True)
 
 class Comment(models.Model):
     content = models.TextField()
