@@ -1,5 +1,5 @@
 from django import forms
-from .models import Card, Comment
+from .models import Card, Comment, UserCard
 
 
 class CardForm(forms.ModelForm):
@@ -9,6 +9,12 @@ class CardForm(forms.ModelForm):
         labels = {
             "is_private": "Private",
         }
+
+
+class UserCardForm(forms.ModelForm):
+    class Meta:
+        model = UserCard
+        fields = ["title", "content"]
 
 
 class CommentForm(forms.ModelForm):
