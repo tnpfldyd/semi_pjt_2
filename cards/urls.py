@@ -7,6 +7,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("create/indiv/", views.create_indiv, name="create_indiv"),
     path("create/group/", views.create_group, name="create_group"),
+    # 주소 정리해야함
     path("<int:pk>/", views.group_detail, name="group_detail"),
     path("detail/indiv/", views.indiv_detail, name="indiv_detail"),
     path("<int:pk>/update/", views.card_update, name="card_update"),

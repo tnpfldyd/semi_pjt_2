@@ -136,63 +136,58 @@ def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all()
     form = CommentForm()
-    
 
-    user_list = meeting.belong.all() # 유저리스트를 보여줄 코드
+    user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
+    user = request.user  # request.user => 현재 로그인한 유저
+    if request.POST.get("belong_id"):
+        if meeting.belong.filter(id=user.id).exists():  # 이미 참여를 누른 유저일 때
+            meeting.belong.remove(user)
+            messages.error(request, "참여 취소😀")
 
-    
-    user = request.user # request.user => 현재 로그인한 유저
-    if request.POST.get("belong_id"):    
-      if meeting.belong.filter(id = user.id).exists(): # 이미 참여를 누른 유저일 때
-        meeting.belong.remove(user)
-        messages.error(request, "참여 취소😀")
+        else:  # 참여를 누르지 않은 유저일 때
+            meeting.belong.add(user)  # belong 필드에 현재 유저 삭제
+            messages.success(request, "참여 성공😀")
 
-      else: # 참여를 누르지 않은 유저일 때
-        meeting.belong.add(user) # belong 필드에 현재 유저 삭제
-        messages.success(request, "참여 성공😀")
-    
     # DB에 존재하면 바로 입장.
-    if meeting.belong.filter(id = user.id).exists():
-      
-      context = {
-        "user_list": user_list,
-        "meeting": meeting,
-        "comments": comments,
-        "commentform": form,
-      }
-      return render(request, "meetings/detail.html", context)
-    
-    # DB에 없는데 패스워드가 일치하다면
-    elif request.POST.get('password') == meeting.password:
-            
-      context = {
-        "user_list": user_list,
-        "meeting": meeting,
-        "comments": comments,
-        "commentform": form,
+    if meeting.belong.filter(id=user.id).exists():
+
+        context = {
+            "user_list": user_list,
+            "meeting": meeting,
+            "comments": comments,
+            "commentform": form,
         }
-      return render(request, "meetings/detail.html", context)
+        return render(request, "meetings/detail.html", context)
+
+    # DB에 없는데 패스워드가 일치하다면
+    elif request.POST.get("password") == meeting.password:
+
+        context = {
+            "user_list": user_list,
+            "meeting": meeting,
+            "comments": comments,
+            "commentform": form,
+        }
+        return render(request, "meetings/detail.html", context)
 
     else:
-      return redirect("meetings:index")
+        return redirect("meetings:index")
 
-   
+    # else:
+    #     if request.POST.get("password") == meeting.password:
+    #         print("로직?")
 
-    else:
-        if request.POST.get("password") == meeting.password:
-            print("로직?")
+    #         context = {
+    #             "meeting": meeting,
+    #             "comments": comments,
+    #             "commentform": form,
+    #         }
 
-            context = {
-                "meeting": meeting,
-                "comments": comments,
-                "commentform": form,
-            }
+    #         return render(request, "meetings/detail.html", context)
 
-            return render(request, "meetings/detail.html", context)
-
-        else:
-            return redirect("meetings:index")
+    #     else:
+    #         return redirect("meetings:index")
 
 
 def update(request, meeting_pk):
