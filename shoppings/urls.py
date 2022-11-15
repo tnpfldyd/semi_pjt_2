@@ -5,5 +5,6 @@ app_name = "shoppings"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("<int:num>/", views.search, name="search"),
+    path("search/", views.search, name="search"),
+    path("<str:string>/sort/", views.ssort, name="sort"),
 ]

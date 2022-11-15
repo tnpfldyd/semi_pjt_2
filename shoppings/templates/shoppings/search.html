@@ -3,12 +3,20 @@
 {% load static %}
 {% block content %}
 
-<form action="{% url 'shoppings:search' 1 %}" class="text-center">
-  <input class="form-control-sm" type="text" name="keyword">
-  <button class="btn btn-outline-primary" type="submit">검색</button>
-</form>
 <div class="container text-center">
-  <div class="row row-cols-4">
+  <div class="d-flex justify-content-end">
+    <form action="{% url 'shoppings:search' %}" class="text-center">
+      <input class="form-control-sm" type="text" name="keyword">
+      <button class="btn btn-outline-primary" type="submit">검색</button>
+    </form>
+    <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
+      <option value="sim" selected>정확도순</option>
+      <option value="asc">최저가순</option>
+      <option value="dsc">최고가순</option>
+      <option value="date">날짜순</option>
+    </select>
+  </div>
+  <div class="row row-cols-4" id="card-div">
     {% for item in items %}
     <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
       <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
@@ -23,4 +31,7 @@
     {% endfor %}
   </div>
 </div>
+<div id="keyword" style="display: none;">{{keyword}}</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/search.js' %}"></script>
 {% endblock %}

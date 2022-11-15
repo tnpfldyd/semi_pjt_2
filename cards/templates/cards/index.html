@@ -27,12 +27,26 @@
 
   {% else %}
   <p class='text-center my-5'> 개인 벽난로를 생성해주세요! </p>
+
   <div>
     <a href="{% url 'cards:create_indiv' %}" class="btn btn-primary"> 개인 벽난로 만들기</a>
   </div>
+
   {% endif %}
   
 </div>
+
+<div class='my-5'>
+
+
+{% for card in cards %}
+  {% if card.is_private == 0%}
+    {{ card.pk }}
+    <a href="{% url 'cards:indiv_detail'%}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
+    <br>
+  {% endif %}
+
+{% endfor%}
 
 <h2> 그룹 트리 </h2>
 <a href="{% url 'cards:create_group' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>

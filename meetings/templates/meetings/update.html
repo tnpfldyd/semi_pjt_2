@@ -4,12 +4,14 @@
 
 {% block content %}
 
-  <div class="container">
-    <h1>수정하기</h1>
-    <form action="" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {% bootstrap_form meeting_form %}
-      <input type="submit" value="작성">
-    </form>
+  <div class="container h-100">
+    <div class="container">
+      <h1 class="ms-5 mt-5">수정하기</h1>
+      <form class="container h-100 p-5 entry3 rounded-5" action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form meeting_form %}
+        <input class="btn btn-outline-primary" type="submit" value="작성">
+      </form>
+    </div>
   </div>
 {% endblock content %}

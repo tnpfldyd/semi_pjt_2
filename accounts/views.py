@@ -106,7 +106,7 @@ def kakao_callback(request):
         auth_logout(request)
         messages.error(request, "누적 신고 횟수가 많아 로그인 할 수 없어요.😥")
     else:
-        messages.success(request, "오셔서 환영합니다.😀")
+        messages.success(request, "오신걸 환영합니다.😀")
     return redirect(request.GET.get("next") or "accounts:index")
 
 

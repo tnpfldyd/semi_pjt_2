@@ -3,9 +3,7 @@
 {% load static %}
 {% block content %} 
 
-<a href="{% url 'cards:groupcard_update' cards.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
-<a href="{% url 'cards:groupcard_delete' cards.pk %}" class="text-decoration-none"> 벽난로 부수기 </a>
-<a href="{% url 'cards:gcomment_create' cards.pk %}" class="text-decoration-none"> 메시지 남기기 </a>
+<a href="{% url 'cards:comment_create' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
 
 <div>
   <h1> 성별 : {{ cards.user.gender }} </h1>
@@ -17,8 +15,8 @@
   <h1> 벽난로id :{{ cards.chimneys }} </h1>
 </div>
 
-
 <img src="{%static 'images/산타가방.jpg' %}">
+
 
 <div class>
   {% if cards.socks == 1 %}
@@ -52,7 +50,6 @@
             {{ comment.content }}
           </div>
           <div class="modal-footer">
-            <a class="btn btn-danger" href="{% url 'cards:gcomments_delete' cards.pk comment.pk %}" role="button"> 삭제 </a>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
           </div>
         </div>
@@ -75,7 +72,6 @@
           {{ comment.content }}
         </div>
         <div class="modal-footer">
-          <a class="btn btn-danger" href="{% url 'cards:gcomments_delete' cards.pk comment.pk %}" role="button"> 삭제 </a>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
         </div>
       </div>

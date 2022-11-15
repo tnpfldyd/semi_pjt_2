@@ -2,82 +2,81 @@
 {% load static %}
 
 {% block content %}
-
+<body class="mettings_bg">
   <div class="container">
-
-    <h2 class=" mt-4">제목 :
-      {{ meeting.title }}</h2>
-    <p>내용 :
+    <h2 class=" mt-4 text-white">제목 :
+      {{ meeting.title }}
+      <div>
+        {% if request.user == meeting.user %}
+          <a class="float-end btn btn-outline-primary" href="{% url 'meetings:update' meeting.pk %}">
+            수정
+          </a>
+          <a class="float-end btn btn-outline-danger me-4" href="{% url 'meetings:delete' meeting.pk %}">
+            삭제
+          </a>
+        {% endif %}
+      </div>
+    </h2>
+    <p class="text-white">내용 :
       {{ meeting.content }}</p>
 
-    <div class="my-5">
-      <h4 class="fw-bold">리뷰 작성</h4>
+    <div class="my-5 text-white">
+      <h4 class="fw-bold mb-3">리뷰 작성
+        <a class="float-end btn btn-outline-success" href="{% url 'meetings:index' %}">목록</a>
+      </h4>
       {% if request.user.is_authenticated %}
         <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
           {% csrf_token %}
-          <input type="text" name="content">
+          <input type="text" class="form-control my-4" name="content" placeholder="댓글을 달아주세요" aria-label="Username" aria-describedby="basic-addon1">
           <button class="btn btn-outline-primary ">작성</button>
         </form>
       {% endif %}
     </div>
 
-    <div class="d-flex">
+    <div class="d-flex text-white">
       이 방에 참여한 유저들: 
       <div>
       {% for user in user_list %}
-        <a href="">{{ user.nickname }}</a>
+        <a class="ms-2 text-decoration-none text-white" href="{% url 'accounts:profile' meeting.pk %}">{{ user.nickname }}</a>
       {% endfor %}
       </div>
     </div>
 
     <form action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
       {% csrf_token %}
-      <button name="belong_id" value="belong_id">
+      <button class="btn btn-outline-info" name="belong_id" value="belong_id">
         참여
       </button>
     </form>
     {% if meeting.belong %}
-    {{ meeting.belong.count }}
+    <span class="text-white">{{ meeting.belong.count }}</span>
 
     {% endif %}
-    <small>참여버튼을 누르시면 비밀번호 입력없이 들어올 수 있습니다.</small>
+    <small class="text-white">참여버튼을 누르시면 비밀번호 입력없이 들어올 수 있습니다.</small>
 
-    <div class="my-3">
-      댓글 수 :
-      {{ metting.comment_set.count }}
+    <div class="my-3 text-white">
+      댓글
     </div>
 
     {% for comment in comments %}
       <div>
-        <p>{{ comment.user.username }}</p>
+        <p class="text-white">{{ comment.user.nickname }}</p>
       </div>
-      <p class="fs-6">{{ comment.created_at|date:"SHORT_DATETIME_FORMAT" }}</p>
-      <p>{{ comment.content }}</p>
+      <p class="fs-6 text-white">{{ comment.created_at|date:"SHORT_DATETIME_FORMAT" }}</p>
+      <p class="text-white">{{ comment.content }}</p>
 
       {% if request.user == comment.user %}
         <form action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
           {% csrf_token %}
-          <button type="submit">삭제</button>
+          <button class="btn btn-outline-danger" type="submit">삭제</button>
         </form>
       {% endif %}
       <hr>
       {% empty %}
-      <p>댓글이 없습니다.</p>
+      <p class="text-white">댓글이 없습니다.</p>
     {% endfor %}
-
-    <div>
-      <a class="btn btn-outline-secondary" href="{% url 'meetings:index' %}">목록</a>
-      {% if request.user == meeting.user %}
-        <a class="float-end btn btn-outline-primary" href="{% url 'meetings:update' meeting.pk %}">
-          수정
-        </a>
-        <a class="float-end btn btn-outline-danger" href="{% url 'meetings:delete' meeting.pk %}">
-          삭제
-        </a>
-      {% endif %}
-    </div>
   </div>
-
+</body>
 
   {% comment %} js {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
