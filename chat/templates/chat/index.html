@@ -2,9 +2,16 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<div class='d-flex justify-content-center'>
+<style>
+    body {
+     background-image : url('{% static 'images/채팅로비.jpg' %}');
+     background-repeat : no-repeat;
+     background-size : cover;
+    }
+</style>
+<div class='d-flex justify-content-center' style='opacity: 0.9;'>
     <div style='width:40rem'>
-        <h1 class='my-5 text-center'>
+        <h1 class='my-5 text-center text-light '>
             영어나 숫자 채팅방을 입력하세요.
         </h1>
         <input id="room-name-input" type="text" size="100" class='form-control'><br>
@@ -27,4 +34,6 @@
         window.location.pathname = '/chat/' + roomName + '/';
     };
 </script>
+
+
 {% endblock  %}
