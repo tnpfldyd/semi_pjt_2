@@ -4,11 +4,10 @@ from .models import Meeting
 from .forms import MeetingForm, CommentForm
 from django.core.paginator import Paginator
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse,JsonResponse
 import json
 
 # Create your views here.
-
 
 def home(request):
     return render(request, "meetings/home.html")
@@ -30,82 +29,71 @@ def index(request):
 
     at_all = "모두보기"
     paginator = Paginator(meetings, 4)
-    page_number = request.GET.get("local")
-    page_obj = paginator.get_page(page_number)
+    page_number = request.GET.get("local") 
+    page_obj = paginator.get_page(page_number) 
+
 
     if request.POST.get("reset"):
-        return redirect("meetings:index")
+      return redirect('meetings:index')
 
-    if request.GET.get("local") and nw in request.GET.get("local"):
+    if request.GET.get('local') and nw in request.GET.get('local'):
 
-        meetings_local = Meeting.objects.filter(location__contains=nw).order_by("-pk")
-        meetings_local_name = nw
-        # 페이지네이션
-        paginator = Paginator(meetings_local, 4)
-        page_number = request.GET.get("local")  # key 값이 local, value 값이 노원구
-        page_number = page_number.strip(nw)  # 노원구2 에서 노원구를 제거
-        page_obj = paginator.get_page(page_number)  # 숫자만 받음
+      meetings_local = Meeting.objects.filter(location__contains=nw).order_by("-pk")
+      meetings_local_name = nw
+      # 페이지네이션
+      paginator = Paginator(meetings_local, 4)
+      page_number = request.GET.get("local") # key 값이 local, value 값이 노원구 
+      page_number = page_number.strip(nw) # 노원구2 에서 노원구를 제거
+      page_obj = paginator.get_page(page_number) # 숫자만 받음
+      
+      context = {
+        "nw": nw,
+        "meetings": meetings,
+        "page_obj": page_obj,
+        "meetings_local": meetings_local,
+        "meetings_local_name": meetings_local_name,
+        "meetings_count": meetings_count,
+        "meetings_local_list": meetings_local_list,
+      }
 
-        context = {
-            "nw": nw,
-            "meetings": meetings,
-            "page_obj": page_obj,
-            "meetings_local": meetings_local,
-            "meetings_local_name": meetings_local_name,
-            "meetings_count": meetings_count,
-            "meetings_local_list": meetings_local_list,
-        }
+      return render(request, 'meetings/index.html', context)
 
-        return render(request, "meetings/index.html", context)
+    elif request.GET.get('local') and sp in request.GET.get('local'):
+      meetings_local = Meeting.objects.filter(location__contains=sp).order_by("-pk")
+      meetings_local_name = sp
+      # 페이지네이션
+      paginator = Paginator(meetings_local, 4)
+      page_number = request.GET.get("local")  
+      page_number = page_number.strip(sp) 
+      page_obj = paginator.get_page(page_number)
 
-    elif request.GET.get("local") and sp in request.GET.get("local"):
-        meetings_local = Meeting.objects.filter(location__contains=sp).order_by("-pk")
-        meetings_local_name = sp
-        # 페이지네이션
-        paginator = Paginator(meetings_local, 4)
-        page_number = request.GET.get("local")
-        page_number = page_number.strip(sp)
-        page_obj = paginator.get_page(page_number)
+      context = {
+        "sp": sp,
+        "meetings": meetings,
+        "page_obj": page_obj,
+        "meetings_local": meetings_local,
+        "meetings_local_name": meetings_local_name,
+        "meetings_count": meetings_count,
+        "meetings_local_list": meetings_local_list,
+      }
 
-        context = {
-            "sp": sp,
-            "meetings": meetings,
-            "page_obj": page_obj,
-            "meetings_local": meetings_local,
-            "meetings_local_name": meetings_local_name,
-            "meetings_count": meetings_count,
-            "meetings_local_list": meetings_local_list,
-        }
-
-        return render(request, "meetings/index.html", context)
+      return render(request, 'meetings/index.html', context)
 
     else:
 
-        context = {
-            "at_all": at_all,
-            "meetings": meetings,
-            "page_obj": page_obj,
-            "meetings_local": meetings_local,
-            "meetings_local_name": meetings_local_name,
-            "meetings_count": meetings_count,
-            "meetings_local_list": meetings_local_list,
-        }
-        return render(request, "meetings/index.html", context)
+      context = {
+          "at_all": at_all,
+          "meetings": meetings,
+          "page_obj": page_obj,
+          "meetings_local": meetings_local,
+          "meetings_local_name": meetings_local_name,
+          "meetings_count": meetings_count,
+          "meetings_local_list": meetings_local_list,
+      }
+      return render(request, "meetings/index.html", context)
 
 
-dic = {
-    "0": "zero",
-    "1": "one",
-    "2": "two",
-    "3": "three",
-    "4": "four",
-    "5": "five",
-    "6": "six",
-    "7": "seven",
-    "8": "eight",
-    "9": "nine",
-}
-
+dic = {'0':'zero', '1':'one', '2':'two', '3':'three', '4':'four', '5':'five', '6':'six', '7':'seven', '8':'eight', '9':'nine'}
 
 def create(request):
     if request.method == "POST":
@@ -115,7 +103,7 @@ def create(request):
             meeting.user = request.user
 
             meeting.save()
-            temp = ""
+            temp = ''
             for i in str(meeting.pk):
                 temp += dic[i]
             meeting.text = temp
@@ -123,7 +111,7 @@ def create(request):
             return redirect("meetings:index")
     else:
         meeting_form = MeetingForm()
-
+    
     context = {
         "meeting_form": meeting_form,
     }
@@ -132,14 +120,12 @@ def create(request):
 
 
 def detail(request, meeting_pk):
-    print("?")
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all()
     form = CommentForm()
-    
+    session_id = request.session.session_key
 
     user_list = meeting.belong.all() # 유저리스트를 보여줄 코드
-
 
     
     user = request.user # request.user => 현재 로그인한 유저
@@ -165,7 +151,18 @@ def detail(request, meeting_pk):
     
     # DB에 없는데 패스워드가 일치하다면
     elif request.POST.get('password') == meeting.password:
-            
+      
+      context = {
+        "user_list": user_list,
+        "meeting": meeting,
+        "comments": comments,
+        "commentform": form,
+        }
+      return render(request, "meetings/detail.html", context)
+    
+    # 이미 방에 들와본 경험이 있어서 session_id가 있다면
+    elif session_id:
+
       context = {
         "user_list": user_list,
         "meeting": meeting,
@@ -174,25 +171,10 @@ def detail(request, meeting_pk):
         }
       return render(request, "meetings/detail.html", context)
 
+
     else:
       return redirect("meetings:index")
 
-   
-
-    else:
-        if request.POST.get("password") == meeting.password:
-            print("로직?")
-
-            context = {
-                "meeting": meeting,
-                "comments": comments,
-                "commentform": form,
-            }
-
-            return render(request, "meetings/detail.html", context)
-
-        else:
-            return redirect("meetings:index")
 
 
 def update(request, meeting_pk):
@@ -224,8 +206,8 @@ def comment_create(request, meeting_pk):
     meeting_data = Meeting.objects.get(pk=meeting_pk)
 
     if request.user.is_authenticated:
-        print(request.POST.get("content"))
         form = CommentForm(request.POST)
+        print("여기?!")
         if form.is_valid():
             print("여긴되나?")
             comment = form.save(commit=False)
@@ -233,10 +215,9 @@ def comment_create(request, meeting_pk):
             comment.user = request.user
             comment.save()
 
-        return redirect("meetings:detail", meeting_pk)
+        return redirect('meetings:detail', meeting_pk)
     else:
         return redirect("accounts:login")
-
 
 def comment_delete(request, meeting_pk, comment_pk):
     meeting_data = Meeting.objects.get(pk=meeting_pk)
@@ -244,15 +225,15 @@ def comment_delete(request, meeting_pk, comment_pk):
 
     if request.user == comment_data.user:
         comment_data.delete()
-
+    
     return redirect("meetings:detail", meeting_pk)
 
-
 def belong_meeting(request, pk):
-    meeting = Meeting.objects.get(pk=pk)
-    if request.user in meeting.belong_meeting.all():
-        meeting.belong_meeting.remove(request.user)
-    else:
-        meeting.belong_meeting.add(request.user)
-
-    return redirect("meetings:detail", pk)
+  meeting = Meeting.objects.get(pk=pk)
+  
+  if request.user in meeting.belong_meeting.all():
+    meeting.belong_meeting.remove(request.user)
+  else:
+    meeting.belong_meeting.add(request.user)
+  
+  return redirect("meetings:detail", pk)
