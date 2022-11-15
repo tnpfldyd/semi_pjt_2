@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
-from .forms import CardForm, CommentForm, UserCardForm , GroupCardForm,
-from .models import Card, Comment, UserCard,  Groupcard,
+from .forms import *
+from .models import *
 
 import requests, os, json
 from django.contrib.auth.decorators import login_required
