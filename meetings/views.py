@@ -158,6 +158,9 @@ def detail(request, meeting_pk):
       if meeting.belong.filter(id = user.id).exists(): # 이미 참여를 누른 유저일 때
         meeting.belong.remove(user)
         messages.error(request, "참여 취소😀")
+      else: # 참여를 누르지 않은 유저일 때
+        meeting.belong.add(user) # belong 필드에 현재 유저 삭제
+        messages.success(request, "참여 성공😀")
 
 
     # DB에 존재하면 바로 입장.
