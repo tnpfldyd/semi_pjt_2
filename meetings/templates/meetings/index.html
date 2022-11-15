@@ -41,69 +41,62 @@
     {% endfor %}
   </div>
   <hr/>
+
+  
 <div class="d-flex">
   {% for meeting in page_obj %}
-  <div class="row row-cols-1 row-cols-md-2 mx-1">
-    <div class="card-header">
-      {% if request.user in meeting.belong.all %}
+      {% comment %}  {% endcomment %}
+      <div class="container cus-container">
+        {% if request.user in meeting.belong.all %}
           <div class="JJim fs-3" >
             ❤️
           </div>
-      {% endif %}
-      <div class="card mb-4" style="width: 21rem; height:550px;">
-        {% if meeting.image %}
-        <img src="{{ meeting.image.url }}" class="card-img-top" alt="..." style="height:300px;">
-        {% else %}
-          <img src="https://dummyimage.com/600x360/000000/c4c4c4" class="my4-2">
         {% endif %}
-        <div class="card-body" style="min-height:100px;">
-          <h5 class="card-title">{{ meeting.title }}</h5>
-          <hr/>
-          <p class="card-text">{{ meeting.content|truncatewords:14 }}</p>
-        </div>
-        {% comment %} 방장 {% endcomment %}
-        <div class="d-flex justify-content-end">
-          방장 프로필:<a class="mx-2" href="{% url 'accounts:profile' meeting.user.username %}">{{ meeting.user.nickname }}</a>
-          <a href="{% url 'notes:send' meeting.user.username %}">쪽지</a>
-        </div>
-        <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small>
-        <div class="card-footer d-flex justify-content-between align-items-center">
-          {% comment %} 패스워드 로직 {% endcomment %}
-          <div>
-            {% if request.user in meeting.belong.all %}
-            <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
-              <span></span>
-              <span>입장하기</span>
-            </a>
-            {% elif meeting.password %}
-            <button action="{% url 'meetings:password' meeting.pk %}" method="POST" onClick="" type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
-              <span>🔒</span>
-              <span>입장하기</span>
-            </button>
+        <div class="card cus-card">
+          <div class="cus-imgBx">
+            {% if meeting.image %}
+            <img src="{{ meeting.image.url }}" class="card-img-top rounded-4" alt="..." >
             {% else %}
-            <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
-              <span></span>
-              <span>입장하기</span>
-            </a>
+            <img src="https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="rounded-4">
             {% endif %}
-            {% comment %}  {% endcomment %}
           </div>
-          
-          <div>
-            {% comment %} is_closed 로직 {% endcomment %}
-            {% if meeting.is_closed == True %}
-            <small> 자리가 있어요!</small>
-            {% else %}
-            <small> 자리가 없어요!</small>
-            {% endif %}
-            {% comment %}  {% endcomment %}
+          <div class="cus-contentBx">
+            <h2>{{ meeting.title }}</h2>
+            <div class="cus-size">
+              <div class="fs-6 mt-2">{{ meeting.content|truncatewords:14 }}</div>
+            </div>
+          </div>
+          <div class="cus-contentBx2">
+            <div class="cus-color">
+              <div>
+                {% comment %} <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small> {% endcomment %}
+              </div>
+            </div>
+            <a class="mx-2" href="{% url 'accounts:profile' meeting.user.username %}">{{ meeting.user.nickname }}</a>
+            {% comment %} 패스워드 로직 {% endcomment %}
+            <div>
+              {% if request.user in meeting.belong.all %}
+              <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
+                <span></span>
+                <span>입장하기</span>
+              </a>
+              {% elif meeting.password %}
+              <button action="{% url 'meetings:password' meeting.pk %}" method="POST" onClick="" type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
+                <span>🔒</span>
+                <span>입장하기</span>
+              </button>
+              {% else %}
+              <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
+                <span></span>
+                <span>입장하기</span>
+              </a>
+              {% endif %}
+              {% comment %}  {% endcomment %}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  
-  
+      {% comment %}  {% endcomment %}
 
             {% comment %} 모달 {% endcomment %}
             <div class="modal fade" id="{{meeting.text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
