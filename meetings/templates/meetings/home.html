@@ -66,120 +66,140 @@
 </section>
 
 <!-- 5 -->
+<section class="entry bg">
+  <div class="container">
+    <div class=" row align-content-center justify-content-center align-items-center">
+      <div class="col-6 p-5">
+        <h1 class="text-white ms-5">실제 트리를 꾸며볼까?</h1>
+        <p class="text-white mb-0 ms-5">ㅁㅁㅁㅁ</p>
+        <p class="text-white ms-5 mb-0">ㅁㅁㅁㅁ</p>
+
+        <div clss="time-body ms-5">
+          <div class="ms-5" id="timer" style="padding-top: 30px;"></div>
+        </div>
+      </div>
+      <div class="swing col-6 text-center">
+        <a href="{% url 'shoppings:index' %}"><img src="{%static 'images/선물.png'%}" style="width:400px; height:400px;" alt=""></a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 6 -->
 <footer class="entry2 bg-light">
-  <h1>footer 영역</h1>
+<h1>footer 영역</h1>
 </footer>
 
 <!-- js -->
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
 <script>
-  new Snowflakes();
+new Snowflakes();
 </script>
 
 <!-- 시간 js -->
 <script>
-  function updateTimer() {
-    future = Date.parse("dec 11, 2022 12:00:00");
-    now = new Date();
-    diff = future - now;
+function updateTimer() {
+  future = Date.parse("dec 11, 2022 12:00:00");
+  now = new Date();
+  diff = future - now;
 
-    days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    hours = Math.floor(diff / (1000 * 60 * 60));
-    mins = Math.floor(diff / (1000 * 60));
-    secs = Math.floor(diff / 1000);
+  days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  hours = Math.floor(diff / (1000 * 60 * 60));
+  mins = Math.floor(diff / (1000 * 60));
+  secs = Math.floor(diff / 1000);
 
-    d = days;
-    h = hours - days * 24;
-    m = mins - hours * 60;
-    s = secs - mins * 60;
+  d = days;
+  h = hours - days * 24;
+  m = mins - hours * 60;
+  s = secs - mins * 60;
 
-    document
-      .getElementById("timer")
-      .innerHTML = "<div>" + d + "<span>days</span></div>" + "<div>" + h + "<span>hours</span></div>" + "<div>" + m + "<span>minutes</span></div>" + "<div>" + s + "<span>seconds</span></div>";
-  }
-  setInterval("updateTimer()", 1000);
+  document
+    .getElementById("timer")
+    .innerHTML = "<div>" + d + "<span>days</span></div>" + "<div>" + h + "<span>hours</span></div>" + "<div>" + m + "<span>minutes</span></div>" + "<div>" + s + "<span>seconds</span></div>";
+}
+setInterval("updateTimer()", 1000);
 </script>
 
 <!-- 시간 스타일 -->
 <style>
-  time-body {
-    text-align: center;
-    padding: 70px 50px;
-    background: #0d1a29;
-    font-family: sans-serif;
-    font-weight: lighter;
+time-body {
+  text-align: center;
+  padding: 70px 50px;
+  background: #0d1a29;
+  font-family: sans-serif;
+  font-weight: lighter;
+}
+
+#timer {
+  font-size: 3em;
+  font-weight: 100;
+  color: white;
+  text-shadow: 0 0 20px #48c8ff;
+}
+
+#timer div {
+  display: inline-block;
+  min-width: 90px;
+}
+
+#timer div span {
+  color: #b1cdf1;
+  display: block;
+  font-size: 0.35em;
+  font-weight: 400;
+}
+
+{
+  % comment %
+}
+
+액자 애니메이션 css {
+  % endcomment %
+}
+
+.swing {
+  animation: swing ease-in-out 1s infinite alternate;
+  transform-origin: center -20px;
+  float: left;
+}
+
+.swing:after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #999;
+  top: -10px;
+  left: 50%;
+  z-index: 0;
+  border-bottom: none;
+  border-right: none;
+  transform: rotate(45deg);
+}
+
+/* nail */
+.swing:before {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  top: -14px;
+  left: 54%;
+  z-index: 5;
+  border-radius: 50% 50%;
+  background: #000;
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(3deg);
   }
 
-  #timer {
-    font-size: 3em;
-    font-weight: 100;
-    color: white;
-    text-shadow: 0 0 20px #48c8ff;
+  100% {
+    transform: rotate(-3deg);
   }
-
-  #timer div {
-    display: inline-block;
-    min-width: 90px;
-  }
-
-  #timer div span {
-    color: #b1cdf1;
-    display: block;
-    font-size: 0.35em;
-    font-weight: 400;
-  }
-
-  {
-    % comment %
-  }
-
-  액자 애니메이션 css {
-    % endcomment %
-  }
-
-  .swing {
-    animation: swing ease-in-out 1s infinite alternate;
-    transform-origin: center -20px;
-    float: left;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-  }
-
-  .swing:after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 1px solid #999;
-    top: -10px;
-    left: 50%;
-    z-index: 0;
-    border-bottom: none;
-    border-right: none;
-    transform: rotate(45deg);
-  }
-
-  /* nail */
-  .swing:before {
-    content: '';
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    top: -14px;
-    left: 54%;
-    z-index: 5;
-    border-radius: 50% 50%;
-    background: #000;
-  }
-
-  @keyframes swing {
-    0% {
-      transform: rotate(3deg);
-    }
-
-    100% {
-      transform: rotate(-3deg);
-    }
-  }
+}
 </style>
 {% endblock content %}

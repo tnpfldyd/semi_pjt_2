@@ -61,7 +61,7 @@
           <div>
             {% if request.user in meeting.belong.all %}
             <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
-              <span>🔓</span>
+              <span>🔒</span>
               <span>1입장하기</span>
             </a>
             {% elif meeting.password %}
@@ -71,8 +71,8 @@
             </button>
             {% else %}
             <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
-              <span>🔓</span>
-              <span>3입장하기</span>
+              <span></span>
+              <span>입장하기</span>
             </a>
             {% endif %}
             {% comment %}  {% endcomment %}
