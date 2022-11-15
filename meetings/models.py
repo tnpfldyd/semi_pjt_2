@@ -34,6 +34,7 @@ class Meeting(models.Model):
     text = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     belong = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="belongs", blank=True)
+    # enter_record = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="enter_records", blank=True)
 
 
 class Comment(models.Model):

@@ -115,3 +115,66 @@ a {
 }
 
 /* 폼에서 양말, 벽난로 선택 끝 */
+
+/* meeting index */
+.card-header {
+  position: relative;
+}
+
+.JJim {
+  z-index: 1;
+  margin-top: 3px;
+  margin-left: 5px;
+  position: absolute;
+}
+
+#custom-form {
+  color: #006f57;
+  
+}
+
+.custom-link {
+  color: black;
+
+}
+
+.custom-link:hover {
+  color: #cc041e;
+  font-weight: bold;
+}
+
+.custom-card {
+  max-width: 350px;
+  min-width: 350px;
+  margin: 0px 5px;
+  overflow: hidden;
+}
+
+.custom-card img{
+  max-width: 350px;
+  max-width: initial;
+  margin-left: 0%;
+}
+
+.custom-card{
+  max-height: 550px;
+  min-height: 550px;
+  overflow: hidden;
+}
+
+.custom-card img{
+  min-height: 550px;
+  max-height: initial;
+  margin-top: 15%;
+}
+
+#custom-btn {
+  color: #010200;
+  background-color: #fff;
+  border: none;
+}
+
+#custom-btn:hover {
+  color: #cc041e;
+  font-weight: bold;
+}
