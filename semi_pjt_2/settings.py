@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "chat",
     "cards",
     "vocies",
+    "channels",
     "accounts",
     "meetings",
     "widget_tweaks",
