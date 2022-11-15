@@ -1,5 +1,6 @@
 from django import forms
-from .models import Groupcard, Comment, Groupcomment
+from .models import Groupcard, Comment, Groupcomment, Card, Comment, UserCard
+
 
 
 class CardForm(forms.ModelForm):
@@ -18,6 +19,12 @@ class GroupCardForm(forms.ModelForm):
         labels = {
             "is_private": "Private",
         }
+
+
+class UserCardForm(forms.ModelForm):
+    class Meta:
+        model = UserCard
+        fields = ["title", "content"]
 
 
 class CommentForm(forms.ModelForm):
