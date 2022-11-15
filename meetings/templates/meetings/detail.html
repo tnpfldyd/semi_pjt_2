@@ -15,7 +15,7 @@
       {% if request.user.is_authenticated %}
         <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
           {% csrf_token %}
-          <input type="text">
+          <input type="text" name="content">
           <button class="btn btn-outline-primary ">작성</button>
         </form>
       {% endif %}
@@ -55,11 +55,10 @@
       <p>{{ comment.content }}</p>
 
       {% if request.user == comment.user %}
-        <form action="{% url 'mettings:comment_delete' metting.pk comment.pk %}" method="POST">
+        <form action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
           {% csrf_token %}
-          <button>삭제</button>
+          <button type="submit">삭제</button>
         </form>
-      {% else %}
       {% endif %}
       <hr>
       {% empty %}

@@ -17,7 +17,7 @@ def room(request, room_name):
     else:
         context = {
             "room_name": room_name,
-            "user": "anonymouse",
-            "userid": "anonymouse",
+            "user": "Anonymouse",
+            "userid": "Anonymouse",
         }
     return render(request, "chat/room.html", context)
