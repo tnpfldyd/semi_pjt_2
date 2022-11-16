@@ -2,15 +2,75 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
+
+
+{% comment %} <div class="container">
 {% for note in notes %}
-<div id="{{note.pk}}">
-  <a href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a>
-  {{ note.created_at }}
-    {% csrf_token %}
-    <button value="{{note.pk}}" onclick="remove(event)">삭제</button>
+  <div id="{{note.pk}}">
+    <a href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a>
+    {{ note.created_at }}
+      {% csrf_token %}
+      <button value="{{note.pk}}" onclick="remove(event)">삭제</button>
+  </div>
+  {% endfor %}
+</div> {% endcomment %}
+
+<div class="container">
+  <div id="main_in">
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th width="150" class="tl">보낸사람</th>
+          <th width="600" class="tl">제목</th>
+          <th width="200" class="tc">날짜</th>
+          <th width="50" class="tc">삭제</th>
+        </tr>
+      </thead>
+          <tbody>
+          {% for note in notes %}
+          <div id="{{note.pk}}">
+            <tr>
+              <td>{{note.from_user_id}}</td> <!---보낸이 -->
+              <td><a href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a></td> <!---제목 -->
+              <td class="tc">{{ note.created_at }}</td> <!---보낸시간 -->
+              <td class="tc"><button value="{{note.pk}}" onclick="remove(event)">삭제</button></td> <!---체크박스 -->
+            </tr>
+          </div>
+          {% endfor %}
+          </tbody>
+    </table>
+  </div>
 </div>
-{% endfor %}
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="{% static 'js/notes.js' %}"></script>
+
+
+<style>
+  #main_head {
+    width: 100%;
+    background:#003f51;	
+  }
+  #main_head_in {
+    width: 1200px;
+    height: 50px;
+  }
+  #main_t {
+    position: absolute;
+    top:5px; 
+  }
+  #mem_log {
+    font-size: 14px;
+    color:white;
+    padding-top:10px;
+    text-align: right;
+  }
+  #mem_log a{
+    color:white;
+  }
+  #mlog {
+    margin-left: 40px; 
+  }
+</style>
 
 {% endblock %}

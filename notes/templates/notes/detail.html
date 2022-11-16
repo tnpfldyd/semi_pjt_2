@@ -2,9 +2,7 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-{{ note.title }}
-{{ note.content}}
-{{ note.created_at }}
+
 <style>
     #modal.modal-overlay {
         width: 100%;
@@ -64,9 +62,13 @@
 </style>
 </head>
 <body>
-<div id="container">
-    <h2>Lorem Ipsum</h2>
-    <button id="btn-modal">{{ request.user.nickname }}</button>
+<div id="container" class="container mt-3">
+    <div class="d-flex justify-content-between">
+      <h2>{{ note.title }}</h2>
+      <a class="custom-link fs-4" id="btn-modal">{{ request.user.nickname }}</a>
+    </div>
+    <div>{{ note.content }}</div>
+    <div>{{ note.created_at }}</div>
     <div id="lorem-ipsum"></div>
     <div id="modal" class="modal-overlay">
         <div class="modal-window">
