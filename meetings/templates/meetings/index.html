@@ -76,7 +76,7 @@
                 {% comment %} <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small> {% endcomment %}
               </div>
             </div>
-            <a class="mx-2" href="{% url 'accounts:profile' meeting.user.username %}">{{ meeting.user.nickname }}</a>
+            <a style="cursor: pointer;" class="mx-2" id="id{{meeting.text}}">{{ meeting.user.nickname }}</a>
             {% comment %} 패스워드 로직 {% endcomment %}
             <div>
               {% if request.user in meeting.belong.all %}
@@ -123,8 +123,59 @@
                 </div>
               </div>
             </div>
-    
+
+            <div id="modal" class="modal-overlay">
+              <div class="modal-window">
+                  <div class="title">
+                      <h2>{{ request.user.nickname }}</h2>
+                  </div>
+                  <div class="close-area">X</div>
+                  <div class="content">
+                      <h3><a href="{% url 'accounts:profile' request.user.username %}" class="text-decoration-none text-white">프로필</a></h3>
+                      <h3><a href="{% url 'notes:send' request.user.username %}" class="text-decoration-none text-white">쪽지</a></h3>
+                      <h3><a href="{% url 'accounts:follow' request.user.username %}" class="text-decoration-none text-white">팔로우</a></h3>
+                      <h3><a href="{% url 'accounts:block' request.user.username %}" class="text-decoration-none text-white">차단</a></h3>
+                  </div>
+              </div>
+            </div>
+
+            <script>
+              var a = "id"+{{meeting.text}}
+              console.log(a)
+              const modal = document.getElementById("modal")
+              function modalOn() {
+                  modal.style.display = "flex"
+              }
+              function isModalOn() {
+                  return modal.style.display === "flex"
+              }
+              function modalOff() {
+                  modal.style.display = "none"
+              }
+              const btnModal = document.getElementById(a)
+              btnModal.addEventListener("click", e => {
+                  modalOn()
+              })
+              const closeBtn = modal.querySelector(".close-area")
+              closeBtn.addEventListener("click", e => {
+                  modalOff()
+              })
+              modal.addEventListener("click", e => {
+                  const evTarget = e.target
+                  if(evTarget.classList.contains("modal-overlay")) {
+                      modalOff()
+                  }
+              })
+              window.addEventListener("keyup", e => {
+                  if(isModalOn() && e.key === "Escape") {
+                      modalOff()
+                  }
+              })
+            
+            </script>
   {% endfor %}
+
+  
   {% comment %} 내가참여한 모임들 {% endcomment %}
   <div class="card d-flex align-items-center" style="min-width: 150px;">
     <div>참여신청한 모임들</div>
@@ -146,7 +197,7 @@
   </div>
 </div>
 
-  
+
 
 
 {% comment %} 노원구 {% endcomment %}
@@ -219,4 +270,64 @@
     </span>
   </div>
 </div>
+
+
+<style>
+  #modal.modal-overlay {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  #modal .modal-window {
+      background: rgba(21, 22, 22, 0.7);
+      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+      backdrop-filter: blur( 13.5px );
+      -webkit-backdrop-filter: blur( 13.5px );
+      border-radius: 10px;
+      border: 1px solid rgba( 255, 255, 255, 0.18 );
+      width: 200px;
+      height: 250px;
+      position: relative;
+      top: -100px;
+      padding: 10px;
+  }
+  #modal .title {
+      padding-left: 10px;
+      display: inline;
+      text-shadow: 1px 1px 2px gray;
+      color: white;
+      
+  }
+  #modal .title h2 {
+      display: inline;
+  }
+  #modal .close-area {
+      display: inline;
+      float: right;
+      padding-right: 10px;
+      cursor: pointer;
+      text-shadow: 1px 1px 2px gray;
+      color: white;
+  }
+  
+  #modal .content {
+      margin-top: 20px;
+      padding: 0px 10px;
+      text-shadow: 1px 1px 2px gray;
+      color: white;
+  }
+</style>
+
 {% endblock content %}
