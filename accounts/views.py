@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 import requests
 from django.contrib import messages
 from django.http import JsonResponse
+from cards.models import *
 
 # Create your views here.
 def signup(request):
@@ -202,7 +203,11 @@ def block_user(request):
 
 def profile(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
-    return render(request, "accounts/profile.html", {"user": user})
+    context = {
+        "user": user,
+    }
+    return render(request, "accounts/profile.html", context)
+
 
 @login_required
 def save(request):
@@ -223,4 +228,3 @@ def save(request):
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
         return redirect("accounts:mypage")
-
