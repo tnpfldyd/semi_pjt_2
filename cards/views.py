@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 
 @login_required
 def index(request):
-    cards = UserCard.objects.order_by("-pk")
+    cards = UserCard.objects.get(user=request.user)
     groupcards = Groupcard.objects.order_by("-pk")
     user = get_user_model().objects.get(pk=request.user.pk)
     context = {"cards": cards, "groupcards": groupcards, "user": user}
@@ -35,7 +35,7 @@ def create_indiv(request):
             temp.socks = request.POST["choice_sock"]
             temp.chimneys = request.POST["choice_chim"]
             temp.save()
-            return redirect("cards:index")
+            return redirect("accounts:profile", request.user.pk)
     else:
         form = UserCardForm()
     context = {
@@ -78,7 +78,7 @@ def usercard_update(request, pk):
 def usercard_delete(request):
     card = UserCard.objects.get(user_id=request.user.pk)
     card.delete()
-    return redirect("cards:index")
+    return redirect("accounts:profile", request.user.pk)
 
 
 dic = {
