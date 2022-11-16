@@ -22,7 +22,6 @@ def index(request):
 
 # 개인카드 생성, 수정, 삭제, 디테일
 
-
 @login_required
 def create_indiv(request):
     if request.method == "POST":

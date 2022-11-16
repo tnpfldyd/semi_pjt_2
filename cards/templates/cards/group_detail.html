@@ -1,78 +1,45 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
+
+
+
 {% block content %} 
+<link rel="stylesheet" href="{% static 'style_card.css' %}" />
 
 
-<div class="container_trans">
-
-  <div class="container_content">
-  <div class="container_content_inner">
-  <div class="title">
-    <h1>Hello World</h1>
-  </div>
-  <div class="par">
-  <p>
-  Cupiditate alias odio omnis minima veritatis saepe porro, repellendus natus vitae, sequi exercitationem ipsam, qui possimus sit eveniet laborum sapiente quisquam quae neque velit? 
-  </p>
-  </div>
-  <div class="btns">
-  </div>
-  </div>
-  </div>
-   <div class="container_outer_img">
-    <h1> 컨테이너 바깥 이미지 </h1>
-   <div class="img-inner">
-   <img src='https://images.unsplash.com/photo-1517911041065-4960862d38f0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80'  alt="" class="container_img"/>
-         </div>
-       </div>
-    </div>
-
-  <div class="overlay"> 
-    <div class="wrapper">
-      <h1 class="text-center "> 산타를 눌러주세요 </h1>
-      <div class="container">
-        <div class="santa">
-          <div class="hand-l"></div>
-          <div class="hand-r"></div>
-          <div class="hat"></div>
-          <div class="face">
-            <div class="beard"></div>
-            <div class="eyes"></div>
-          </div>
-          <div class="belt"></div>
-          <div class="shoe"></div>
+<section data-page="home" id="home" class="active">
+  <h1 class="text-center "> 산타를 눌러주세요 </h1>
+  <a href="#other" data-role="link">
+  <div class="container">
+      <div class="santa">
+        <div class="hand-l"></div>
+        <div class="hand-r"></div>
+        <div class="hat"></div>
+        <div class="face">
+          <div class="beard"></div>
+          <div class="eyes"></div>
         </div>
-        <div class="santabag">
-          <img src="{%static 'images/santabag.png' %}" height="300px" alt="...">
-        </div>
+        <div class="belt"></div>
+        <div class="shoe"></div>
       </div>
-    </div>
+      <div class="santabag">
+        <img src="{%static 'images/santabag.png' %}" height="300px" alt="...">
+      </div>
   </div>
+  </a>
+</section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div>
+<section data-page="other" id="other">
+  <div>
+  <p><a href="#home" data-role="link">산타보기</a></p>
   <a href="{% url 'cards:groupcard_update' cards.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
   <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="text-decoration-none"> 벽난로 부수기 </a>
   <a href="{% url 'cards:gcomment_create' cards.pk %}" class="text-decoration-none"> 메시지 남기기 </a>
 </div>
 
 <div>
+  
   <h1> 성별 : {{ cards.user.gender }} </h1>
   <h1> 이름 : {{ cards.user.nickname }} </h1>
   <img src="{{ cards.user.profileimage }}" class="rounded-circle">
@@ -81,12 +48,6 @@
   <h1> 양말id : {{ cards.socks }} </h1>
   <h1> 벽난로id :{{ cards.chimneys }} </h1>
 </div>
-
-
-
-
-
-
 
 
 <img src="{%static 'images/산타가방.jpg' %}">
@@ -152,11 +113,52 @@
       </div>
     </div>
   </div>
-
-
-
-  <script src="{% static 'js/fireplace.js' %}"></script>
-
 {% endfor %}
+</section>
+
+
+
+<img src="{%static 'images/rudolph.gif' %}" class="width:100%">
+
+
+
+
+
+
+<script>
+  var app = (function(){
+    let pages = [];
+    let links = [];
+    
+    document.addEventListener("DOMContentLoaded", function(){
+        pages = document.querySelectorAll('[data-page]');
+        links = document.querySelectorAll('[data-role="link"]');
+        //pages[0].className = "active";  - already done in the HTML
+        [].forEach.call(links, function(link){
+            link.addEventListener("click", navigate)
+        });
+    });
+    
+    function navigate(ev){
+        ev.preventDefault();
+        let id = ev.currentTarget.href.split("#")[1];
+        [].forEach.call(pages, function(page){
+           if(page.id ===id){
+               page.classList.add('active');
+           }else{
+               page.classList.remove('active');
+           } 
+        });
+        return false;
+    }
+    
+    return {
+        pages,
+        links,
+        xhr: ajax
+    }
+})();
+
+  </script>
 
 {% endblock %}
