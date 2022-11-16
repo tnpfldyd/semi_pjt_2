@@ -46,12 +46,13 @@ def create_indiv(request):
     return render(request, "cards/create_indiv.html", context)
 
 
+
 def indiv_detail(request, pk):
     # cards = UserCard.objects.get(user=request.user.pk)
     cards = UserCard.objects.get(pk=pk)
     context = {
         "cards": cards,
-        "comments": cards.usercomment_set.all(),
+        "comments": comments,
     }
     return render(request, "cards/indiv_detail.html", context)
 

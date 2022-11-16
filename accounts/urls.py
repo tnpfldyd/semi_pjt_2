@@ -17,4 +17,6 @@ urlpatterns = [
     path("<int:pk>/block/", views.block, name="block"),
     path("block_user/", views.block_user, name="block_user"),
     path("profile/<int:pk>/", views.profile, name="profile"),
+    #path("profile/<str:username>/", views.profile, name="profile"),
+    path("save/", views.save, name="save"),
 ]

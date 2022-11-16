@@ -102,11 +102,19 @@ dic = {'0':'zero', '1':'one', '2':'two', '3':'three', '4':'four', '5':'five', '6
 def create(request):
     if request.method == "POST":
         meeting_form = MeetingForm(request.POST, request.FILES)
+        # b = MeetingForm(auto_id=False)
+        # print(b)
         if meeting_form.is_valid():
+            print("aaaa")
             meeting = meeting_form.save(commit=False)
             meeting.user = request.user
-
+            meeting.title = request.POST["title"]
+            meeting.content = request.POST["content"]
+            meeting.image = request.POST["image"]
+            meeting.password = request.POST["password"]
+            meeting.location = request.POST["location"]
             meeting.save()
+
             temp = ''
             for i in str(meeting.pk):
                 temp += dic[i]
