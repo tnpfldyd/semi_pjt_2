@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .forms import UserCardForm, UserCommentForm, GroupCardForm, GroupCommentForm
-from .models import UserCard, Comment, Groupcard
+from .models import UserCard, Groupcard
 
 import requests, os, json
 from django.contrib.auth.decorators import login_required
@@ -50,7 +50,7 @@ def indiv_detail(request, pk):
     cards = UserCard.objects.get(pk=pk)
     context = {
         "cards": cards,
-        "comments": comments,
+
     }
     return render(request, "cards/indiv_detail.html", context)
 
