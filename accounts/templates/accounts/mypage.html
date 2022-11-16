@@ -68,6 +68,7 @@ p {
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% block content %}
+<h2>나의 정보</h2>
 이메일{{user.email}}
 <br>
 연령대{{user.age_range}}
@@ -76,13 +77,14 @@ p {
 <br>
 닉네임{{user.nickname}}
 <br>
-
 {% comment %} 프로필 이미지 if 처리 {% endcomment %}
 {% if user.profileimage %}
-    프로필 이미지<img src="{{user.profileimage}}">
+프로필 이미지<img src="{{user.profileimage}}">
 {% else %}
-    이미지 없음
+이미지 없음
 {% endif %}
+<br>
+<a class="btn btn-outline-primary" href="{% url 'accounts:update' %}">정보 수정</a>
 <br>
 <h3>트리 알림</h3>
 {% if user.tree_notice %}
