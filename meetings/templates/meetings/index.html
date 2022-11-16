@@ -133,7 +133,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-footer">
-                    <h3><a href="{% url 'accounts:profile' meeting.user.username %}" class="text-decoration-none text-dark">프로필</a></h3>
+                    <h3><a href="{% url 'accounts:profile' meeting.user.pk %}" class="text-decoration-none text-dark">프로필</a></h3>
                     <h3><a href="{% url 'notes:send' meeting.user.username %}" class="text-decoration-none text-dark">쪽지</a></h3>
                     <h3><a href="{% url 'accounts:follow' meeting.user.pk %}" class="text-decoration-none text-dark">팔로우</a></h3>
                     <h3><a href="{% url 'accounts:block' meeting.user.pk %}" class="text-decoration-none text-dark">차단</a></h3>
