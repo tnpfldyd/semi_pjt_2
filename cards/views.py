@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .forms import UserCardForm, UserCommentForm, GroupCardForm, GroupCommentForm
-from .models import UserCard, Comment, Groupcard
+from .models import UserCard, Groupcard
 
 import requests, os, json
 from django.contrib.auth.decorators import login_required
@@ -42,7 +42,6 @@ def create_indiv(request):
         "form": form,
     }
     return render(request, "cards/create_indiv.html", context)
-
 
 
 def indiv_detail(request, pk):
@@ -201,6 +200,7 @@ def card_update(request, pk):
 def card_delete(request):
     card = Groupcard.objects.get(user_id=request.user.pk, is_indiv=1)
 
+
 def groupcard_update(request, pk):
     cards = Groupcard.objects.get(pk=pk)
     if request.method == "POST":
@@ -228,7 +228,6 @@ def groupcard_delete(request, pk):
     request.user.card_created = 0
     request.user.save()
     return redirect("cards:index")
-
 
 
 def group_detail(request, pk):

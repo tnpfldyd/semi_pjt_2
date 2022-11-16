@@ -35,8 +35,8 @@
   height: 100vh;
   width: 100vw;
 
-  background-repeat : no-repeat;
-  background-size : cover;
+  background-repeat: no-repeat;
+  background-size: cover;
   background-image: url("/static/images/글생성배경.jpg");
 
 }

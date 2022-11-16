@@ -132,7 +132,7 @@
   <div>
     <h1 class='my-5 text-center'> 개인 벽난로 </h1> 
     {% if user.usercard %}
-    <a href="{% url 'cards:indiv_detail' %}" class="card2">
+    <a href="#" class="card2">
       <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt="" />
       <div class="card__overlay">
         <div class="card__header">
@@ -177,7 +177,7 @@
     <br>
   {% endif %}
 
-{% endfor%} {% endcomment %}
+{% endfor%}
 
 
 
