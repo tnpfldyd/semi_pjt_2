@@ -199,7 +199,6 @@ def block_user(request):
     return render(request, "accounts/block_user.html", {"block_users": block_users})
 
 
-@login_required
-def profile(request, username):
-    user = get_object_or_404(get_user_model(), username=username)
+def profile(request, pk):
+    user = get_object_or_404(get_user_model(), pk=pk)
     return render(request, "accounts/profile.html", {"user": user})

@@ -9,7 +9,7 @@ urlpatterns = [
     path("create/group/", views.create_group, name="create_group"),
     # 주소 정리해야함
     path("detail/group/<int:pk>", views.group_detail, name="group_detail"),
-    path("detail/indiv/", views.indiv_detail, name="indiv_detail"),
+    path("detail/indiv/<int:pk>", views.indiv_detail, name="indiv_detail"),
     path("<int:pk>/indiv/update/", views.card_update, name="card_update"),
     path("<int:pk>/group/update/", views.groupcard_update, name="groupcard_update"),
     path("<int:pk>/group/delete/", views.groupcard_delete, name="groupcard_delete"),
