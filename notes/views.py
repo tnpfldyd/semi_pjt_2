@@ -48,7 +48,7 @@ def delete(request, pk):
     print(request.POST)
     if request.user == note.to_user and request.method == "POST":
         note.delete()
-        return JsonResponse(request.POST["note_pk"])
+        return JsonResponse({"pk": pk})
     else:
         messages.error(request, "남의 쪽지는 지울 수 없어요.😅")
-        return redirect("notes:inted")
+        return redirect("notes:index")
