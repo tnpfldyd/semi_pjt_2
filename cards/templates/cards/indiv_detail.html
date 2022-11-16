@@ -7,44 +7,71 @@
 <a href="{% url 'cards:usercard_delete'%}" class="text-decoration-none"> 벽난로 없애기 </a>
 <a href="{% url 'cards:usercard_comment' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
 
-<p class=' my-5 fs-1 ms-5'>벽난로 개인 프로필</p>
-<div class='row'>
-  <div class='col-3 ms-5'>
-    <img src="{{ cards.user.profileimage }}" class="rounded-2" style='width:10rem;'>
-  </div>
-  <div class='col-2'>
-    <p> 이름 : {{ cards.user.nickname }} </p>
-    <p> 성별 : {{ cards.user.gender }} </p>
-    <p> 나이 : {{ cards.user.age_range }}</p>
-  </div>
+<div class="row">
+  <!-- 벽난로 주인 프로필 -->
+  <div class='col-5 ms-2'>
 
-</div>
+    <p class=' my-5 fs-1 ms-5'>개인 프로필</p>
+    <div class='row'>
+      <div class='col-6'>
+        <img src="{{ cards.user.profileimage }}" class="rounded-2" style='width:10rem;'>
+      </div>
+      <div class='col-6'>
+        <p> 이름 : {{ cards.user.nickname }} </p>
+        <p> 성별 : {{ cards.user.gender }} </p>
+        <p> 나이 : {{ cards.user.age_range }}</p>
+      </div>
+    </div>
 
-<p class=' my-5 fs-1 ms-5'>벽난로 내용</p>
-<div class='ms-5'>
-  <p> 제목 : {{ cards.title }} </p>
-  <p> 내용 : {{ cards.content }} </p>
-  <img src="{%static 'images/산타가방.jpg' %}">
-  
-  <div class>
-    {% if cards.chimneys %}
-      {% if cards.socks %}
-      <div style='position:relative'>
-        <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
-        <div style='position: absolute; top:2rem; left:2rem;'>
-          <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
+  </div>
+  <!-- 벽난로  -->
+  <div class='col-6 ms-2'>
+
+    <p class=' my-5 fs-1 ms-5'>벽난로</p>
+    <div class='ms-5'>
+      <!-- 벽난로 주인의 장식 모달 창 -->
+      <div class="modal fade" id="owner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class='d-flex justify-content-center'>
+                <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
+              </div>
+              <div class='mb-2 rounded-2 p-1'>
+                <p class='text-center fs-5 my-5'>{{ cards.title }} </p>
+                <p class='my-1 text-center'>{{ cards.content }} </p>
+              </div>
+              <div class='d-grid mt-5'>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      {% else %}
-      <div>
-        <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
+      <div class>
+        {% if cards.chimneys %}
+          {% if cards.socks %}
+          <div style='position:relative'>
+            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
+            <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
+              <div style='position: absolute; top:2rem; left:2rem;'>
+                <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
+              </div>
+            </a>
+          </div>
+          {% else %}
+          <div>
+            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
+          </div>
+          {% endif %}
+        {% endif %}
+      
       </div>
-      {% endif %}
-    {% endif %}
-  
+    </div>
+    
   </div>
-</div>
 
+</div>
 {% for comment in comments %}
   {% if comment.ribbons == 1 %}
     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">

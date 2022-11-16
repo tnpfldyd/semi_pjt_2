@@ -17,4 +17,5 @@ urlpatterns = [
     path("<int:pk>/block/", views.block, name="block"),
     path("block_user/", views.block_user, name="block_user"),
     path("profile/<str:username>/", views.profile, name="profile"),
+    path("mypage/<int:pk>", views.mypage, name="mypage"),
 ]

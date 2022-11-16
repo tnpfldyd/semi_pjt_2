@@ -203,3 +203,7 @@ def block_user(request):
 def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     return render(request, "accounts/profile.html", {"user": user})
+
+
+def mypage(request):
+    return render(request, "accounts/mypage.html")

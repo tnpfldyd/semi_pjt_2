@@ -33,8 +33,8 @@
 .entry3 {
   height: 100vh;
   width: 100vw;
-  background-repeat : no-repeat;
-  background-size : cover;
+  background-repeat: no-repeat;
+  background-size: cover;
   background-image: url("/static/images/배경2.png");
 }
 
@@ -54,6 +54,26 @@ body {
 a {
   color: #fff;
 }
+
+
+
+
+.cc-selector input {
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.visa {
+  background-image: url(http://i.imgur.com/lXzJ1eB.png);
+}
+
+.mastercard {
+  background-image: url(http://i.imgur.com/SJbRQF7.png);
+}
+
 
 /* 폼에서 양말, 벽난로 선택 시작 */
 .cc-selector input {
@@ -155,7 +175,7 @@ a {
 
 #custom-form {
   color: #006f57;
-  
+
 }
 
 .custom-link {
@@ -175,19 +195,19 @@ a {
   overflow: hidden;
 }
 
-.custom-card img{
+.custom-card img {
   max-width: 350px;
   max-width: initial;
   margin-left: 0%;
 }
 
-.custom-card{
+.custom-card {
   max-height: 550px;
   min-height: 550px;
   overflow: hidden;
 }
 
-.custom-card img{
+.custom-card img {
   min-height: 550px;
   max-height: initial;
   margin-top: 15%;
@@ -207,11 +227,11 @@ a {
 /*  */
 
 
-.cus-container{
+.cus-container {
   position: relative;
 }
 
-.cus-container .cus-card{
+.cus-container .cus-card {
   position: relative;
   width: 320px;
   height: 550px;
@@ -232,20 +252,21 @@ a {
   transition: 0.5s ease-in-out;
 } */
 
-.cus-container .cus-card:hover:before{
+.cus-container .cus-card:hover:before {
   clip-path: circle(300px at 80% -20%);
 }
 
 /* 글씨 */
-.cus-container .cus-card:after{
+.cus-container .cus-card:after {
   position: absolute;
   top: 30%;
   left: -20%;
-  color: rgba(255,255,25,0.05)
+  color: rgba(255, 255, 25, 0.05)
 }
+
 /*  */
 
-.cus-container .cus-card .cus-imgBx{
+.cus-container .cus-card .cus-imgBx {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -254,14 +275,16 @@ a {
   height: 430px;
   transition: 0.5s;
 }
+
 /* 이미지 이동 */
-.cus-container .cus-card:hover .cus-imgBx{
+.cus-container .cus-card:hover .cus-imgBx {
   top: 5%;
   transform: translateY(0%);
-    
+
 }
+
 /*  */
-.cus-container .cus-card .cus-imgBx img{
+.cus-container .cus-card .cus-imgBx img {
   position: absolute;
   top: 20%;
   left: 50%;
@@ -270,7 +293,7 @@ a {
   width: 320px;
 }
 
-.cus-container .cus-card .cus-contentBx{
+.cus-container .cus-card .cus-contentBx {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -280,7 +303,7 @@ a {
   z-index: 10;
 }
 
-.cus-container .cus-card .cus-contentBx2{
+.cus-container .cus-card .cus-contentBx2 {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -289,16 +312,19 @@ a {
   transition: 1s;
   z-index: 11;
 }
+
 /* 컨텐츠 높이 */
-.cus-container .cus-card:hover .cus-contentBx{
+.cus-container .cus-card:hover .cus-contentBx {
   height: 280px;
 }
-.cus-container .cus-card:hover .cus-contentBx2{
+
+.cus-container .cus-card:hover .cus-contentBx2 {
   height: 80px;
 }
+
 /*  */
 
-.cus-container .cus-card .cus-contentBx h2{
+.cus-container .cus-card .cus-contentBx h2 {
   position: relative;
   font-weight: 600;
   letter-spacing: 1px;
@@ -306,7 +332,7 @@ a {
   margin: 0;
 }
 
-.cus-container .cus-card .cus-contentBx2 a{
+.cus-container .cus-card .cus-contentBx2 a {
   position: relative;
   font-weight: 600;
   letter-spacing: 1px;
@@ -314,7 +340,7 @@ a {
   margin: 0;
 }
 
-.cus-container .cus-card .cus-contentBx2 div{
+.cus-container .cus-card .cus-contentBx2 div {
   position: relative;
   font-weight: 600;
   letter-spacing: 1px;
@@ -322,30 +348,33 @@ a {
   margin: 0;
 }
 
-.cus-container .cus-card .cus-contentBx .cus-size, .cus-container .cus-card .cus-contentBx .cus-color {
+.cus-container .cus-card .cus-contentBx .cus-size,
+.cus-container .cus-card .cus-contentBx .cus-color {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 8px 20px;
-  transition: 0.5s;opacity: 0;
+  transition: 0.5s;
+  opacity: 0;
   visibility: hidden;
   padding-top: 0;
   padding-bottom: 0;
 }
 
-.cus-container .card:hover .cus-contentBx .cus-size{
+.cus-container .card:hover .cus-contentBx .cus-size {
   opacity: 1;
   visibility: visible;
   transition-delay: 0.1s;
 }
 
-.cus-container .cus-card:hover .cus-contentBx .cus-color{
+.cus-container .cus-card:hover .cus-contentBx .cus-color {
   opacity: 1;
   visibility: visible;
   transition-delay: 0.1s;
 }
 
-.cus-container .cus-card .cus-contentBx .cus-size div, .cus-container .cus-card .cus-contentBx .cus-color div{
+.cus-container .cus-card .cus-contentBx .cus-size div,
+.cus-container .cus-card .cus-contentBx .cus-color div {
   color: #fff;
   font-weight: 300;
   font-size: 14px;
@@ -354,7 +383,7 @@ a {
   margin-right: 10px;
 }
 
-.cus-container .cus-card .cus-contentBx .cus-size span{
+.cus-container .cus-card .cus-contentBx .cus-size span {
   width: 26px;
   height: 26px;
   text-align: center;
@@ -371,7 +400,7 @@ a {
 }
 
 
-.cus-container .cus-card .cus-contentBx a{
+.cus-container .cus-card .cus-contentBx a {
   display: inline-block;
   padding: 10px 20px;
   background: #fff;
@@ -386,9 +415,9 @@ a {
   margin-top: 0;
 }
 
-.cus-container .cus-card:hover .cus-contentBx a{
+.cus-container .cus-card:hover .cus-contentBx a {
   opacity: 1;
   transform: translateY(0px);
   transition-delay: 0.75s;
-  
+
 }
