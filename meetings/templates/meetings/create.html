@@ -4,7 +4,7 @@
 {% block content %}
   <div class="wrapper justify-content-around">
     <div class="">
-      <h1 class="ms-5 mt-5 text-center">글 쓰기</h1>
+      <h1 class="my-4 text-center">글 쓰기</h1>
       <form class="container inner h-100 p-5 rounded-5" action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form meeting_form %}
