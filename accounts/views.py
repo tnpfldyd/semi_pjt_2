@@ -204,7 +204,6 @@ def profile(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
     return render(request, "accounts/profile.html", {"user": user})
 
-
 @login_required
 def save(request):
     if request.method == "POST":
@@ -224,3 +223,4 @@ def save(request):
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
         return redirect("accounts:mypage")
+

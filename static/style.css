@@ -34,9 +34,11 @@
 .entry3 {
   height: 100vh;
   width: 100vw;
+
   background-repeat : no-repeat;
   background-size : cover;
   background-image: url("/static/images/글생성배경.jpg");
+
 }
 
 .main_image_text {
@@ -55,6 +57,26 @@ body {
 a {
   color: #fff;
 }
+
+
+
+
+.cc-selector input {
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.visa {
+  background-image: url(http://i.imgur.com/lXzJ1eB.png);
+}
+
+.mastercard {
+  background-image: url(http://i.imgur.com/SJbRQF7.png);
+}
+
 
 /* 폼에서 양말, 벽난로 선택 시작 */
 .cc-selector input {
@@ -403,7 +425,9 @@ a {
   transform: translateY(0px);
   transition-delay: 0.75s;
 
+
 }
+
 
 
 

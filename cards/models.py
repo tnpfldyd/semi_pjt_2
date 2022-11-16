@@ -8,7 +8,8 @@ class UserCard(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_card"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
     socks = models.IntegerField(blank=True)
     chimneys = models.IntegerField(blank=True)

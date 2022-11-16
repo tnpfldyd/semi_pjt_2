@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="my-4">나의 문의</h1>
+    <h5>{{ user.vocies.count }}개의 문의가 있습니다.</h5>
+    {% for vocie in user.vocies.all %}
+      <a href="{% url 'vocies:detail' vocie.pk %}" class="text-decoration-none text-dark">
+        <div class="my-4">
+          <p>{{ vocie.title }}
+            |
+            <span>{{ vocie.user.username }}</span></p>
+        </div>
+      </a>
+    {% endfor %}
+  {% endblock content %}
+</div>
