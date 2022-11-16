@@ -62,27 +62,35 @@
 </style>
 </head>
 <body>
-<div id="container" class="container mt-3">
+<div id="container" class="container mt-3" style="max-width:600px;">
     <div class="d-flex justify-content-between">
       <h2>{{ note.title }}</h2>
-      <a class="custom-link fs-4" id="btn-modal">{{ request.user.nickname }}</a>
+      <a class="custom-link fs-4 mx-3" id="btn-modal">{{ request.user.nickname }}</a>
     </div>
-    <div>{{ note.content }}</div>
-    <div>{{ note.created_at }}</div>
-    <div id="lorem-ipsum"></div>
-    <div id="modal" class="modal-overlay">
-        <div class="modal-window">
-            <div class="title">
-                <h2>{{ request.user.nickname }}</h2>
-            </div>
-            <div class="close-area">X</div>
-            <div class="content">
-                <h3><a href="{% url 'accounts:profile' request.user.username %}" class="text-decoration-none text-white">프로필</a></h3>
-                <h3><a href="{% url 'notes:send' request.user.username %}" class="text-decoration-none text-white">쪽지</a></h3>
-                <h3><a href="{% url 'accounts:follow' request.user.username %}" class="text-decoration-none text-white">팔로우</a></h3>
-                <h3><a href="{% url 'accounts:block' request.user.username %}" class="text-decoration-none text-white">차단</a></h3>
+    <hr/>
+    <div class="container">
+      <div class="card">
+        <div class="d-flex justify-content-center fs-5 m-3">
+          {{ note.content }}
+        </div>
+        <div class="d-flex justify-content-end">
+          <small class="m-3">{{ note.created_at|date:'o.m.d D' }} {{ note.created_at|time:"H:i" }}</small>
+        </div>
+        <div id="modal" class="modal-overlay">
+            <div class="modal-window">
+                <div class="title">
+                    <h2>{{ request.user.nickname }}</h2>
+                </div>
+                <div class="close-area">X</div>
+                <div class="content">
+                    <h3><a href="{% url 'accounts:profile' request.user.username %}" class="text-decoration-none text-white">프로필</a></h3>
+                    <h3><a href="{% url 'notes:send' request.user.username %}" class="text-decoration-none text-white">쪽지</a></h3>
+                    <h3><a href="{% url 'accounts:follow' request.user.username %}" class="text-decoration-none text-white">팔로우</a></h3>
+                    <h3><a href="{% url 'accounts:block' request.user.username %}" class="text-decoration-none text-white">차단</a></h3>
+                </div>
             </div>
         </div>
+      </div>
     </div>
 </div>
 <script>

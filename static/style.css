@@ -245,6 +245,8 @@ a {
   overflow: hidden;
 }
 
+
+
 /* .container .card:before{
   content: '';
   position: absolute;
@@ -428,12 +430,6 @@ a {
 
 }
 
-
-
-
-
-
-
 /* 화면 전환용 css */
 
 :root {
@@ -527,3 +523,4 @@ a {
     transform: translateX(0px);
   }
 }
+
