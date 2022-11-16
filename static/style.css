@@ -15,8 +15,9 @@
 }
 
 .mettings_bg {
+
   height: 100vh;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: radial-gradient(ellipse, #6285d630 0%, #8ba2d1 100%);
 }
 
 .entry {
@@ -35,7 +36,7 @@
   width: 100vw;
   background-repeat : no-repeat;
   background-size : cover;
-  background-image: url("/static/images/배경2.png");
+  background-image: url("/static/images/글생성배경.jpg");
 }
 
 .main_image_text {
