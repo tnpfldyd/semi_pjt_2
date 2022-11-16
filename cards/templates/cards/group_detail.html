@@ -3,9 +3,74 @@
 {% load static %}
 {% block content %} 
 
-<a href="{% url 'cards:groupcard_update' cards.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
-<a href="{% url 'cards:groupcard_delete' cards.pk %}" class="text-decoration-none"> 벽난로 부수기 </a>
-<a href="{% url 'cards:gcomment_create' cards.pk %}" class="text-decoration-none"> 메시지 남기기 </a>
+
+<div class="container_trans">
+
+  <div class="container_content">
+  <div class="container_content_inner">
+  <div class="title">
+    <h1>Hello World</h1>
+  </div>
+  <div class="par">
+  <p>
+  Cupiditate alias odio omnis minima veritatis saepe porro, repellendus natus vitae, sequi exercitationem ipsam, qui possimus sit eveniet laborum sapiente quisquam quae neque velit? 
+  </p>
+  </div>
+  <div class="btns">
+  </div>
+  </div>
+  </div>
+   <div class="container_outer_img">
+    <h1> 컨테이너 바깥 이미지 </h1>
+   <div class="img-inner">
+   <img src='https://images.unsplash.com/photo-1517911041065-4960862d38f0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80'  alt="" class="container_img"/>
+         </div>
+       </div>
+    </div>
+
+  <div class="overlay"> 
+    <div class="wrapper">
+      <h1 class="text-center "> 산타를 눌러주세요 </h1>
+      <div class="container">
+        <div class="santa">
+          <div class="hand-l"></div>
+          <div class="hand-r"></div>
+          <div class="hat"></div>
+          <div class="face">
+            <div class="beard"></div>
+            <div class="eyes"></div>
+          </div>
+          <div class="belt"></div>
+          <div class="shoe"></div>
+        </div>
+        <div class="santabag">
+          <img src="{%static 'images/santabag.png' %}" height="300px" alt="...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div>
+  <a href="{% url 'cards:groupcard_update' cards.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
+  <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="text-decoration-none"> 벽난로 부수기 </a>
+  <a href="{% url 'cards:gcomment_create' cards.pk %}" class="text-decoration-none"> 메시지 남기기 </a>
+</div>
 
 <div>
   <h1> 성별 : {{ cards.user.gender }} </h1>
@@ -16,6 +81,12 @@
   <h1> 양말id : {{ cards.socks }} </h1>
   <h1> 벽난로id :{{ cards.chimneys }} </h1>
 </div>
+
+
+
+
+
+
 
 
 <img src="{%static 'images/산타가방.jpg' %}">
@@ -81,6 +152,10 @@
       </div>
     </div>
   </div>
+
+
+
+  <script src="{% static 'js/fireplace.js' %}"></script>
 
 {% endfor %}
 
