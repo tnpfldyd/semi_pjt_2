@@ -7,28 +7,11 @@
 <a href="{% url 'cards:usercard_delete'%}" class="text-decoration-none"> 벽난로 없애기 </a>
 <a href="{% url 'cards:usercard_comment' cards.pk %}" class="text-decoration-none"> 댓글 남기기 </a>
 
-<div class="row">
-  <!-- 벽난로 주인 프로필 -->
-  <div class='col-5 ms-2'>
-
-    <p class=' my-5 fs-1 ms-5'>개인 프로필</p>
-    <div class='row'>
-      <div class='col-6'>
-        <img src="{{ cards.user.profileimage }}" class="rounded-2" style='width:10rem;'>
-      </div>
-      <div class='col-6'>
-        <p> 이름 : {{ cards.user.nickname }} </p>
-        <p> 성별 : {{ cards.user.gender }} </p>
-        <p> 나이 : {{ cards.user.age_range }}</p>
-      </div>
-    </div>
-
-  </div>
-  <!-- 벽난로  -->
-  <div class='col-6 ms-2'>
-
-    <p class=' my-5 fs-1 ms-5'>벽난로</p>
-    <div class='ms-5'>
+<div class="d-flex justify-content-center">
+  <div>
+    
+    <p class=' my-5 fs-1 text-center'>{{ cards.user.nickname }} <span class='small fw-lighter'>님의 벽난로</span></p>
+    <div class=''>
       <!-- 벽난로 주인의 장식 모달 창 -->
       <div class="modal fade" id="owner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -68,9 +51,7 @@
       
       </div>
     </div>
-    
   </div>
-
 </div>
 {% for comment in comments %}
   {% if comment.ribbons == 1 %}

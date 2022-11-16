@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 
-from .forms import UserCardForm, UserCommentForm, GroupCardForm, GroupCommentForm
-from .models import UserCard, Groupcard
+from .forms import *
+from .models import *
+
 
 import requests, os, json
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,7 @@ from django.contrib.auth import get_user_model
 
 @login_required
 def index(request):
-    cards = UserCard.objects.order_by("-pk")
+    cards = UserCard.objects.get(user=request.user)
     groupcards = Groupcard.objects.order_by("-pk")
     user = get_user_model().objects.get(pk=request.user.pk)
     context = {"cards": cards, "groupcards": groupcards, "user": user}
@@ -35,7 +36,7 @@ def create_indiv(request):
             temp.socks = request.POST["choice_sock"]
             temp.chimneys = request.POST["choice_chim"]
             temp.save()
-            return redirect("cards:index")
+            return redirect("accounts:profile", request.user.pk)
     else:
         form = UserCardForm()
     context = {
@@ -44,10 +45,10 @@ def create_indiv(request):
     return render(request, "cards/create_indiv.html", context)
 
 
-
 def indiv_detail(request, pk):
     # cards = UserCard.objects.get(user=request.user.pk)
     cards = UserCard.objects.get(pk=pk)
+    comments = cards.usercomment_set.all()
     context = {
         "cards": cards,
 
@@ -78,7 +79,7 @@ def usercard_update(request, pk):
 def usercard_delete(request):
     card = UserCard.objects.get(user_id=request.user.pk)
     card.delete()
-    return redirect("cards:index")
+    return redirect("accounts:profile", request.user.pk)
 
 
 dic = {
@@ -201,6 +202,7 @@ def card_update(request, pk):
 def card_delete(request):
     card = Groupcard.objects.get(user_id=request.user.pk, is_indiv=1)
 
+
 def groupcard_update(request, pk):
     cards = Groupcard.objects.get(pk=pk)
     if request.method == "POST":
@@ -228,7 +230,6 @@ def groupcard_delete(request, pk):
     request.user.card_created = 0
     request.user.save()
     return redirect("cards:index")
-
 
 
 def group_detail(request, pk):

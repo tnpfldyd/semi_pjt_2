@@ -129,12 +129,11 @@
                   <div class="title">
                       <h2>{{ request.user.nickname }}</h2>
                   </div>
-                  <div class="close-area">X</div>
-                  <div class="content">
-                      <h3><a href="{% url 'accounts:profile' request.user.username %}" class="text-decoration-none text-white">프로필</a></h3>
-                      <h3><a href="{% url 'notes:send' request.user.username %}" class="text-decoration-none text-white">쪽지</a></h3>
-                      <h3><a href="{% url 'accounts:follow' request.user.username %}" class="text-decoration-none text-white">팔로우</a></h3>
-                      <h3><a href="{% url 'accounts:block' request.user.username %}" class="text-decoration-none text-white">차단</a></h3>
+                  <div class="modal-footer">
+                    <h3><a href="{% url 'accounts:profile' meeting.user.username %}" class="text-decoration-none text-dark">프로필</a></h3>
+                    <h3><a href="{% url 'notes:send' meeting.user.username %}" class="text-decoration-none text-dark">쪽지</a></h3>
+                    <h3><a href="{% url 'accounts:follow' meeting.user.pk %}" class="text-decoration-none text-dark">팔로우</a></h3>
+                    <h3><a href="{% url 'accounts:block' meeting.user.pk %}" class="text-decoration-none text-dark">차단</a></h3>
                   </div>
               </div>
             </div>
