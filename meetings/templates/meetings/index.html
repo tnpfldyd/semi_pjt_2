@@ -49,8 +49,12 @@
       <div class="container cus-container">
         {% if request.user in meeting.belong.all %}
           <div class="JJim fs-3" >
-            ❤️
+            <span class="cus-shadow">❤️</span>
           </div>
+        {% elif meeting.password %}
+          <div class="JJim fs-3" >
+            <span class="cus-shadow">🔒</span>
+          </div>         
         {% endif %}
         <div class="card cus-card">
           <div class="cus-imgBx">
@@ -149,15 +153,15 @@
 
 
 {% comment %} 페이지네이션  {% endcomment %}
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center mt-3">
   <div class="paginagtion">
     <span class="step-links">
     {% comment %} {% for local in meetings_local_list %} {% endcomment %}
       
       {% if at_all %}
       {% if page_obj.has_previous %}
-      <a href="?local={{ page_obj }}">&laquo; 처음</a>
-      <a href="?local={{ page_obj.previous_page_number }}">이전</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj }}">&laquo; 처음</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj.previous_page_number }}">이전</a>
       {% endif %}
 
       <span class="current">
@@ -166,8 +170,8 @@
 
       {% if page_obj.has_next %}
       
-      <a href="?local={{ page_obj.next_page_number }}">다음</a>
-      <a href="?local={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj.next_page_number }}">다음</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
 
       {% endif %}
       {% endif %}
