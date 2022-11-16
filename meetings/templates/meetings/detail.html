@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block content %}
-<body class="mettings_bg">
-  <div class="container">
-    <h2 class=" mt-4 text-white">제목 :
+<body class="wrapper">
+  <div class="inner">
+    <h2 class=" mt-4 text-black">제목 :
       {{ meeting.title }}
       <div>
         {% if request.user == meeting.user %}
@@ -17,10 +17,10 @@
         {% endif %}
       </div>
     </h2>
-    <p class="text-white">내용 :
+    <p class="text-black">내용 :
       {{ meeting.content }}</p>
 
-    <div class="my-5 text-white">
+    <div class="my-5 text-black">
       <h4 class="fw-bold mb-3">리뷰 작성
         <a class="float-end btn btn-outline-success" href="{% url 'meetings:index' %}">목록</a>
       </h4>
@@ -33,37 +33,37 @@
       {% endif %}
     </div>
 
-    <div class="d-flex text-white">
+    <div class="d-flex text-black">
       이 방에 참여한 유저들: 
       <div>
       {% for user in user_list %}
-        <a class="ms-2 text-decoration-none text-white" href="{% url 'accounts:profile' meeting.pk %}">{{ user.nickname }}</a>
+        <a class="ms-2 text-decoration-none text-black" href="{% url 'accounts:profile' meeting.pk %}">{{ user.nickname }}</a>
       {% endfor %}
       </div>
     </div>
 
     <form action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
       {% csrf_token %}
-      <button class="btn btn-outline-info" name="belong_id" value="belong_id">
+      <button class="btn btn-outline-light" name="belong_id" value="belong_id">
         참여
       </button>
     </form>
     {% if meeting.belong %}
-    <span class="text-white">{{ meeting.belong.count }}</span>
+    <span class="text-black">{{ meeting.belong.count }}</span>
 
     {% endif %}
-    <small class="text-white">참여버튼을 누르시면 비밀번호 입력없이 들어올 수 있습니다.</small>
+    <small class="text-black">참여버튼을 누르시면 비밀번호 입력없이 들어올 수 있습니다.</small>
 
-    <div class="my-3 text-white">
+    <div class="my-3 text-black">
       댓글
     </div>
 
     {% for comment in comments %}
       <div>
-        <p class="text-white">{{ comment.user.nickname }}</p>
+        <p class="text-black">{{ comment.user.nickname }}</p>
       </div>
-      <p class="fs-6 text-white">{{ comment.created_at|date:"SHORT_DATETIME_FORMAT" }}</p>
-      <p class="text-white">{{ comment.content }}</p>
+      <p class="fs-6 text-black">{{ comment.created_at|date:"SHORT_DATETIME_FORMAT" }}</p>
+      <p class="text-black">{{ comment.content }}</p>
 
       {% if request.user == comment.user %}
         <form action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
@@ -73,7 +73,7 @@
       {% endif %}
       <hr>
       {% empty %}
-      <p class="text-white">댓글이 없습니다.</p>
+      <p class="text-black">댓글이 없습니다.</p>
     {% endfor %}
   </div>
 </body>
@@ -114,6 +114,25 @@
             console.log(error.response)
           })
       })
-
     </script>
+
+    <style>
+      .wrapper {
+        min-height: 100vh;
+        background-image: url("/static/images/글생성배경.jpg");
+        background-size: cover;
+      }
+      .inner {
+        max-width: 758px;
+        margin: auto;
+        background: #39459f;
+        border: 10px solid #0d99d2;
+        padding: 77px 99px 87px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+        -ms-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+        -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+      }
+    </style>
 {% endblock content %}
