@@ -48,9 +48,14 @@ def create_indiv(request):
 
 def indiv_detail(request):
     cards = UserCard.objects.get(user=request.user.pk)
+    comments = cards.usercomment_set.all()
+    comments_false = cards.usercomment_set.filter(read=False)
+    for i in comments_false:
+        i.read = True
+        i.save()
     context = {
         "cards": cards,
-        "comments": cards.usercomment_set.all(),
+        "comments": comments,
     }
     return render(request, "cards/indiv_detail.html", context)
 
@@ -196,7 +201,6 @@ def card_update(request, pk):
     return render(request, "cards/card_update.html", context=context)
 
 
-
 def groupcard_update(request, pk):
     cards = Groupcard.objects.get(pk=pk)
     if request.method == "POST":
@@ -221,7 +225,6 @@ def groupcard_delete(request, pk):
     card = Groupcard.objects.get(pk=pk)
     card.delete()
     return redirect("cards:index")
-
 
 
 def group_detail(request, pk):

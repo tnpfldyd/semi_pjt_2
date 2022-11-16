@@ -7,7 +7,9 @@ from django.conf import settings
 class UserCard(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_card"
+    )
     socks = models.IntegerField(blank=True)
     chimneys = models.IntegerField(blank=True)
 
@@ -31,19 +33,7 @@ class UserComment(models.Model):
     )
     ribbons = models.IntegerField()
     id_text = models.TextField(blank=True)
-
-
-class Comment(models.Model):
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    usercard = models.ForeignKey(UserCard, on_delete=models.CASCADE)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="card_comment",
-    )
-    ribbons = models.IntegerField()
-    id_text = models.TextField(blank=True)
+    read = models.BooleanField(default=False)
 
 
 class Groupcomment(models.Model):

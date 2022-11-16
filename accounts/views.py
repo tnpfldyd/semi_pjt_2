@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 import requests
 from django.contrib import messages
+from django.http import JsonResponse
 
 # Create your views here.
 def signup(request):
@@ -203,3 +204,24 @@ def block_user(request):
 def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     return render(request, "accounts/profile.html", {"user": user})
+
+
+@login_required
+def save(request):
+    if request.method == "POST":
+        tree_notice = request.GET.get("p")
+        note_notice = request.GET.get("h6")
+        if tree_notice == "ON":
+            request.user.tree_notice = True
+        else:
+            request.user.tree_notice = False
+        if note_notice == "ON":
+            request.user.note_notice = True
+        else:
+            request.user.note_notice = False
+        request.user.save()
+        messages.success(request, "저장 성공.😀")
+        return JsonResponse({1: 1})
+    else:
+        messages.error(request, "그렇게는 접근할 수 없어요.😥")
+        return redirect("accounts:mypage")
