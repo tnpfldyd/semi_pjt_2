@@ -245,6 +245,8 @@ a {
   overflow: hidden;
 }
 
+
+
 /* .container .card:before{
   content: '';
   position: absolute;
@@ -440,6 +442,7 @@ a {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 
 .wrapper {
   width: 350px;
@@ -834,3 +837,4 @@ a {
     transform: translateX(0px);
   }
 }
+
