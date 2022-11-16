@@ -49,8 +49,12 @@
       <div class="container cus-container">
         {% if request.user in meeting.belong.all %}
           <div class="JJim fs-3" >
-            ❤️
+            <span class="cus-shadow">❤️</span>
           </div>
+        {% elif meeting.password %}
+          <div class="JJim fs-3" >
+            <span class="cus-shadow">🔒</span>
+          </div>         
         {% endif %}
         <div class="card cus-card">
           <div class="cus-imgBx">
@@ -72,7 +76,7 @@
                 {% comment %} <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small> {% endcomment %}
               </div>
             </div>
-            <a class="mx-2" href="{% url 'accounts:profile' meeting.user.username %}">{{ meeting.user.nickname }}</a>
+            <a style="cursor: pointer;" class="mx-2" data-bs-toggle="modal" data-bs-target="#modal{{meeting.text}}">{{ meeting.user.nickname }}</a>
             {% comment %} 패스워드 로직 {% endcomment %}
             <div>
               {% if request.user in meeting.belong.all %}
@@ -119,8 +123,60 @@
                 </div>
               </div>
             </div>
-    
+
+            <div id="modal{{meeting.text}}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel{{meeting.text}}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <div>{{meeting.user.nickname}}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-footer">
+                    <h3><a href="{% url 'accounts:profile' meeting.user.username %}" class="text-decoration-none text-dark">프로필</a></h3>
+                    <h3><a href="{% url 'notes:send' meeting.user.username %}" class="text-decoration-none text-dark">쪽지</a></h3>
+                    <h3><a href="{% url 'accounts:follow' meeting.user.pk %}" class="text-decoration-none text-dark">팔로우</a></h3>
+                    <h3><a href="{% url 'accounts:block' meeting.user.pk %}" class="text-decoration-none text-dark">차단</a></h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <script>
+              
+              const modal = document.getElementById("modal")
+              function modalOn() {
+                  modal.style.display = "flex"
+              }
+              function isModalOn() {
+                  return modal.style.display === "flex"
+              }
+              function modalOff() {
+                  modal.style.display = "none"
+              }
+              const btnModal = document.getElementById(a)
+              btnModal.addEventListener("click", e => {
+                  modalOn()
+              })
+              const closeBtn = modal.querySelector(".close-area")
+              closeBtn.addEventListener("click", e => {
+                  modalOff()
+              })
+              modal.addEventListener("click", e => {
+                  const evTarget = e.target
+                  if(evTarget.classList.contains("modal-overlay")) {
+                      modalOff()
+                  }
+              })
+              window.addEventListener("keyup", e => {
+                  if(isModalOn() && e.key === "Escape") {
+                      modalOff()
+                  }
+              })
+            
+            </script>
   {% endfor %}
+
+  
   {% comment %} 내가참여한 모임들 {% endcomment %}
   <div class="card d-flex align-items-center" style="min-width: 150px;">
     <div>참여신청한 모임들</div>
@@ -142,22 +198,22 @@
   </div>
 </div>
 
-  
+
 
 
 {% comment %} 노원구 {% endcomment %}
 
 
 {% comment %} 페이지네이션  {% endcomment %}
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center mt-3">
   <div class="paginagtion">
     <span class="step-links">
     {% comment %} {% for local in meetings_local_list %} {% endcomment %}
       
       {% if at_all %}
       {% if page_obj.has_previous %}
-      <a href="?local={{ page_obj }}">&laquo; 처음</a>
-      <a href="?local={{ page_obj.previous_page_number }}">이전</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj }}">&laquo; 처음</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj.previous_page_number }}">이전</a>
       {% endif %}
 
       <span class="current">
@@ -166,8 +222,8 @@
 
       {% if page_obj.has_next %}
       
-      <a href="?local={{ page_obj.next_page_number }}">다음</a>
-      <a href="?local={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj.next_page_number }}">다음</a>
+      <a style="text-decoration:none; color:black" href="?local={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
 
       {% endif %}
       {% endif %}
@@ -215,4 +271,64 @@
     </span>
   </div>
 </div>
+
+
+<style>
+  #modal.modal-overlay {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  #modal .modal-window {
+      background: rgba(21, 22, 22, 0.7);
+      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+      backdrop-filter: blur( 13.5px );
+      -webkit-backdrop-filter: blur( 13.5px );
+      border-radius: 10px;
+      border: 1px solid rgba( 255, 255, 255, 0.18 );
+      width: 200px;
+      height: 250px;
+      position: relative;
+      top: -100px;
+      padding: 10px;
+  }
+  #modal .title {
+      padding-left: 10px;
+      display: inline;
+      text-shadow: 1px 1px 2px gray;
+      color: white;
+      
+  }
+  #modal .title h2 {
+      display: inline;
+  }
+  #modal .close-area {
+      display: inline;
+      float: right;
+      padding-right: 10px;
+      cursor: pointer;
+      text-shadow: 1px 1px 2px gray;
+      color: white;
+  }
+  
+  #modal .content {
+      margin-top: 20px;
+      padding: 0px 10px;
+      text-shadow: 1px 1px 2px gray;
+      color: white;
+  }
+</style>
+
 {% endblock content %}

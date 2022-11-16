@@ -44,11 +44,13 @@ def create_indiv(request):
     return render(request, "cards/create_indiv.html", context)
 
 
-def indiv_detail(request):
-    cards = UserCard.objects.get(user=request.user.pk)
+
+def indiv_detail(request, pk):
+    # cards = UserCard.objects.get(user=request.user.pk)
+    cards = UserCard.objects.get(pk=pk)
     context = {
         "cards": cards,
-        "comments": cards.usercomment_set.all(),
+        "comments": comments,
     }
     return render(request, "cards/indiv_detail.html", context)
 
@@ -198,10 +200,45 @@ def card_update(request, pk):
 
 def card_delete(request):
     card = Groupcard.objects.get(user_id=request.user.pk, is_indiv=1)
+
+def groupcard_update(request, pk):
+    cards = Groupcard.objects.get(pk=pk)
+    if request.method == "POST":
+        form = GroupCardForm(request.POST, instance=cards)
+        if form.is_valid():
+            if form.is_valid():
+                temp = form.save(commit=False)
+                temp.user = request.user
+                # 라디오 버튼 'name'='id'로 들어옴
+                # name==choice, id=1,2,3으로 설정
+                temp.socks = request.POST["choice_sock"]
+                temp.chimneys = request.POST["choice_chim"]
+                temp.save()
+                return redirect("cards:group_detail", cards.pk)
+    else:
+        form = GroupCardForm(instance=cards)
+    context = {"form": form}
+    return render(request, "cards/groupcard_update.html", context=context)
+
+
+def groupcard_delete(request, pk):
+    card = Groupcard.objects.get(pk=pk)
+
     card.delete()
     request.user.card_created = 0
     request.user.save()
     return redirect("cards:index")
+
+
+
+def group_detail(request, pk):
+    groupcards = Groupcard.objects.get(pk=pk)
+    context = {
+        "cards": groupcards,
+        "comments": groupcards.groupcomment_set.all(),
+    }
+
+    return render(request, "cards/group_detail.html", context)
 
 
 dic = {

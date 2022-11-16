@@ -1,5 +1,5 @@
 from django import forms
-from .models import Groupcard, Comment, Groupcomment, UserCard, UserComment
+from .models import *
 
 
 class GroupCardForm(forms.ModelForm):
