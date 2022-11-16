@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 
-
-from .forms import *
-from .models import *
-
+from .forms import UserCardForm, UserCommentForm, GroupCardForm, GroupCommentForm
+from .models import UserCard, Comment, Groupcard
 
 import requests, os, json
 from django.contrib.auth.decorators import login_required
@@ -46,11 +44,13 @@ def create_indiv(request):
     return render(request, "cards/create_indiv.html", context)
 
 
-def indiv_detail(request):
-    cards = UserCard.objects.get(user=request.user.pk)
+
+def indiv_detail(request, pk):
+    # cards = UserCard.objects.get(user=request.user.pk)
+    cards = UserCard.objects.get(pk=pk)
     context = {
         "cards": cards,
-        "comments": cards.usercomment_set.all(),
+        "comments": comments,
     }
     return render(request, "cards/indiv_detail.html", context)
 
@@ -175,9 +175,7 @@ def group_detail(request, pk):
 
 
 def card_update(request, pk):
-
     cards = Groupcard.objects.get(user_id=request.user.pk, is_indiv=1)
-
     if request.method == "POST":
         form = GroupCardForm(request.POST, instance=cards)
         if form.is_valid():
@@ -188,6 +186,10 @@ def card_update(request, pk):
                 # name==choice, id=1,2,3으로 설정
                 temp.socks = request.POST["choice_sock"]
                 temp.chimneys = request.POST["choice_chim"]
+                # 개인이면 is_indiv에 1
+                temp.is_indiv = 1
+                request.user.card_created = True
+                request.user.save()
                 temp.save()
                 return redirect("cards:indiv_detail")
     else:
@@ -196,6 +198,8 @@ def card_update(request, pk):
     return render(request, "cards/card_update.html", context=context)
 
 
+def card_delete(request):
+    card = Groupcard.objects.get(user_id=request.user.pk, is_indiv=1)
 
 def groupcard_update(request, pk):
     cards = Groupcard.objects.get(pk=pk)
@@ -219,7 +223,10 @@ def groupcard_update(request, pk):
 
 def groupcard_delete(request, pk):
     card = Groupcard.objects.get(pk=pk)
+
     card.delete()
+    request.user.card_created = 0
+    request.user.save()
     return redirect("cards:index")
 
 
@@ -290,31 +297,3 @@ def comment_create(request, pk):
     context = {"comment_form": comment_form}
 
     return render(request, "cards/comment_create.html", context)
-
-
-def gcomment_create(request, pk):
-    groupcard = Groupcard.objects.get(pk=pk)
-    comment_form = GroupCommentForm(request.POST, request.FILES)
-    if comment_form.is_valid():
-        comment = comment_form.save(commit=False)
-        comment.user = request.user
-        comment.groupcard = groupcard
-        comment.ribbons = request.POST["choice_ribbon"]
-        comment.save()
-        temp = ""
-        for i in str(comment.pk):
-            temp += dic[i]
-        comment.id_text = temp
-        comment.save()
-        return redirect("cards:group_detail", pk)
-    else:
-        comment_form = GroupCommentForm()
-    context = {"comment_form": comment_form}
-
-    return render(request, "cards/comment_create.html", context)
-
-
-def gcomments_delete(request, cards_pk, comment_pk):
-    comment = Groupcomment.objects.get(pk=comment_pk)
-    comment.delete()
-    return redirect("cards:group_detail", cards_pk)

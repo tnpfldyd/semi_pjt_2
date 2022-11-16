@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+  <h1>{{ vocie.title }}</h1>
+  <p>{{ vocie.created_at }}
+    |
+    <span>{{ vocie.user.nickname }}</span></p>
+  {% if vocie.image %}
+    <img src="{{ vocie.image.url }}" alt="{{ vocie.image }}">
+  {% endif %}
+  <p>{{ vocie.content }}</p>
+  <a href="{% url 'vocies:update' vocie.pk %}" class="btn btn-outline-success">수정하기</a>
+  <!-- 답변 -->
+  <!-- 어드민만 답변달 수 있게 -->
+  {% if user.is_superuser %}
+    <form action="{% url 'vocies:comment_create' vocie.pk %}" method="POST">
+      {% csrf_token %}
+      {% bootstrap_form comment_form %}
+      {% bootstrap_button button_type="submit" content="OK" button_class="btn btn-primary" %}
+    </form>
+  {% endif %}
+
+  <hr>
+
+  <div class="my-4">
+    <h4 class="my-3">문의 답변</h3>
+    {% for comment in comments %}
+      <div>
+        <p>{{ comment.content }}</p>
+        {% if user.is_superuser %}
+          <a href="{% url 'vocies:delete_comment' comment.pk vocie.pk %}" class="btn btn-outline-danger">삭제</a>
+        {% endif %}
+      </div>
+      {% empty %}
+      <p>아직 답변이 없습니다.</p>
+    {% endfor %}
+  </div>
+{% endblock content %}

@@ -3,72 +3,212 @@
 {% load static %}
 {% block content %} 
 
-<h1 class='text-center my-5'> 벽난로 만들기 배너 이미지 </h1>
 
-<div class='my-5'>
-
-  <h1 class='my-5'> 개인 벽난로 </h1>
-  <p class='my-5'> {{ user.nickname }} 님의 벽난로 </p> 
-  {% if user.usercard %}
-  <div class="card" style="width: 18rem;">
-    {% if user.usercard.chimneys == 1%}
-    <img src="{%static 'images/벽난로1.jpg' %}" class="card-img-top" alt="...">
-    {% elif user.usercard.chimneys == 2%}
-    <img src="{%static 'images/벽난로2.jpg' %}" class="card-img-top" alt="...">
-    {% elif user.usercard.chimneys == 3%}
-    <img src="{%static 'images/벽난로3.jpg' %}" class="card-img-top" alt="...">
-    {% endif %}
-    <div class="card-body">
-      <h5 class="card-title">{{ user.usercard.title }}</h5>
-      <p class="card-text">{{ user.usercard.content }}</p>
-      <a href="{% url 'cards:indiv_detail' %}" class="btn btn-primary">Go somewhere</a>
-    </div>
-  </div>
-
-  {% else %}
-  <p class='text-center my-5'> 개인 벽난로를 생성해주세요! </p>
-
-  <div>
-    <a href="{% url 'cards:create_indiv' %}" class="btn btn-primary"> 개인 벽난로 만들기</a>
-  </div>
-
-  {% endif %}
+<style>
+  :root {
+    --surface-color: #fff;
+    --curve: 40;
+  }
   
+  * {
+    box-sizing: border-box;
+  }
+
+  
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 5vw;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  .card2 {
+    position: relative;
+    display: block;
+    width: 20rem;
+    height: auto;  
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+  }
+  
+  .card__image {      
+    width: 100%;
+    height: auto;
+  }
+  
+  .card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;      
+    border-radius: calc(var(--curve) * 1px);    
+    background-color: var(--surface-color);      
+    transform: translateY(100%);
+    transition: .2s ease-in-out;
+  }
+  
+  .card2:hover .card__overlay {
+    transform: translateY(0);
+  }
+  
+  .card__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    padding: 0.7em;
+    border-radius: calc(var(--curve) * 1px) 0 0 0;    
+    background-color: var(--surface-color);
+    transform: translateY(-100%);
+    transition: .2s ease-in-out;
+  }
+  
+  .card__arc {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    bottom: 100%;
+    right: 0;      
+    z-index: 1;
+  }
+  
+  .card__arc path {
+    fill: var(--surface-color);
+    d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+  }       
+  
+  .card2:hover .card__header {
+    transform: translateY(0);
+  }
+  
+  .card__thumb {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;      
+    border-radius: 50%;      
+  }
+  
+  .card__title {
+    font-size: 1em;
+    margin: 0 0 .3em;
+    color: #6A515E;
+  }
+  
+  .card__tagline {
+    display: block;
+    margin: 1em 0;
+    font-family: "MockFlowFont";  
+    font-size: .8em; 
+    color: #6A515E;  
+  }
+  
+  .card__status {
+    font-size: .8em;
+    color: #6A515E;
+  }
+  
+  .card__description {
+    padding: 0 2em 2em;
+    margin: 0;
+    color: #6A515E;
+    font-family: "MockFlowFont";   
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }    
+</style>
+<div style='height:20rem;overflow: hidden;'>
+  <img src="{% static 'images/벽난로배너.jpg' %}" style='width:100%;' alt="">
 </div>
+<!-- 개인 벽난로 -->
+
+
+<div class='mb-5 d-flex p-4'>
+  <div>
+    <h1 class='my-5 text-center'> 개인 벽난로 </h1> 
+    {% if user.usercard %}
+    <a href="{% url 'cards:indiv_detail' %}" class="card2">
+      <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt="" />
+      <div class="card__overlay">
+        <div class="card__header">
+          <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+          {% if user.profileimage %}
+          <img class="card__thumb" src="{{ user.profileimage }}"  />
+          {% else %}
+          <img class="card__thumb" src="{{ user.profileimage.url }}"  />
+          {% endif %}                     
+          <div class="card__header-text">
+            <h3 class="card__title">{{ user.nickname }}</h3>            
+            <span class="card__status">{{ user.usercard.title }}</span>
+          </div>
+        </div>
+        <p class="card__description">{{ user.usercard.content }}</p>
+      </div>
+    </a>      
+
+
+    
+    {% else %}
+    <div>
+      <a href="{% url 'cards:create_indiv' %}" class="btn btn-primary"> 개인 벽난로를 생성해주세요! </a>
+    </div>
+
+    {% endif %}
+  
+  </div>
+
+
+
+
+
+
 
 <div class='my-5'>
-
-
 {% for card in cards %}
+
   {% if card.is_private == 0%}
     {{ card.pk }}
     <a href="{% url 'cards:indiv_detail'%}" class="text-decoration-none text-dark"> {{ card.title }} </a> 
     <br>
   {% endif %}
 
-{% endfor%}
+{% endfor%} {% endcomment %}
+
+
 
 <h2> 그룹 트리 </h2>
 <a href="{% url 'cards:create_group' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>
 
-<div class="row">
-  {% for card in groupcards %}
-  <div class="card" style="width: 18rem;">
-    {% if card.chimneys == 1%}
-    <img src="{%static 'images/벽난로1.jpg' %}" class="card-img-top" alt="...">
-    {% elif card.chimneys == 2%}
-    <img src="{%static 'images/벽난로2.jpg' %}" class="card-img-top" alt="...">
-    {% elif card.chimneys == 3%}
-    <img src="{%static 'images/벽난로3.jpg' %}" class="card-img-top" alt="...">
-    {% endif %}
-    <div class="card-body">
-      <h5 class="card-title">{{ card.title }}</h5>
-      <p class="card-text">{{card.content}}</p>
-      <a href="{% url 'cards:group_detail' card.pk %}" class="btn btn-primary">Go somewhere</a>
+{% if groupcards %}
+  <div class="row">
+    {% for card in groupcards %}
+    <div class="card" style="width: 18rem;">
+      {% if card.chimneys == 1%}
+      <img src="{%static 'images/벽난로1.jpg' %}" class="card-img-top" alt="...">
+      {% elif card.chimneys == 2%}
+      <img src="{%static 'images/벽난로2.jpg' %}" class="card-img-top" alt="...">
+      {% elif card.chimneys == 3%}
+      <img src="{%static 'images/벽난로3.jpg' %}" class="card-img-top" alt="...">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ card.title }}</h5>
+        <p class="card-text">{{card.content}}</p>
+        <a href="{% url 'cards:group_detail' card.pk %}" class="btn btn-primary">Go somewhere</a>
+      </div>
     </div>
+    {% endfor%}
+    <br>
   </div>
-  {% endfor%}
-  <br>
-</div>
+{% else %}
+<p class='text-center my-5'> 단체용 벽난로를 생성해주세요! </p>
+
+{% endif %}
+
+
 
 {% endblock %}

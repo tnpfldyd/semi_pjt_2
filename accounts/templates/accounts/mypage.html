@@ -1,4 +1,74 @@
+<style>
+    .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  vertical-align:middle;
+}
 
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+p {
+	margin:0px;
+	display:inline-block;
+	font-size:15px;
+	font-weight:bold;
+}
+</style>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+<h2>나의 정보</h2>
 이메일{{user.email}}
 <br>
 연령대{{user.age_range}}
@@ -7,12 +77,86 @@
 <br>
 닉네임{{user.nickname}}
 <br>
-
 {% comment %} 프로필 이미지 if 처리 {% endcomment %}
-{% if user.profileimage.url != None %}
-    프로필 이미지<img src="{{user.profileimage.url}}">
-{% elif user.profileimage != None %}
-    프로필 이미지<img src="{{user.profileimage}}">
+{% if user.profileimage %}
+프로필 이미지<img src="{{user.profileimage}}">
 {% else %}
-    이미지 없음
+이미지 없음
 {% endif %}
+<br>
+<a class="btn btn-outline-primary" href="{% url 'accounts:update' %}">정보 수정</a>
+<br>
+<h3>트리 알림</h3>
+{% if user.tree_notice %}
+<label class="switch">
+    <input type="checkbox" id='check1' checked>
+    <span class="slider round"></span>
+  </label>
+  <p>ON</p><p style="display:none;">OFF</p>
+{% else %}
+<label class="switch">
+    <input type="checkbox" id='check1'>
+    <span class="slider round"></span>
+  </label>
+  <p>OFF</p><p style="display:none;">ON</p>
+{% endif %}
+<h3>쪽지 알림</h3>
+{% if user.note_notice %}
+<div class="d-flex">
+<label class="switch">
+    <input type="checkbox" id='check2' checked>
+    <span class="slider round"></span>
+  </label>
+  <h6 class="fw-bold mx-1 mt-2">ON</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">OFF</h6>
+</div>
+{% else %}
+<div class="d-flex">
+<label class="switch">
+  <input type="checkbox" id='check2'>
+  <span class="slider round"></span>
+</label>
+<h6 class="fw-bold mx-1 mt-2">OFF</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">ON</h6>
+</div>
+{% endif %}
+<form id="form-1">
+  {% csrf_token %}
+<button type="submit" class="btn btn-primary">저장</button>
+</form>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var check1 = $("input[id='check1']");
+check1.click(function(){
+	$("p").toggle();
+});
+var check2 = $("input[id='check2']");
+check2.click(function(){
+	$("h6").toggle();
+});
+  const form = document.querySelector('#form-1')
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const p = document.querySelectorAll('p')
+      const h6 = document.querySelectorAll('h6')
+      for (let i = 0; i < 2; i++) {
+        if (p[i].style.display !== 'none') {
+          var realp = p[i].innerText
+        }
+        if (h6[i].style.display !== 'none') {
+          var realh6 = h6[i].innerText
+        }
+      }
+      axios({
+        method: 'post',
+        url: '/accounts/save/',
+        headers: {'X-CSRFToken': csrftoken},
+        params: {'p': realp, 'h6': realh6},
+      })
+      .then(response =>{
+        location.reload()
+      })
+    })
+</script>
+
+{% endblock %}
