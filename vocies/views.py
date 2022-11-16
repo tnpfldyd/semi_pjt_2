@@ -8,7 +8,7 @@ from django.contrib import messages
 
 
 def index(request):
-    return render(request, "vocies.index.html")
+    return render(request, "vocies/index.html")
 
 
 @login_required
@@ -39,6 +39,21 @@ def detail(request, pk):
         return render(request, "vocies/detail.html", context)
     messages.warning(request, "작성자만 접근할 수 있습니다.")
     return redirect("vocies:index")
+
+@login_required
+def update(request, pk):
+    vocie = Vocie.objects.get(pk=pk)
+    if request.user == vocie.user:
+        if vocie.method == 'POST':
+            form = VocieForm(request.POST, request.FILES, instance=vocie)
+            if form.is_valid():
+                form.save()
+                return redirect("vocies:detail", vocie.pk)
+        else:
+            form = VocieForm(instance=vocie)
+        return render(request, "vocies/update.html", {"form": form})
+    else:
+        return redirect("vocies:detail", pk)
 
 
 @login_required

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>운영자 페이지</h1>
+  <h4>모든 문의</h4>
+  {% for vocie in vocies %}
+    <div class="d-flex justify-content-center my-3">
+      <a href="{% url 'vocies:detail' vocie.pk %}" class="text-decoration-none text-dark">{{ vocie.title }}
+        {% if not vocie.center.count %}
+          <span class="text-danger fw-bold">(아직 답변이 없습니다)</span>
+        {% endif %}
+      </a>
+      <span>{{ vocie.user.nickname }}
+
+      </span>
+    </div>
+
+  {% endfor %}
+{% endblock content %}

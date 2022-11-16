@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 {% block content %}
-  <h1>문의 작성하기</h1>
+  <h1>문의 수정하기</h1>
   <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form %}
-    {% bootstrap_button button_type='submit' content='문의 작성' button_class='btn btn-primary' %}
+    {% bootstrap_button button_type="submit" content="OK" button_class="btn btn-outline-primary"%}
   </form>
 {% endblock content %}
