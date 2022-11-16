@@ -58,7 +58,7 @@
             <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
           </li>
           <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'accounts:update' %}">정보 수정</a>
+            <a class="nav-link" href="{% url 'accounts:profile' request.user.pk %}">프로필</a>
           </li>
           {% else %}
           <li class="navbar-brand">

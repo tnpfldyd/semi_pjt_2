@@ -10,7 +10,12 @@ from django.http import JsonResponse
 @login_required
 def index(request):
     notes = request.user.user_to.order_by("-created_at")
-    return render(request, "notes/index.html", {"notes": notes})
+
+    for note in notes:
+      note_user_pk = note.to_user.pk # user.pk
+      sender_user = get_object_or_404(get_user_model(), pk=note_user_pk)
+      # sender_user = username
+      return render(request, "notes/index.html", {"notes": notes, "sender_user": sender_user})
 
 
 @login_required
