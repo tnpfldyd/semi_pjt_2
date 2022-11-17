@@ -111,23 +111,22 @@ dic = {
 }
 
 
+
+
+
+
 def create(request):
     if request.method == "POST":
         meeting_form = MeetingForm(request.POST, request.FILES)
         # b = MeetingForm(auto_id=False)
         # print(b)
         if meeting_form.is_valid():
-            print("aaaa")
             meeting = meeting_form.save(commit=False)
             meeting.user = request.user
-            # meeting.title = request.POST["title"]
-            # meeting.content = request.POST["content"]
-            # meeting.image = request.POST["image"]
-            meeting.password = request.POST["password"]
-            meeting.location = request.POST["location"]
             meeting.save()
 
             temp = ""
+            
             for i in str(meeting.pk):
                 temp += dic[i]
             meeting.text = temp
@@ -162,8 +161,9 @@ def detail(request, meeting_pk):
 
     user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
-
-    user = request.user  # request.user => 현재 로그인한 유저
+    user = request.user # request.user => 현재 로그인한 유저
+    if meeting.belong.filter(id = user.id).exists() == False:
+      messages.success(request, "참여를 누르면 비밀번호 없이 입장할 수 있습니다.😀")
 
     if request.POST.get("belong_id2"):
         if meeting.belong.filter(id=user.id).exists():  # 이미 참여를 누른 유저일 때

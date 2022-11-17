@@ -133,6 +133,7 @@
   
       <p class=' my-5 fs-1 ms-5 text-center'>개인 프로필</p>
       <div class='row'>
+
         <div class='col-6 d-flex justify-content-center'>
           <div>
 
@@ -142,6 +143,7 @@
             <img src="{% static 'images/게스트.png' %}" class="rounded-2" style='width:10rem;'>
             {% endif %}
           </div>
+
         </div>
         <div class='col-6 d-flex justify-content-center'>
             <div>
@@ -171,6 +173,7 @@
                       <img class="card__thumb" src="{{ user.profileimage }}"  />
                     {% else %}
                     <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
+
                     {% endif %}                     
                     <div class="card__header-text">
                       <h3 class="card__title">{{ user.nickname }}</h3>            
