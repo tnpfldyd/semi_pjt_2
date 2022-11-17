@@ -9,9 +9,9 @@
 
 {% comment %} 모임 목록 {% endcomment %}
 
-<div class="container mt-2 m-3">
+<div class="mt-2 mx-4">
   <div class="d-flex justify-content-between align-items-center">
-    <div class="fs-3">모임 목록 ({{ meetings_count }})</div>
+    <div class="fs-3 mx-2">모임 목록 ({{ meetings_count }})</div>
     <div class="btn btn-warning">
       <a style="text-decoration:none" class="text-dark" href="{% url 'meetings:create' %}">나도 모임 생성하기</a>
     </div>
@@ -20,7 +20,7 @@
   <div class="container p-0">
     
   </div>
-  <div class="mt-3">
+  <div class="mt-3 mx-2">
     <span class="fw-bold" style="color: #da2c38">{{ meetings_local_name }}</span>에 위치한 모임들 
     <hr/>
   </div>
@@ -76,7 +76,7 @@
                 {% comment %} <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small> {% endcomment %}
               </div>
             </div>
-            <a style="cursor: pointer;" class="mx-2" id="id{{meeting.text}}">{{ meeting.user.nickname }}</a>
+            <a style="cursor: pointer; text-decoration:none;" class="mx-2 my-2" data-bs-toggle="modal" data-bs-target="#modal{{meeting.text}}">{{ meeting.user.nickname }}</a>
             {% comment %} 패스워드 로직 {% endcomment %}
             <div>
               {% if request.user in meeting.belong.all %}
@@ -124,23 +124,25 @@
               </div>
             </div>
 
-            <div id="modal" class="modal-overlay">
-              <div class="modal-window">
-                  <div class="title">
-                      <h2>{{ request.user.nickname }}</h2>
+            <div id="modal{{meeting.text}}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel{{meeting.text}}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <div>{{meeting.user.nickname}}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-footer">
-                    <h3><a href="{% url 'accounts:profile' meeting.user.username %}" class="text-decoration-none text-dark">프로필</a></h3>
-                    <h3><a href="{% url 'notes:send' meeting.user.username %}" class="text-decoration-none text-dark">쪽지</a></h3>
-                    <h3><a href="{% url 'accounts:follow' meeting.user.pk %}" class="text-decoration-none text-dark">팔로우</a></h3>
-                    <h3><a href="{% url 'accounts:block' meeting.user.pk %}" class="text-decoration-none text-dark">차단</a></h3>
+                  <div class="modal-body">
+                    <div class="d-flex align-items-center"><a href="{% url 'accounts:profile' meeting.user.pk %}" class="text-decoration-none text-dark fs-3">프로필<span class="fs-4">🙂</span></a></div>
+                    <div class="d-flex align-items-center"><a href="{% url 'notes:send' meeting.user.username %}" class="text-decoration-none text-dark fs-3">쪽지<span class="fs-3">✉️</span></a></div>
+                    <div class="d-flex align-items-center"><a href="{% url 'accounts:follow' meeting.user.pk %}" class="text-decoration-none text-dark fs-3">팔로우<span class="fs-4">❤️</span></a></div>
+                    <div class="d-flex align-items-center"><a href="{% url 'accounts:block' meeting.user.pk %}" class="text-decoration-none text-dark fs-3">차단<span class="fs-4">💢</span></a></div>
                   </div>
+                </div>
               </div>
             </div>
 
             <script>
-              var a = "id"+{{meeting.text}}
-              console.log(a)
               const modal = document.getElementById("modal")
               function modalOn() {
                   modal.style.display = "flex"
@@ -181,7 +183,7 @@
     {% for meeting in meetings_all %}
     <div class="d-flex align-items-center">
         {% if request.user in meeting.belong.all %}
-          <a style="text-decoration:none;" href="{% url 'meetings:detail' meeting.pk %}" class="text-dark">{{ meeting.title }}</a>
+          <a style="text-decoration:none;" href="{% url 'meetings:detail' meeting.pk %}" class="text-dark custom-link">{{ meeting.title }}</a>
           <form id="custom-form" action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
             {% csrf_token %}
             <button id="custom-btn"name="belong_id2" value="belong_id2">
@@ -270,6 +272,11 @@
   </div>
 </div>
 
+
+<button id="custom-btn" value="{{note.pk}}" onclick="remove(event)">
+</button>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/notes.js' %}"></script>
 
 <style>
   #modal.modal-overlay {
