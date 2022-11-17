@@ -23,7 +23,7 @@ def index(request):
 
 
 @login_required
-def create_indiv(request):
+def usercard_create(request):
     if request.method == "POST":
         form = UserCardForm(request.POST)
         if form.is_valid():
@@ -31,7 +31,7 @@ def create_indiv(request):
             temp.user = request.user
             # 라디오 버튼 'name'='id'로 들어옴
             # name==choice, id=1,2,3으로 설정
-            temp.socks = request.POST["choice_sock"]
+            temp.userdeco = request.POST["userdeco"]
             temp.chimneys = request.POST["choice_chim"]
             temp.save()
             return redirect("accounts:profile", request.user.pk)
@@ -40,10 +40,10 @@ def create_indiv(request):
     context = {
         "form": form,
     }
-    return render(request, "cards/create_indiv.html", context)
+    return render(request, "cards/usercard_create.html", context)
 
 
-def indiv_detail(request, pk):
+def usercard_detail(request, pk):
     # cards = UserCard.objects.get(user=request.user.pk)
     cards = UserCard.objects.get(pk=pk)
     comments = cards.usercomment_set.all()
@@ -59,11 +59,11 @@ def indiv_detail(request, pk):
         "cards": cards,
         "comments": comments,
     }
-    return render(request, "cards/indiv_detail.html", context)
+    return render(request, "cards/usercard_detail.html", context)
 
 
 def usercard_update(request, pk):
-    cards = UserCard.objects.get(user_id=pk)
+    cards = UserCard.objects.get(user=request.user)
     if request.method == "POST":
         form = UserCardForm(request.POST, instance=cards)
         if form.is_valid():
@@ -72,10 +72,10 @@ def usercard_update(request, pk):
                 temp.user = request.user
                 # 라디오 버튼 'name'='id'로 들어옴
                 # name==choice, id=1,2,3으로 설정
-                temp.socks = request.POST["choice_sock"]
+                temp.userdeco = request.POST["userdeco"]
                 temp.chimneys = request.POST["choice_chim"]
                 temp.save()
-                return redirect("cards:indiv_detail")
+                return redirect("cards:usercard_detail", cards.pk)
     else:
         form = UserCardForm(instance=cards)
     context = {"form": form}
@@ -141,7 +141,7 @@ def usercard_comment(request, pk):
                     )
                 }
                 response = requests.post(url, headers=headers, data=data)
-            return redirect("cards:indiv_detail", pk)
+            return redirect("cards:usercard_detail", pk)
     else:
         comment_form = UserCommentForm()
     context = {"comment_form": comment_form}
@@ -182,30 +182,6 @@ def group_detail(request, pk):
     }
 
     return render(request, "cards/group_detail.html", context)
-
-
-def card_update(request, pk):
-    cards = Groupcard.objects.get(user_id=request.user.pk, is_indiv=1)
-    if request.method == "POST":
-        form = GroupCardForm(request.POST, instance=cards)
-        if form.is_valid():
-            if form.is_valid():
-                temp = form.save(commit=False)
-                temp.user = request.user
-                # 라디오 버튼 'name'='id'로 들어옴
-                # name==choice, id=1,2,3으로 설정
-                temp.socks = request.POST["choice_sock"]
-                temp.chimneys = request.POST["choice_chim"]
-                # 개인이면 is_indiv에 1
-                temp.is_indiv = 1
-                request.user.card_created = True
-                request.user.save()
-                temp.save()
-                return redirect("cards:indiv_detail")
-    else:
-        form = GroupCardForm(instance=cards)
-    context = {"form": form}
-    return render(request, "cards/card_update.html", context=context)
 
 
 def card_delete(request):
@@ -273,7 +249,33 @@ def gcomment_create(request, pk):
             comment.groupcard = card
             comment.ribbons = request.POST["choice_ribbon"]
             comment.save()
-            return redirect("cards:group_detail", pk)
+            temp = ""
+            for i in str(comment.pk):
+                temp += dic[i]
+            comment.id_text = temp
+            comment.save()
+            url = "https://kauth.kakao.com/oauth/token"
+            data = {
+                "grant_type": "refresh_token",
+                "client_id": os.getenv("KAKAO_ID"),
+                "refresh_token": card.user.refresh_token,
+                "client_secret": os.getenv("KAKAO_SECRET"),
+            }
+            response = requests.post(url, data=data).json()
+            url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
+            access_token = response["access_token"]
+            headers = {"Authorization": "Bearer " + access_token}
+            data = {
+                "template_object": json.dumps(
+                    {
+                        "object_type": "text",
+                        "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
+                        "link": {"web_url": "http://localhost:8000/cards/" + str(pk)},
+                    }
+                )
+            }
+            response = requests.post(url, headers=headers, data=data)
+            return redirect("cards:group_detail", card.pk)
     else:
         comment_form = GroupCommentForm()
     context = {"comment_form": comment_form}

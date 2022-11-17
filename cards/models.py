@@ -11,7 +11,7 @@ class UserCard(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    socks = models.IntegerField(blank=True)
+    userdeco = models.IntegerField(blank=True)
     chimneys = models.IntegerField(blank=True)
 
 
