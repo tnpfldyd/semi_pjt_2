@@ -84,7 +84,6 @@
             {{ comment.content }}
           </div>
           <div class="modal-footer">
-            <a class="btn btn-danger" href="{% url 'cards:gcomments_delete' cards.pk comment.pk %}" role="button"> 삭제 </a>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
           </div>
         </div>
@@ -107,7 +106,6 @@
           {{ comment.content }}
         </div>
         <div class="modal-footer">
-          <a class="btn btn-danger" href="{% url 'cards:gcomments_delete' cards.pk comment.pk %}" role="button"> 삭제 </a>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
         </div>
       </div>
