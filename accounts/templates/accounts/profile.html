@@ -129,7 +129,9 @@
       <p class=' my-5 fs-1 ms-5'>개인 프로필</p>
       <div class='row'>
         <div class='col-6'>
+          {% if user.profileimage %}
           <img src="{{ user.profileimage }}" class="rounded-2" style='width:10rem;'>
+          {% endif %}
         </div>
         <div class='col-6'>
           <p> 이름 : {{ user.nickname }} </p>
@@ -153,8 +155,6 @@
                     <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
                     {% if user.profileimage %}
                     <img class="card__thumb" src="{{ user.profileimage }}"  />
-                    {% else %}
-                    <img class="card__thumb" src="{{ user.profileimage.url }}"  />
                     {% endif %}                     
                     <div class="card__header-text">
                       <h3 class="card__title">{{ user.nickname }}</h3>            
