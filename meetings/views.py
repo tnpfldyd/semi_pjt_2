@@ -123,11 +123,6 @@ def create(request):
         if meeting_form.is_valid():
             meeting = meeting_form.save(commit=False)
             meeting.user = request.user
-            # meeting.title = request.POST["title"]
-            # meeting.content = request.POST["content"]
-            # meeting.image = request.POST["image"]
-            meeting.password = request.POST["password"]
-            meeting.location = request.POST["location"]
             meeting.save()
 
             temp = ""
