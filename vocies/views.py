@@ -71,12 +71,11 @@ def comment(request, pk):
     return redirect("vocies:index")
 
 
-# @permission_required('vocies.index', raise_exception=True)
 def delete_comment(request, pk, super_pk):
     if request.user.is_superuser:
         comment_delete = Comment.objects.get(pk=pk)
         comment_delete.delete()
-    return redirect("vocie:detail", super_pk)
+    return redirect("vocies:detail", super_pk)
 
 
 # @permission_required('vocies.index', raise_exception=True)
