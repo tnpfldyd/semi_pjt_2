@@ -4,8 +4,19 @@
 {% block content %}
 <body class="wrapper">
   <div class="inner">
-    <h2 class=" mt-4 text-black">제목 :
-      {{ meeting.title }}
+    <div class=" mt-4 text-black">
+      <div class="d-flex jusify-content-evenly">
+        <div class="">{{ meeting.title }}</div>
+        <div class="">
+          <form action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
+            {% csrf_token %}
+            <button class="btn btn-outline-light" name="belong_id" value="belong_id">
+              참여
+            </button>
+          </form>
+          <a class="float-end btn btn-outline-success" href="{% url 'meetings:index' %}">뒤로가기</a>
+        </div>
+      </div>
       <div>
         {% if request.user == meeting.user %}
           <a class="float-end btn btn-outline-primary" href="{% url 'meetings:update' meeting.pk %}">
@@ -16,14 +27,12 @@
           </a>
         {% endif %}
       </div>
-    </h2>
-    <p class="text-black">내용 :
+    </div>
+    <p class="text-black">
       {{ meeting.content }}</p>
 
     <div class="my-5 text-black">
-      <h4 class="fw-bold mb-3">리뷰 작성
-        <a class="float-end btn btn-outline-success" href="{% url 'meetings:index' %}">목록</a>
-      </h4>
+      <h4 class="fw-bold mb-3">댓글 작성</h4>
       {% if request.user.is_authenticated %}
         <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
           {% csrf_token %}
@@ -42,12 +51,6 @@
       </div>
     </div>
 
-    <form action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
-      {% csrf_token %}
-      <button class="btn btn-outline-light" name="belong_id" value="belong_id">
-        참여
-      </button>
-    </form>
     {% if meeting.belong %}
     <span class="text-black">{{ meeting.belong.count }}</span>
 

@@ -34,8 +34,8 @@
 .entry3 {
   height: 100vh;
   width: 100vw;
-  background-repeat : no-repeat;
-  background-size : cover;
+  background-repeat: no-repeat;
+  background-size: cover;
   background-image: url("/static/images/글생성배경.jpg");
 }
 
@@ -156,7 +156,7 @@ a {
 
 #custom-form {
   color: #006f57;
-  
+
 }
 
 .custom-link {
@@ -179,19 +179,19 @@ a {
   overflow: hidden;
 }
 
-.custom-card img{
+.custom-card img {
   max-width: 350px;
   max-width: initial;
   margin-left: 0%;
 }
 
-.custom-card{
+.custom-card {
   max-height: 550px;
   min-height: 550px;
   overflow: hidden;
 }
 
-.custom-card img{
+.custom-card img {
   min-height: 550px;
   max-height: initial;
   margin-top: 15%;
@@ -210,11 +210,11 @@ a {
 
 /* meeting page */
 
-.cus-container{
+.cus-container {
   position: relative;
 }
 
-.cus-container .cus-card{
+.cus-container .cus-card {
   position: relative;
   width: 320px;
   height: 550px;
@@ -235,20 +235,21 @@ a {
   transition: 0.5s ease-in-out;
 } */
 
-.cus-container .cus-card:hover:before{
+.cus-container .cus-card:hover:before {
   clip-path: circle(300px at 80% -20%);
 }
 
 /* 글씨 */
-.cus-container .cus-card:after{
+.cus-container .cus-card:after {
   position: absolute;
   top: 30%;
   left: -20%;
-  color: rgba(255,255,25,0.05)
+  color: rgba(255, 255, 25, 0.05)
 }
+
 /*  */
 
-.cus-container .cus-card .cus-imgBx{
+.cus-container .cus-card .cus-imgBx {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -257,14 +258,16 @@ a {
   height: 430px;
   transition: 0.5s;
 }
+
 /* 이미지 이동 */
-.cus-container .cus-card:hover .cus-imgBx{
+.cus-container .cus-card:hover .cus-imgBx {
   top: 5%;
   transform: translateY(0%);
-    
+
 }
+
 /*  */
-.cus-container .cus-card .cus-imgBx img{
+.cus-container .cus-card .cus-imgBx img {
   position: absolute;
   top: 20%;
   left: 50%;
@@ -273,7 +276,7 @@ a {
   width: 320px;
 }
 
-.cus-container .cus-card .cus-contentBx{
+.cus-container .cus-card .cus-contentBx {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -283,7 +286,7 @@ a {
   z-index: 10;
 }
 
-.cus-container .cus-card .cus-contentBx2{
+.cus-container .cus-card .cus-contentBx2 {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -292,16 +295,19 @@ a {
   transition: 1s;
   z-index: 11;
 }
+
 /* 컨텐츠 높이 */
-.cus-container .cus-card:hover .cus-contentBx{
+.cus-container .cus-card:hover .cus-contentBx {
   height: 280px;
 }
-.cus-container .cus-card:hover .cus-contentBx2{
+
+.cus-container .cus-card:hover .cus-contentBx2 {
   height: 80px;
 }
+
 /*  */
 
-.cus-container .cus-card .cus-contentBx h2{
+.cus-container .cus-card .cus-contentBx h2 {
   position: relative;
   font-weight: 600;
   letter-spacing: 1px;
@@ -309,7 +315,7 @@ a {
   margin: 0;
 }
 
-.cus-container .cus-card .cus-contentBx2 a{
+.cus-container .cus-card .cus-contentBx2 a {
   position: relative;
   font-weight: 600;
   letter-spacing: 1px;
@@ -317,7 +323,7 @@ a {
   margin: 0;
 }
 
-.cus-container .cus-card .cus-contentBx2 div{
+.cus-container .cus-card .cus-contentBx2 div {
   position: relative;
   font-weight: 600;
   letter-spacing: 1px;
@@ -325,30 +331,33 @@ a {
   margin: 0;
 }
 
-.cus-container .cus-card .cus-contentBx .cus-size, .cus-container .cus-card .cus-contentBx .cus-color {
+.cus-container .cus-card .cus-contentBx .cus-size,
+.cus-container .cus-card .cus-contentBx .cus-color {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 8px 20px;
-  transition: 0.5s;opacity: 0;
+  transition: 0.5s;
+  opacity: 0;
   visibility: hidden;
   padding-top: 0;
   padding-bottom: 0;
 }
 
-.cus-container .card:hover .cus-contentBx .cus-size{
+.cus-container .card:hover .cus-contentBx .cus-size {
   opacity: 1;
   visibility: visible;
   transition-delay: 0.1s;
 }
 
-.cus-container .cus-card:hover .cus-contentBx .cus-color{
+.cus-container .cus-card:hover .cus-contentBx .cus-color {
   opacity: 1;
   visibility: visible;
   transition-delay: 0.1s;
 }
 
-.cus-container .cus-card .cus-contentBx .cus-size div, .cus-container .cus-card .cus-contentBx .cus-color div{
+.cus-container .cus-card .cus-contentBx .cus-size div,
+.cus-container .cus-card .cus-contentBx .cus-color div {
   color: #fff;
   font-weight: 300;
   font-size: 14px;
@@ -357,7 +366,7 @@ a {
   margin-right: 10px;
 }
 
-.cus-container .cus-card .cus-contentBx .cus-size span{
+.cus-container .cus-card .cus-contentBx .cus-size span {
   width: 26px;
   height: 26px;
   text-align: center;
@@ -374,7 +383,7 @@ a {
 }
 
 
-.cus-container .cus-card .cus-contentBx a{
+.cus-container .cus-card .cus-contentBx a {
   display: inline-block;
   padding: 10px 20px;
   background: #fff;
@@ -389,11 +398,11 @@ a {
   margin-top: 0;
 }
 
-.cus-container .cus-card:hover .cus-contentBx a{
+.cus-container .cus-card:hover .cus-contentBx a {
   opacity: 1;
   transform: translateY(0px);
   transition-delay: 0.75s;
-  
+
 }
 
 
@@ -402,100 +411,6 @@ a {
 .cus-note {
   border: 2px solid #000;
   border-radius: 16px;
-
-/* 화면 전환용 css */
-
-:root {
-  --secondary-color: #000000;
-  --contrast-color: #FFFFFF;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  z-index: -10;
-  background-color: var(--contrast-color);
-}
-
-.container_trans {
-  display: flex;
-  height: 100vh;
-  justify-content: space-around;
-  align-items: center;
-  color: #fff;
-  animation: expand 2s ease forwards;
-  background-color: var(--secondary-color);
-  position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  transition: all 0.8s ease;
-}
-
-.container_content {
-  width: 50%;
-}
-
-.container_content_inner {
-  width: 80%;
-  margin-left: 80px;
-}
-
-.container_outer_img {
-  margin: 50px;
-  width: 50%;
-  overflow: hidden;
-}
-
-.container_img {
-  width: 100%;
-  animation: slideIn 1.5s ease-in-out forwards;
-}
-
-.par {
-  height: auto;
-  overflow: hidden;
-}
-
-
-
-.title {
-  overflow: hidden;
-  height: auto;
-}
-
-
-@keyframes slideIn {
-  0% {
-    transform: translateX(500px) scale(.2);
-  }
-
-  100% {
-    transform: translateX(0px) scale(1);
-  }
-}
-
-@keyframes slideUp {
-  0% {
-    transform: translateY(300px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-@keyframes expand {
-  0% {
-    transform: translateX(1400px);
-  }
-
-  100% {
-    transform: translateX(0px);
-  }
-
 }
 
 .cus-note-in {
