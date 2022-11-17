@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .forms import *
 from .models import *
 from django.contrib import messages
@@ -42,9 +42,9 @@ def detail(request, pk):
 
 @login_required
 def update(request, pk):
-    vocie = Vocie.objects.get(pk=pk)
+    vocie = get_object_or_404(Vocie, pk=pk)
     if request.user == vocie.user:
-        if vocie.method == 'POST':
+        if request.method == 'POST':
             form = VocieForm(request.POST, request.FILES, instance=vocie)
             if form.is_valid():
                 form.save()
@@ -53,6 +53,7 @@ def update(request, pk):
             form = VocieForm(instance=vocie)
         return render(request, "vocies/update.html", {"form": form})
     else:
+        messages.warning(request, "작성자만 수정할 수 있습니다.")
         return redirect("vocies:detail", pk)
 
 
@@ -70,6 +71,14 @@ def comment(request, pk):
     return redirect("vocies:index")
 
 
-@login_required
+# @permission_required('vocies.index', raise_exception=True)
+def delete_comment(request, pk, super_pk):
+    if request.user.is_superuser:
+        comment_delete = Comment.objects.get(pk=pk)
+        comment_delete.delete()
+    return redirect("vocie:detail", super_pk)
+
+
+# @permission_required('vocies.index', raise_exception=True)
 def manage_page(request):
     return render(request, "vocies/manage_page.html", {"vocies": Vocie.objects.order_by("-pk")})

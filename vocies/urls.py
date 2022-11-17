@@ -11,4 +11,5 @@ urlpatterns = [
     path("<int:pk>/", views.detail, name="detail"),
     path("<int:pk>/comment/", views.comment, name="comment"),
     path("manage_page/", views.manage_page, name="manage_page"),
+    path("<int:pk>/<int:super_pk>/delete_comment/", views.delete_comment, name="delete_comment"),
 ]
