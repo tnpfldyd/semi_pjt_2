@@ -13,14 +13,14 @@ from django.contrib.auth import get_user_model
 
 @login_required
 def index(request):
-    cards = UserCard.objects.get(user=request.user)
     groupcards = Groupcard.objects.order_by("-pk")
     user = get_user_model().objects.get(pk=request.user.pk)
-    context = {"cards": cards, "groupcards": groupcards, "user": user}
+    context = {"groupcards": groupcards, "user": user}
     return render(request, "cards/index.html", context)
 
 
 # 개인카드 생성, 수정, 삭제, 디테일
+
 
 @login_required
 def create_indiv(request):
@@ -49,7 +49,7 @@ def indiv_detail(request, pk):
     comments = cards.usercomment_set.all()
     context = {
         "cards": cards,
-
+        "comments": comments,
     }
     return render(request, "cards/indiv_detail.html", context)
 
@@ -130,7 +130,7 @@ def usercard_comment(request, pk):
                 )
             }
             response = requests.post(url, headers=headers, data=data)
-            return redirect("cards:indiv_detail")
+            return redirect("cards:indiv_detail", pk)
     else:
         comment_form = UserCommentForm()
     context = {"comment_form": comment_form}
