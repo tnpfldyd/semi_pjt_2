@@ -3,14 +3,23 @@
 {% load static %}
 {% block content %} 
 
-
+<style>
+  body {
+    background-image : url('{% static 'images/개인카드배경6.jpg' %}');
+    background-repeat : repeat;
+    background-size : cover;
+    {% comment %} color:white; {% endcomment %}
+   }
+</style>
 <div class="d-flex justify-content-center">
   <div>
+    {% if cards.user == request.user %}
     <div class='d-flex justify-content-end'>
       <a href="{% url 'cards:usercard_update' request.user.pk %}" class="btn btn-success mt-5 me-3"> 벽난로 바꾸기 </a>
       <a href="{% url 'cards:usercard_delete'%}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
     </div>
-    <p class=' my-5 fs-1 text-center'>{{ cards.user.nickname }} <span class='small fw-lighter'>님의 벽난로</span></p>
+    {% endif %}
+    <p class=' my-5 fs-1 text-center' style='color:white'>{{ cards.user.nickname }} 님에게 <span style='color:orangered '>{{ cards.usercomment_set.count }}</span>개의 메세지가 전달됐어요!</p>
     <div class=''>
       <!-- 벽난로 주인의 장식 모달 창 -->
       <div class="modal fade" id="owner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -18,7 +27,7 @@
           <div class="modal-content">
             <div class="modal-body">
               <div class='d-flex justify-content-center'>
-                <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
+                <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:4rem;'>
               </div>
               <div class='mb-2 rounded-2 p-1'>
                 <p class='text-center fs-5 my-5'>{{ cards.title }} </p>
@@ -33,22 +42,21 @@
       </div>
       <div class>
         {% if cards.chimneys %}
-          {% if cards.socks %}
-          <div style='position:relative'>
-            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-1'>
+          {% if cards.userdeco %}
+          <div style='position:relative' class='my-5'>
+            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:4px solid white'>
             <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
               <div style='position: absolute; top:2rem; left:2rem;'>
-                <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
+                <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:4rem;'>
               </div>
             </a>
           </div>
           {% else %}
           <div>
-            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
+            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:4px solid white'>
           </div>
           {% endif %}
         {% endif %}
-      
       </div>
     </div>
     {% if cards.user != request.user %}

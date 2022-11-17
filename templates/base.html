@@ -19,10 +19,10 @@
     {% bootstrap_css %}
 
 <body>
-  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header d-flex flex-column">
+        <div class="modal-header d-flex flex-column p-4">
           <h1 class='text-center my-5'>카카오 로그인</h1>
           <div class="d-grid">
             <a href="{% url 'accounts:kakao' %}">
