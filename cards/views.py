@@ -52,9 +52,8 @@ def usercard_detail(request, pk):
         for comment in new_comments:
             comment.read = True
             comment.save()
-        if not request.user.user_to.filter(read=False).exists():
-            request.user.notice = True
-            request.user.save()
+        request.user.notice_tree = True
+        request.user.save()
     context = {
         "cards": cards,
         "comments": comments,
@@ -112,8 +111,9 @@ def usercard_comment(request, pk):
             comment.usercard = card
             comment.ribbons = request.POST["choice_ribbon"]
             comment.save()
-            card.user.notice = False
-            card.user.save()
+            if card.user.tree_notice:
+                card.user.notice_tree = False
+                card.user.save()
             temp = ""
             for i in str(comment.pk):
                 temp += dic[i]

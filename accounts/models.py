@@ -17,4 +17,5 @@ class User(AbstractUser):
     refresh_token = models.TextField(blank=True)
     tree_notice = models.BooleanField(default=True)
     note_notice = models.BooleanField(default=True)
-    notice = models.BooleanField(default=False)
+    notice_tree = models.BooleanField(default=True)
+    notice_note = models.BooleanField(default=True)

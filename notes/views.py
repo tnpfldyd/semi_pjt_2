@@ -25,8 +25,9 @@ def send(request, pk):
         temp.from_user = request.user
         temp.to_user = to_user
         temp.save()
-        to_user.notice = False
-        to_user.save()
+        if to_user.note_notice:
+            to_user.notice_note = False
+            to_user.save()
         messages.success(request, "쪽지 전송 완료.😀")
         return redirect("meetings:index")
     context = {
@@ -46,10 +47,8 @@ def detail(request, pk):
         if not note.read:
             note.read = True
             note.save()
-        card = request.user.usercard
-        comment = card.usercomment_set.filter(read=False)
-        if not request.user.user_to.filter(read=False).exists() and not comment:
-            request.user.notice = True
+        if not request.user.user_to.filter(read=False).exists():
+            request.user.notice_note = True
             request.user.save()
         return render(request, "notes/detail.html", {"note": note})
     else:
