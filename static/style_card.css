@@ -308,15 +308,9 @@
 
 
 /* 화면 전환용 */
-body {
-  font: 1rem/1.6 sans-serif;
-  width: 100%;
-  overflow: hidden;
-  background-color: #e6e4df;
-}
 
 [data-page] {
-  position: fixed;
+  position: absolute;
   /* or absolute if the content exceeds the height of the page */
   width: 100%;
   min-height: 100vh;
