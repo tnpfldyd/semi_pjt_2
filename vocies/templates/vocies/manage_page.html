@@ -18,9 +18,12 @@
               {% for vocie in vocies %}
                 <div class="d-flex justify-content-center my-3">
                   <a href="{% url 'vocies:detail' vocie.pk %}" class="text-decoration-none text-dark">{{ vocie.title }}
-                    {% if not vocie.center.count %}
+                    {% if not vocie.vocie_comment.count %}
                       <span class="text-danger fw-bold">(아직 답변이 없습니다)</span>
+                    {% else %}
+                      <span class="text-success fw-bold">(답변이 완료되었습니다)</span>
                     {% endif %}
+
                     <span>{{ vocie.user.nickname }}</span>
                   </div>
                 </a>
