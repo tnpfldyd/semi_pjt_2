@@ -150,7 +150,6 @@ def detail(request, meeting_pk):
 
     user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
-
     user = request.user # request.user => 현재 로그인한 유저
 
     if request.POST.get("belong_id2"):

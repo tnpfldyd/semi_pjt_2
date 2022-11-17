@@ -18,6 +18,7 @@
           {% for note in notes %}
           <div>
             <tr id="{{note.pk}}">
+
               <td><a class="custom-link" href="{% url 'accounts:profile' note.to_user.pk %}">{{note.to_user.nickname}}</a></td> <!---보낸이 -->
               <td><a class="custom-link" style="text-decoration:none; color:black;" href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a></td> <!---제목 -->
               <td class="tc">{{ note.created_at|date:'o.m.d' }} {{ note.created_at|time:"H:i" }}</td> <!---보낸시간 -->
