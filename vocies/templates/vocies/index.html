@@ -7,7 +7,11 @@
           <h3 class="tit_public my-4">
             문의
           </h3>
-          <a href="{% url 'vocies:myvocie' %}" class="tit_public my-4 text-decoration-none text-muted">내 문의보기</a>
+          {% if user.is_superuser %}
+            <a href="{% url 'vocies:manage_page' %}" class="tit_public my-4 text-decoration-none text-muted">문의답변</a>
+          {% else %}
+            <a href="{% url 'vocies:myvocie' %}" class="tit_public my-4 text-decoration-none text-muted">내 문의보기</a>
+          {% endif %}
         </div>
 
         <ol class="wrap_cont ulist">
@@ -16,15 +20,15 @@
               <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
                 <span class="num_info">1</span>
                 <strong class="tit_info">
-                  카카오계정은 무엇인가요?
+                  카카오톡에 로그인 된 계정이 아닌, 다른 계정으로도 로그인 가능한가요?
                 </strong>
               </a>
             </div>
 
             <div class="collapse ms-5" id="collapseExample1">
               <div class="content ms-3">
-                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
-                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+                <div>불가능합니다.</div>
+                <div>기본적으로 카카오로그인을 통한 로그인만을 지원하고 있습니다.</div>
               </div>
             </div>
           </li>
@@ -35,91 +39,15 @@
               <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
                 <span class="num_info">2</span>
                 <strong class="tit_info">
-                  카카오계정은 무엇인가요?
+                  각종 문의는 어떻게 할 수 있나요?
                 </strong>
               </a>
             </div>
 
             <div class="collapse ms-5" id="collapseExample2">
               <div class="content ms-3">
-                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
-                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
-              </div>
-            </div>
-          </li>
-          <hr class="m-0">
-
-          <li>
-            <div class="info_tit">
-              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <span class="num_info">3</span>
-                <strong class="tit_info">
-                  카카오계정은 무엇인가요?
-                </strong>
-              </a>
-            </div>
-
-            <div class="collapse ms-5" id="collapseExample3">
-              <div class="content ms-3">
-                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
-                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
-              </div>
-            </div>
-          </li>
-          <hr class="m-0">
-
-          <li>
-            <div class="info_tit">
-              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <span class="num_info">4</span>
-                <strong class="tit_info">
-                  카카오계정은 무엇인가요?
-                </strong>
-              </a>
-            </div>
-
-            <div class="collapse ms-5" id="collapseExample4">
-              <div class="content ms-3">
-                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
-                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
-              </div>
-            </div>
-          </li>
-          <hr class="m-0">
-
-          <li>
-            <div class="info_tit">
-              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <span class="num_info">5</span>
-                <strong class="tit_info">
-                  카카오계정은 무엇인가요?
-                </strong>
-              </a>
-            </div>
-
-            <div class="collapse ms-5" id="collapseExample5">
-              <div class="content ms-3">
-                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
-                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
-              </div>
-            </div>
-          </li>
-          <hr class="m-0">
-
-          <li>
-            <div class="info_tit">
-              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample6" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <span class="num_info">6</span>
-                <strong class="tit_info">
-                  카카오계정은 무엇인가요?
-                </strong>
-              </a>
-            </div>
-
-            <div class="collapse ms-5" id="collapseExample6">
-              <div class="content ms-3">
-                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
-                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+                <div>페이지 사용 중 불편을 겪으셨거나 기타 문의하실 내용이 있는 경우 아래 안내된 경로를 통해 문의하실 수 있습니다.</div>
+                <div>로그인 > 우상단 메뉴 > 문의 > 문의하기</div>
               </div>
             </div>
           </li>
@@ -128,17 +56,95 @@
           <li>
             <div class="info_tit">
               <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample7" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <span class="num_info">7</span>
+                <span class="num_info">3</span>
                 <strong class="tit_info">
-                  카카오계정은 무엇인가요?
+                  문의 답변 확인
                 </strong>
               </a>
             </div>
 
             <div class="collapse ms-5" id="collapseExample7">
               <div class="content ms-3">
-                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
-                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+                <div>문의하기로 문의한 글을 확인하는 방법은 문의한 글의 하단에 답변으로 알려드립니다.</div>
+                <div>문의 > 내 문의보기 > 내가문의한 글 > 문의 답변</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">4</span>
+                <strong class="tit_info">
+                  채널톡 이용 안내
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample3">
+              <div class="content ms-3">
+                <div>간단한 궁금증은 쳇봇을 통해 해결 할 수 있습니다.</div>
+                <div>운영자의 답변이 필요한 경우 다소 시간이 걸릴 수 있습니다.</div>
+                <div>우측하단 > 말풍선 > 새문의하기</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">5</span>
+                <strong class="tit_info">
+                  여러 기기에 하나의 계정으로 이용한 경우 기록이 동기화되나요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample4">
+              <div class="content ms-3">
+                <div>동일한 계정이라면 어느기기에서든 열람 기록이 동기화됩니다.</div>
+                <div>다만, 오프라인으로 열람한 기록이 소실된 경우 혹은 네트워크 환경이 불안정한 경우 등 열람기록이 유실된 경우 동기화 되지 않을 수 있습니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">6</span>
+                <strong class="tit_info">
+                  채팅방에 글이 안써져요!
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample5">
+              <div class="content ms-3">
+                <div>방을 입장(생성)할 때 한글을 입력하면 안됩니다.</div>
+                <div>방을 입장(생성)하실 때 꼭 영어 또는 숫자로 입력해주세요.</div>
+                <div>상단 > 채팅 > 방입장(생성)</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample6" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">7</span>
+                <strong class="tit_info">
+                  쇼핑 결제 및 환불문의
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample6">
+              <div class="content ms-3">
+                <div>기본적으로 네이버를 통해 구입을 하신 상품이므로 네이버로 결제 및 환불을 받으시면 됩니다.</div>
+                <div>네이버 > 로그인 > 네이버쇼핑 > MY쇼핑</div>
               </div>
             </div>
           </li>

@@ -76,21 +76,27 @@
                 {% comment %} <small class="d-flex justify-content-end mx-2">{{ meeting.created_at|date:'o.m.d D' }} {{meeting.created_at|time:"H:i"}}</small> {% endcomment %}
               </div>
             </div>
-            <a style="cursor: pointer; text-decoration:none;" class="mx-2 my-2" data-bs-toggle="modal" data-bs-target="#modal{{meeting.text}}">{{ meeting.user.nickname }}</a>
+            <a style="cursor: pointer; text-decoration:none;" class="mx-2 my-2" data-bs-toggle="modal" data-bs-target="#modal{{meeting.text}}">
+              {% if meeting.user.nickname %}
+                {{ meeting.user.nickname }}
+              {% else %}
+                {{ meeting.user.username }}
+              {% endif %}
+            </a>
             {% comment %} 패스워드 로직 {% endcomment %}
             <div>
               {% if request.user in meeting.belong.all %}
-              <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
+              <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3 py-2 m-2">
                 <span></span>
                 <span>입장하기</span>
               </a>
               {% elif meeting.password %}
-              <button action="{% url 'meetings:password' meeting.pk %}" method="POST" onClick="" type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
+              <button action="{% url 'meetings:password' meeting.pk %}" method="POST" onClick="" type="button" class="btn btn-primary px-3 py-2 m-2" data-bs-toggle="modal" data-bs-target="#{{meeting.text}}">
                 <span>🔒</span>
                 <span>입장하기</span>
               </button>
               {% else %}
-              <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3">
+              <a href="{% url 'meetings:detail' meeting.pk %}" class="btn btn-primary px-3 py-2 m-2">
                 <span></span>
                 <span>입장하기</span>
               </a>
@@ -125,18 +131,27 @@
             </div>
 
             <div id="modal{{meeting.text}}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel{{meeting.text}}" aria-hidden="true">
-              <div class="modal-dialog">
+              <div class="modal-dialog" style="width: 300px;">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <div>{{meeting.user.nickname}}
+                    <div class="fs-2">
+                      {% if meeting.user.nickname %}
+                      {{ meeting.user.nickname }}
+                      {% else %}
+                      {{ meeting.user.username }}
+                      {% endif %}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <div class="d-flex align-items-center"><a href="{% url 'accounts:profile' meeting.user.pk %}" class="text-decoration-none text-dark fs-3">프로필<span class="fs-4">🙂</span></a></div>
-                    <div class="d-flex align-items-center"><a href="{% url 'notes:send' meeting.user.username %}" class="text-decoration-none text-dark fs-3">쪽지<span class="fs-3">✉️</span></a></div>
-                    <div class="d-flex align-items-center"><a href="{% url 'accounts:follow' meeting.user.pk %}" class="text-decoration-none text-dark fs-3">팔로우<span class="fs-4">❤️</span></a></div>
-                    <div class="d-flex align-items-center"><a href="{% url 'accounts:block' meeting.user.pk %}" class="text-decoration-none text-dark fs-3">차단<span class="fs-4">💢</span></a></div>
+                    <div class="d-flex justify-content-evenly">
+                      <a href="{% url 'accounts:profile' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">프로필<span class="fs-4">🙂</span></a>
+                      <a href="{% url 'notes:send' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">쪽지<span class="fs-3">✉️</span></a>
+                    </div>                    
+                    <div class="d-flex justify-content-evenly">
+                      <a href="{% url 'accounts:follow' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">팔로우<span class="fs-4">❤️</span></a>
+                      <a href="{% url 'accounts:block' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">차단<span class="fs-4">💢</span></a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -178,22 +193,22 @@
 
   
   {% comment %} 내가참여한 모임들 {% endcomment %}
-  <div class="card d-flex align-items-center" style="min-width: 150px;">
+  <div class="card d-flex align-items-center p-1" style="min-width: 160px;">
     <div>참여신청한 모임들</div>
-    {% for meeting in meetings_all %}
+    {% for meeting in page_obj %}
     <div class="d-flex align-items-center">
         {% if request.user in meeting.belong.all %}
           <a style="text-decoration:none;" href="{% url 'meetings:detail' meeting.pk %}" class="text-dark custom-link">{{ meeting.title }}</a>
           <form id="custom-form" action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
             {% csrf_token %}
-            <button id="custom-btn"name="belong_id2" value="belong_id2">
+            <button id="custom-btn"name="belong_id2" value="belong_id2" class="mb-1">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                 <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
               </svg>
             </button>
           </form>
         {% endif %}
-      </div>
+    </div>
       {% endfor %}
   </div>
 </div>

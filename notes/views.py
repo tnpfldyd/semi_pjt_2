@@ -10,12 +10,15 @@ from django.http import JsonResponse
 @login_required
 def index(request):
     notes = request.user.user_to.order_by("-created_at")
-    return render(request, "notes/index.html", {"notes": notes})
+    to_notes = request.user.user_from.order_by("-created_at")
+
+    return render(request, "notes/index.html", {"notes": notes, "to_notes": to_notes},)
+
 
 
 @login_required
-def send(request, username):
-    to_user = get_object_or_404(get_user_model(), username=username)
+def send(request, pk):
+    to_user = get_object_or_404(get_user_model(), pk=pk)
     form = NotesForm(request.POST or None)
     if form.is_valid():
         temp = form.save(commit=False)
@@ -36,6 +39,10 @@ def send(request, username):
 
 def detail(request, pk):
     note = get_object_or_404(Notes, pk=pk)
+
+    if request.user == note.from_user:
+      return render(request, "notes/detail.html", {"note": note})
+
     if request.user == note.to_user:
         if not note.read:
             note.read = True
