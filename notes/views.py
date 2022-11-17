@@ -22,6 +22,8 @@ def send(request, username):
         temp.from_user = request.user
         temp.to_user = to_user
         temp.save()
+        to_user.notice = False
+        to_user.save()
         messages.success(request, "쪽지 전송 완료.😀")
         return redirect("meetings:index")
     context = {
@@ -37,6 +39,11 @@ def detail(request, pk):
         if not note.read:
             note.read = True
             note.save()
+        card = request.user.usercard
+        comment = card.usercomment_set.filter(read=False)
+        if not request.user.user_to.filter(read=False).exists() and not comment:
+            request.user.notice = True
+            request.user.save()
         return render(request, "notes/detail.html", {"note": note})
     else:
         messages.error(request, "그렇게는 볼 수 없어요.😅")

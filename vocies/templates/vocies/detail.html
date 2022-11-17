@@ -13,7 +13,7 @@
   <!-- 답변 -->
   <!-- 어드민만 답변달 수 있게 -->
   {% if user.is_superuser %}
-    <form action="{% url 'vocies:comment_create' vocie.pk %}" method="POST">
+    <form action="{% url 'vocies:comment' vocie.pk %}" method="POST">
       {% csrf_token %}
       {% bootstrap_form comment_form %}
       {% bootstrap_button button_type="submit" content="OK" button_class="btn btn-primary" %}

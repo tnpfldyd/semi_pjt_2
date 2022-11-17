@@ -47,6 +47,14 @@ def indiv_detail(request, pk):
     # cards = UserCard.objects.get(user=request.user.pk)
     cards = UserCard.objects.get(pk=pk)
     comments = cards.usercomment_set.all()
+    if request.user == cards.user:
+        new_comments = cards.usercomment_set.filter(read=False)
+        for comment in new_comments:
+            comment.read = True
+            comment.save()
+        if not request.user.user_to.filter(read=False).exists():
+            request.user.notice = True
+            request.user.save()
     context = {
         "cards": cards,
         "comments": comments,
@@ -104,32 +112,35 @@ def usercard_comment(request, pk):
             comment.usercard = card
             comment.ribbons = request.POST["choice_ribbon"]
             comment.save()
+            card.user.notice = False
+            card.user.save()
             temp = ""
             for i in str(comment.pk):
                 temp += dic[i]
             comment.id_text = temp
             comment.save()
-            url = "https://kauth.kakao.com/oauth/token"
-            data = {
-                "grant_type": "refresh_token",
-                "client_id": os.getenv("KAKAO_ID"),
-                "refresh_token": card.user.refresh_token,
-                "client_secret": os.getenv("KAKAO_SECRET"),
-            }
-            response = requests.post(url, data=data).json()
-            url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-            access_token = response["access_token"]
-            headers = {"Authorization": "Bearer " + access_token}
-            data = {
-                "template_object": json.dumps(
-                    {
-                        "object_type": "text",
-                        "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
-                        "link": {"web_url": "http://localhost:8000/cards/" + str(pk)},
-                    }
-                )
-            }
-            response = requests.post(url, headers=headers, data=data)
+            if card.user.refresh_token:
+                url = "https://kauth.kakao.com/oauth/token"
+                data = {
+                    "grant_type": "refresh_token",
+                    "client_id": os.getenv("KAKAO_ID"),
+                    "refresh_token": card.user.refresh_token,
+                    "client_secret": os.getenv("KAKAO_SECRET"),
+                }
+                response = requests.post(url, data=data).json()
+                url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
+                access_token = response["access_token"]
+                headers = {"Authorization": "Bearer " + access_token}
+                data = {
+                    "template_object": json.dumps(
+                        {
+                            "object_type": "text",
+                            "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
+                            "link": {"web_url": "http://localhost:8000/cards/" + str(pk)},
+                        }
+                    )
+                }
+                response = requests.post(url, headers=headers, data=data)
             return redirect("cards:indiv_detail", pk)
     else:
         comment_form = UserCommentForm()
