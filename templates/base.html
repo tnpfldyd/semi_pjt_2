@@ -60,6 +60,9 @@
           <li class="navbar-brand">
             <a class="nav-link" href="{% url 'accounts:profile' request.user.pk %}">프로필</a>
           </li>
+          <li class="navbar-brand">
+            <a class="nav-link" href="{% url 'vocies:index' %}">문의</a>
+          </li>
           {% else %}
           <li class="navbar-brand">
             <button type="button" class="nav-link border-0 bg-light" data-bs-toggle="modal" data-bs-target="#exampleModal">

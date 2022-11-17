@@ -1,5 +1,305 @@
 {% extends 'base.html' %}
 {% block content %}
+  <main class="container">
+    <div>
+      <article class="cont_public" id="mArticle">
+        <div class="d-flex justify-content-between">
+          <h3 class="tit_public my-4">
+            문의
+          </h3>
+          <a href="{% url 'vocies:myvocie' %}" class="tit_public my-4 text-decoration-none text-muted">내 문의보기</a>
+        </div>
 
-  <a href="{% url 'vocies:myvocie' %}" class="btn btn-outline-warning">문의하기</a>
+        <ol class="wrap_cont ulist">
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">1</span>
+                <strong class="tit_info">
+                  카카오계정은 무엇인가요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample1">
+              <div class="content ms-3">
+                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
+                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">2</span>
+                <strong class="tit_info">
+                  카카오계정은 무엇인가요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample2">
+              <div class="content ms-3">
+                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
+                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">3</span>
+                <strong class="tit_info">
+                  카카오계정은 무엇인가요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample3">
+              <div class="content ms-3">
+                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
+                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">4</span>
+                <strong class="tit_info">
+                  카카오계정은 무엇인가요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample4">
+              <div class="content ms-3">
+                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
+                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">5</span>
+                <strong class="tit_info">
+                  카카오계정은 무엇인가요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample5">
+              <div class="content ms-3">
+                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
+                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample6" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">6</span>
+                <strong class="tit_info">
+                  카카오계정은 무엇인가요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample6">
+              <div class="content ms-3">
+                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
+                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+          <li>
+            <div class="info_tit">
+              <a class="link_cont text-dark my-3" data-bs-toggle="collapse" href="#collapseExample7" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <span class="num_info">7</span>
+                <strong class="tit_info">
+                  카카오계정은 무엇인가요?
+                </strong>
+              </a>
+            </div>
+
+            <div class="collapse ms-5" id="collapseExample7">
+              <div class="content ms-3">
+                <div>카카오계정은 카카오가 만든 서비스들을 하나의 계정으로 이용할 수 있도록 만든 카카오의 통합 계정입니다.</div>
+                <div>카카오페이지는 카카오계정을 통해 회원가입 및 로그인 후 이용이 가능합니다.</div>
+              </div>
+            </div>
+          </li>
+          <hr class="m-0">
+
+        </ol>
+      </article>
+    </div>
+    <div class="text-end mt-3">
+      <a href="{% url 'vocies:create' %}" class="btn btn-outline-warning">문의하기</a>
+    </div>
+  </main>
+
+  <style>
+    .wrap_keyword {
+      border-top: 2px px solid #212121;
+      margin-top: 26px;
+      padding: 17px 5px 4px;
+    }
+
+    .screen_out {
+      overflow: hidden;
+      position: absolute;
+      width: 0;
+      height: 0;
+      line-height: 0;
+      text-indent: -9999px;
+    }
+
+    .wrap_cont {
+      padding-bottom: 30px;
+      border-top: 2px solid #000;
+      border-bottom: 1px solid #000;
+    }
+
+    .cont_public .wrap_cont > .item_info {
+      padding: 12px 0 16px;
+      border-top: 1px solid #e8e8e8;
+      overflow: hidden;
+    }
+
+    .cont_public .info_tit {
+      overflow: hidden;
+    }
+
+    .num_info {
+      float: left;
+      width: 55px;
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .tit_info {
+      float: left;
+      width: 540px;
+      font-size: 15px;
+      font-weight: normal;
+      margin-right: 40px;
+      margin-left: 5px;
+    }
+
+    .btn_arr {
+      float: right;
+      width: 16px;
+      height: 16px;
+      margin-right: 14px;
+    }
+
+    .cont_public .wrap_cont .link_cont {
+      float: left;
+      width: 740px;
+      margin: 5px;
+    }
+
+    .cont_public .wrap_cont .num_info {
+      float: left;
+      width: 55px;
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .cont_public .wrap_cont .tit_info {
+      float: left;
+      width: 540px;
+      font-size: 15px;
+      font-weight: normal;
+      margin-right: 40px;
+      margin-left: 5px;
+    }
+
+    .cont_public .wrap_cont .btn_arr {
+      float: right;
+      width: 16px;
+      height: 16px;
+      margin-right: 14px;
+    }
+
+    .cont_public .wrap_cont > .item_info .info_cont {
+      display: none;
+      overflow: hidden;
+      width: 690px;
+      text-align: left;
+      margin: 15px 0 15px 60px;
+      font-size: 15px;
+      line-height: 27px;
+    }
+
+    blockquote,
+    body,
+    button,
+    code,
+    dd,
+    div,
+    dl,
+    dt,
+    fieldset,
+    form,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    input,
+    legend,
+    li,
+    ol,
+    p,
+    pre,
+    select,
+    td,
+    textarea,
+    th,
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .cont_public .wrap_cont > .item_info .info_cont {
+      display: none;
+      overflow: hidden;
+      width: 690px;
+      text-align: left;
+      margin: 15px 0 15px 60px;
+      font-size: 15px;
+      line-height: 27px;
+    }
+
+    .cont_public .wrap_cont > .item_info:first-child {
+      margin-top: 30px;
+      border-top: 0 none;
+    }
+
+    .cont_public .wrap_cont > .item_info {
+      padding: 12px 0 16px;
+      border-top: 1px solid #e8e8e8;
+      overflow: hidden;
+    }
+
+    .ulist {
+      list-style: none;
+    }
+  </style>
 {% endblock content %}

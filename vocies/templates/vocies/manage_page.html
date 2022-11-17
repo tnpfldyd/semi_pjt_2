@@ -1,19 +1,184 @@
 {% extends 'base.html' %}
-
+{% load static %}
+{% load django_bootstrap5 %}
 {% block content %}
-  <h1>운영자 페이지</h1>
-  <h4>모든 문의</h4>
-  {% for vocie in vocies %}
-    <div class="d-flex justify-content-center my-3">
-      <a href="{% url 'vocies:detail' vocie.pk %}" class="text-decoration-none text-dark">{{ vocie.title }}
-        {% if not vocie.center.count %}
-          <span class="text-danger fw-bold">(아직 답변이 없습니다)</span>
-        {% endif %}
-      </a>
-      <span>{{ vocie.user.nickname }}
 
-      </span>
+  <div class="content">
+
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <p><img src="{%static "images/as.svg"%}" alt="Image" class="img-fluid"></p>
+            </div>
+            <div class="col-md-6">
+              <h1 class="text-center">모든 문의</h1>
+              {% for vocie in vocies %}
+                <div class="d-flex justify-content-center my-3">
+                  <a href="{% url 'vocies:detail' vocie.pk %}" class="text-decoration-none text-dark">{{ vocie.title }}
+                    {% if not vocie.center.count %}
+                      <span class="text-danger fw-bold">(아직 답변이 없습니다)</span>
+                    {% endif %}
+                    <span>{{ vocie.user.nickname }}</span>
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-  {% endfor %}
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #fff;
+      line-height: 1.9;
+      color: #8c8c8c;
+    }
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Roboto", sans-serif;
+      color: #000;
+    }
+
+    a {
+      -webkit-transition: 0.3s all ease;
+      -o-transition: 0.3s all ease;
+      transition: 0.3s all ease;
+    }
+
+    a,
+    a:hover {
+      text-decoration: none !important;
+    }
+
+    .text-black {
+      color: #000;
+    }
+
+    .content {
+      padding: 7rem 0;
+    }
+
+    .heading {
+      font-size: 2.5rem;
+      font-weight: 900;
+    }
+
+    .form-control {
+      border: none;
+      background: #f3f3f3;
+    }
+
+    .form-control:active,
+    .form-control:focus {
+      outline: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: #000;
+      background: #f3f3f3;
+    }
+
+    .col-form-label {
+      color: #000;
+    }
+
+    .btn,
+    .custom-select,
+    .form-control {
+      height: 50px;
+    }
+
+    .custom-select:active,
+    .custom-select:focus {
+      outline: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: #000;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 4px !important;
+    }
+
+    .btn.btn-primary {
+      background: #000;
+      color: #fff;
+      padding: 15px 20px;
+    }
+
+    .btn:hover {
+      color: #fff;
+    }
+
+    .btn:active,
+    .btn:focus {
+      outline: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+
+    .box {
+      padding: 40px;
+      background: #fff;
+      -webkit-box-shadow: -30px 30px 0 0 rgba(0, 0, 0, 0.08);
+      box-shadow: -30px 30px 0 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .box h3 {
+      font-size: 14px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    label.error {
+      font-size: 12px;
+      color: red;
+    }
+
+    #message {
+      resize: vertical;
+    }
+
+    #form-message-success,
+    #form-message-warning {
+      display: none;
+    }
+
+    #form-message-warning {
+      color: #B90B0B;
+    }
+
+    #form-message-success {
+      color: #55A44E;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .submitting {
+      float: left;
+      width: 100%;
+      padding: 10px 0;
+      display: none;
+      font-weight: bold;
+      font-size: 12px;
+      color: #000;
+    }
+  </style>
 {% endblock content %}
