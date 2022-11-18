@@ -176,7 +176,6 @@ def delete(request):
 def follow(request, pk):
     person = get_object_or_404(get_user_model(), pk=pk)
     if person != request.user and request.method == "POST":
-        print(1)
         if person.followers.filter(pk=request.user.pk).exists():
             person.followers.remove(request.user)
             is_follow = False
@@ -196,20 +195,29 @@ def follow(request, pk):
 
 @login_required
 def block(request, pk):
-    user = get_object_or_404(get_user_model(), pk=pk)
-    if user != request.user:
-        if user.blockers.filter(pk=request.user.pk).exists():
-            user.blockers.remove(request.user)
-            user.save()
+    person = get_object_or_404(get_user_model(), pk=pk)
+    if person != request.user and request.method == "POST":
+        if person.blockers.filter(pk=request.user.pk).exists():
+            person.blockers.remove(request.user)
+            is_follow = False
+            messages.success(request, "차단이 해제되었습니다.")
         else:
-            user.blockers.add(request.user)
-            user.save()
-    return redirect("accounts:profile", user.username)
+            person.blockers.add(request.user)
+            is_follow = True
+            messages.success(request, "차단 되었습니다.")
+        context = {
+            "isFollow": is_follow,
+        }
+        return JsonResponse(context)
+    else:
+        messages.warning(request, "그건 안됨.")
+        return redirect("meetings:index")
 
 
 @login_required
 def block_user(request):
     block_users = request.user.blocking.all()
+    print(block_users)
     return render(request, "accounts/block_user.html", {"block_users": block_users})
 
 
@@ -217,6 +225,8 @@ def profile(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
     context = {
         "user": user,
+        "followers": user.followers.all(),
+        "followings": user.followings.all(),
     }
     return render(request, "accounts/profile.html", context)
 
@@ -287,7 +297,6 @@ def notice(request):
                             )
                         ] = (i.title, i.from_user.nickname, "note", i.pk)
         dic = sorted(dic.items(), reverse=True)
-        print(dic)
         return JsonResponse({"items": dic})
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
