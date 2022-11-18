@@ -7,11 +7,13 @@
 {% block content %} 
 <link rel="stylesheet" href="{% static 'style_card.css' %}" />
 
-
+<!-- 클릭 전 화면 -->
 <section data-page="home" id="home" class="active">
-  <h1 class="text-center "> 산타를 눌러주세요 </h1>
-  <a href="#other" data-role="link">
   <div class="container">
+    <h1 class="text-center santa-h1"> 산타를 눌러주세요 </h1>
+    <a href="#other" data-role="link">
+    <div>
+      <div class="scontainer">
       <div class="santa">
         <div class="hand-l"></div>
         <div class="hand-r"></div>
@@ -26,98 +28,169 @@
       <div class="santabag">
         <img src="{%static 'images/santabag.png' %}" height="300px" alt="...">
       </div>
+    </div>
+    </div>
+    </a>
   </div>
-  </a>
 </section>
 
+
+<!-- 클릭 후 화면 -->
 <section data-page="other" id="other">
+<div class="container">
   <div>
-  <p><a href="#home" data-role="link">산타보기</a></p>
+    <a href="#home" data-role="link">산타보기</a>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <p class="fs-1"> {{ cards.title }} </p>
+      <p class="fs-3"> {{ cards.content }} </p>
+      <!--
+      <p> 성별 : {{ cards.user.gender }} </p>
+      <p> 양말id : {{ cards.socks }} </p>
+      <p> 벽난로id :{{ cards.chimneys }} </p>
+      -->
+    </div>
+    <div class="col-6">
+      <img src="{{ cards.user.profileimage }}" class="rounded-circle">
+      <p class=""> {{ cards.user.nickname }} </p>
+    </div>
+  </div>
+
+  <a href="{% url 'cards:gcomment_create' cards.pk %}" class="text-decoration-none"> 메시지 남기기 </a>
   <a href="{% url 'cards:groupcard_update' cards.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
   <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="text-decoration-none"> 벽난로 부수기 </a>
-  <a href="{% url 'cards:gcomment_create' cards.pk %}" class="text-decoration-none"> 메시지 남기기 </a>
-</div>
-
-<div>
-  
-  <h1> 성별 : {{ cards.user.gender }} </h1>
-  <h1> 이름 : {{ cards.user.nickname }} </h1>
-  <img src="{{ cards.user.profileimage }}" class="rounded-circle">
-  <h1> 제목 : {{ cards.title }} </h1>
-  <h1> 내용 : {{ cards.content }} </h1>
-  <h1> 양말id : {{ cards.socks }} </h1>
-  <h1> 벽난로id :{{ cards.chimneys }} </h1>
-</div>
-
-
-<img src="{%static 'images/산타가방.jpg' %}">
-
-<div class>
-  {% if cards.socks == 1 %}
-    <img src="{%static 'images/양말1.png' %}">
-  {% elif cards.socks == 2 %}
-    <img src="{%static 'images/양말2.png' %}">
-  {% elif cards.socks == 3 %}
-    <img src="{%static 'images/양말3.png' %}">
-  {% endif %}
-
-  {% if cards.chimneys == 1 %}
-  <img src="{%static 'images/벽난로1.jpg' %}">
-  {% elif cards.chimneys == 2 %}
-  <img src="{%static 'images/벽난로2.jpg' %}">
-  {% elif cards.chimneys == 3 %}
-  <img src="{%static 'images/벽난로3.jpg' %}">
-  {% endif %}
-</div>
-
-
-{% for comment in comments %}
-  {% if comment.ribbons == 1 %}
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
-      <img src="{%static 'images/리본1.png' %}">
-    </button>
-
-    <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div>
+    <!-- 벽난로 주인의 장식 모달 창 -->
+    <div class="modal" id="groupfire" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
-            {{ comment.content }}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <div class='d-flex justify-content-center'>
+              <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
+            </div>
+            <div class='mb-2 rounded-2 p-1'>
+              <p class='text-center fs-5 my-5'>{{ cards.title }} </p>
+              <p class='my-1 text-center'>{{ cards.content }} </p>
+            </div>
+            <div class='d-grid mt-5'>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-
-  {% elif comment.ribbons == 2%}
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
-      <img src="{%static 'images/리본2.png' %}">
-    </button>
-
-  {% endif %}
-  <h2> {{ comment.content }} | {{ comment.created_at }} | {{comment.ribbons}} </h2>
-
-  <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body">
-          {{ comment.content }}
+    <div class>
+      {% if cards.chimneys %}
+        {% if cards.socks %}
+        <div style='position:relative'>
+          <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-1'>
+          <a data-bs-toggle="modal" data-bs-target="#groupfire" style='cursor:pointer'>
+            <div style='position: absolute; top:2rem; left:2rem;'>
+              <img src='/static/images/양말{{ cards.socks }}.png' style='width:4rem;'>
+            </div>
+          </a>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        {% else %}
+        <div>
+          <img src="/static/images/벽난로{{ cards.chimneys }}.jpg">
         </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+{% if cards.user != request.user %}
+<div class='d-grid'>
+  <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn btn-primary my-3 fs-4"> 벽난로 꾸며주기 </a>
+</div>
+{% endif %}
+</div>
+</div>
+
+
+
+
+
+
+{% for comment in comments %}
+{% if comment.ribbons == 1 %}
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
+  <img src="{%static 'images/리본1.png' %}">
+</button>
+
+<div class="modal" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        {{ comment.content }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
       </div>
     </div>
   </div>
-{% endfor %}
+</div>
+
+
+{% elif comment.ribbons == 2%}
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
+  <img src="{%static 'images/리본2.png' %}">
+</button>
+
+{% endif %}
+<h2> {{ comment.content }} | {{ comment.created_at }} | {{comment.ribbons}} </h2>
+
+<div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-body">
+      {{ comment.content }}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+    </div>
+  </div>
+</div>
+</div>
+{% endfor %} 
+
+
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 </section>
 
 
 
-<img src="{%static 'images/rudolph.gif' %}" class="width:100%">
 
+
+
+<!-- 배경 아래쪽 -->
+<!-- <img src="{%static 'images/rudolph.gif' %}" class="width:100%"> -->
 
 
 
@@ -156,7 +229,6 @@
         xhr: ajax
     }
 })();
-
   </script>
 
 {% endblock %}
