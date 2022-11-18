@@ -170,16 +170,16 @@
                       {% endif %}
                       {% if request.user in meeting.user.blockers.all %}
                         <div class="col text-center">
-                          <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                          <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
                             취소<span class="fs-4">⭕</span>
                           </button>
                         </div>
                       {% else %}
-                       <div class="col text-center">
-                        <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                        <div class="col text-center">
+                        <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
                           차단<span class="fs-4">❌</span>
                         </button>
-                       </div>
+                        </div>
                       {% endif %}
                     </div>
                     {% endif %}
