@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 import json
 import random
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -15,15 +16,21 @@ def home(request):
     return render(request, "meetings/home.html")
 
 
+@login_required
 def index(request):
     meetings = Meeting.objects.order_by("-pk")
     meetings_all = Meeting.objects.all()
-
-    img = ["https://images.unsplash.com/photo-1615097130643-12caeab3c625?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" , "https://images.unsplash.com/photo-1577042939454-8b29d442b402?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" , "https://images.unsplash.com/photo-1638277267253-543e4c57cd7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"]
+    test = Meeting.objects.exclude(user__in=request.user.blocking.all())
+    img = [
+        "https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+        "https://images.unsplash.com/photo-1615097130643-12caeab3c625?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+        "https://images.unsplash.com/photo-1577042939454-8b29d442b402?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+        "https://images.unsplash.com/photo-1638277267253-543e4c57cd7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+    ]
     s = random.choice(img)
-    
+
     # 모임이 몇개 개설됐는지
-    meetings_count = Meeting.objects.all().count()
+    meetings_count = len(meetings_all)
 
     # 지역별
     meetings_local = meetings_all
@@ -118,6 +125,7 @@ dic = {
 }
 
 
+@login_required
 def create(request):
     if request.method == "POST":
         meeting_form = MeetingForm(request.POST, request.FILES)
@@ -145,6 +153,7 @@ def create(request):
     return render(request, "meetings/create.html", context)
 
 
+@login_required
 def password(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     if request.POST.get("password") == meeting.password:
@@ -155,7 +164,7 @@ def password(request, meeting_pk):
         return redirect("meetings:index")
 
 
-# detail 주소치고 들어가면 들어가짐
+@login_required
 def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all()
@@ -223,6 +232,7 @@ def detail(request, meeting_pk):
             return render(request, "meetings/detail.html", context)
 
 
+@login_required
 def update(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     if request.user == meeting.user:
@@ -241,6 +251,7 @@ def update(request, meeting_pk):
         return redirect("meetings:detail", meeting.pk)
 
 
+@login_required
 def delete(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     if request.user == meeting.user:
@@ -248,6 +259,7 @@ def delete(request, meeting_pk):
         return redirect("meetings:index")
 
 
+@login_required
 def comment_create(request, meeting_pk):
     meeting_data = Meeting.objects.get(pk=meeting_pk)
 
@@ -266,6 +278,7 @@ def comment_create(request, meeting_pk):
         return redirect("accounts:login")
 
 
+@login_required
 def comment_delete(request, meeting_pk, comment_pk):
     meeting_data = Meeting.objects.get(pk=meeting_pk)
     comment_data = meeting_data.comment_set.get(pk=comment_pk)
@@ -276,6 +289,7 @@ def comment_delete(request, meeting_pk, comment_pk):
     return redirect("meetings:detail", meeting_pk)
 
 
+@login_required
 def belong_meeting(request, pk):
     meeting = Meeting.objects.get(pk=pk)
 
