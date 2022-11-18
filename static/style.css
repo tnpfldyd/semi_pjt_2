@@ -117,6 +117,57 @@ a {
   background-image: url("images/리본2.png");
 }
 
+/* 양말 */
+
+.socks1 {
+  background-image: url("images/양말1.png");
+}
+
+.socks2 {
+  background-image: url("images/양말2.png");
+}
+
+.socks3 {
+  background-image: url("images/양말3.png");
+}
+
+.socks4 {
+  background-image: url("images/양말4.png");
+}
+
+.socks5 {
+  background-image: url("images/양말5.png");
+}
+
+.socks6 {
+  background-image: url("images/양말6.png");
+}
+
+.socks7 {
+  background-image: url("images/양말7.png");
+}
+
+.socks8 {
+  background-image: url("images/양말8.png");
+}
+
+.socks9 {
+  background-image: url("images/양말9.png");
+}
+
+.socks10 {
+  background-image: url("images/양말10.png");
+}
+
+.socks11 {
+  background-image: url("images/양말11.png");
+}
+
+.socks12 {
+  background-image: url("images/양말12.png");
+}
+
+
 .cc-selector input:active+.drinkcard-cc {
   opacity: .5;
 }

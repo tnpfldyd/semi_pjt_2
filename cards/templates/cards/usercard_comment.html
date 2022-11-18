@@ -1,25 +1,78 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5%}
-
+{% load static %}
 {% block content %}
 
-<form class="p-4 my-2" action="" method="POST">
-  {% csrf_token %}
-  {% bootstrap_form comment_form %}
-  
-  <div class="cc-selector">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_ribbon" id="1" value="1">
-      <label class="drinkcard-cc ribbon1" for="ribbon1"></label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_ribbon" id="2" value="2">
-      <label class="drinkcard-cc ribbon2" for="ribbon2"> </label>
-    </div>
-  </div>
-  
-  <input class="btn" type="submit" value="제출하기">
+<style>
+  body {
+   background-image : url('{% static 'images/개인카드배경3.png' %}');
+   background-repeat : no-repeat;
+   background-size : cover;
+   color: white
+  }
+</style>
 
-</form>
+
+<div class='d-flex justify-content-center my-5'>
+  
+  <div style='width:40rem'>
+    <form action="" method="POST">
+
+      <h1 class='fs-4 mt-5 mb-4'>메세지 장식을 선택해 주세요</h1>
+      <div class="cc-selector">
+
+          <input type="radio" name="socks" id="socks1" value="1">
+          <label class="drinkcard-cc socks1" for="socks1"></label>
+
+
+          <input type="radio" name="socks" id="socks2" value="2">
+          <label class="drinkcard-cc socks2" for="socks2"> </label>
+
+          <input type="radio" name="socks" id="3" value="3">
+          <label class="drinkcard-cc socks3" for="socks3"></label>
+
+
+          <input type="radio" name="socks" id="4" value="4">
+          <label class="drinkcard-cc socks4" for="socks4"> </label>
+
+          <input type="radio" name="socks" id="5" value="5">
+          <label class="drinkcard-cc socks5" for="socks5"></label>
+
+
+          <input type="radio" name="socks" id="6" value="6">
+          <label class="drinkcard-cc socks6" for="socks6"> </label>
+
+          <input type="radio" name="socks" id="7" value="7">
+          <label class="drinkcard-cc socks7" for="socks7"></label>
+
+
+          <input type="radio" name="socks" id="8" value="8">
+          <label class="drinkcard-cc socks8" for="socks8"> </label>
+
+          <input type="radio" name="socks" id="9" value="9">
+          <label class="drinkcard-cc socks9" for="socks9"></label>
+
+
+          <input type="radio" name="socks" id="10" value="10">
+          <label class="drinkcard-cc socks10" for="socks10"> </label>
+
+          <input type="radio" name="socks" id="11" value="11">
+          <label class="drinkcard-cc socks11" for="socks11"></label>
+
+
+          <input type="radio" name="socks" id="12" value="12">
+          <label class="drinkcard-cc socks12" for="socks12"> </label>
+
+      </div>
+      
+      {% csrf_token %}
+      {% bootstrap_form comment_form %}
+
+      <input class="btn" type="submit" value="제출하기">
+
+    </form>
+  </div>
+</div>
 
 {% endblock %}
+

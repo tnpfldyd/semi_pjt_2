@@ -6,7 +6,7 @@ from .models import *
 import requests, os, json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-
+from django.contrib import messages
 
 # Create your views here.
 
@@ -27,14 +27,18 @@ def usercard_create(request):
     if request.method == "POST":
         form = UserCardForm(request.POST)
         if form.is_valid():
-            temp = form.save(commit=False)
-            temp.user = request.user
-            # 라디오 버튼 'name'='id'로 들어옴
-            # name==choice, id=1,2,3으로 설정
-            temp.userdeco = request.POST["userdeco"]
-            temp.chimneys = request.POST["choice_chim"]
-            temp.save()
-            return redirect("accounts:profile", request.user.pk)
+            try:
+                temp = form.save(commit=False)
+                temp.user = request.user
+                # 라디오 버튼 'name'='id'로 들어옴
+                # name==choice, id=1,2,3으로 설정
+                temp.userdeco = request.POST["userdeco"]
+                temp.chimneys = request.POST["choice_chim"]
+                temp.save()
+                return redirect("accounts:profile", request.user.pk)
+            except:
+                messages.error(request, "벽난로와 장식을 반드시 선택해주세요.😥")
+                return redirect("cards:usercard_create")
     else:
         form = UserCardForm()
     context = {
@@ -109,7 +113,7 @@ def usercard_comment(request, pk):
             comment = comment_form.save(commit=False)
             comment.user = request.user
             comment.usercard = card
-            comment.ribbons = request.POST["choice_ribbon"]
+            comment.socks = request.POST["socks"]
             comment.save()
             if card.user.tree_notice:
                 card.user.notice_tree = False
@@ -136,7 +140,9 @@ def usercard_comment(request, pk):
                         {
                             "object_type": "text",
                             "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
-                            "link": {"web_url": "http://localhost:8000/cards/" + str(pk)},
+                            "link": {
+                                "web_url": "http://localhost:8000/cards/" + str(pk)
+                            },
                         }
                     )
                 }
