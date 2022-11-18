@@ -135,6 +135,9 @@
         % endcomment %
       }
     }
+  #profileimage {
+    box-shadow: 0 8px 5px rgba(0,0,0,0.5);
+  }
   </style>
   <div class="row justify-content-center">
     <!-- 벽난로 주인 프로필 -->
@@ -142,17 +145,14 @@
 
       <p class=' my-5 fs-1 ms-5 text-center'>개인 프로필</p>
       <div class='row'>
-
         <div class='col-6 d-flex justify-content-end'>
           <div>
-
             {% if user.profileimage %}
-              <img src="{{ user.profileimage }}" class="rounded-pill" style='width:10rem;'>
+              <img id="profileimage" src="{{ user.profileimage }}" class="rounded-pill" style='width:10rem;'>
             {% else %}
               <img src="{% static 'images/게스트.png' %}" class="rounded-2" style='width:10rem;'>
             {% endif %}
           </div>
-
         </div>
         <div class='col-6 d-flex justify-content-center'>
           <div>

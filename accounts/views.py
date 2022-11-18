@@ -117,10 +117,12 @@ def kakao_callback(request):
 
 @login_required
 def mypage(request):
+    block_users = request.user.blocking.all()
+    block_cnt = len(block_users)
     return render(
         request,
         "accounts/mypage.html",
-        {"user": get_user_model().objects.get(pk=request.user.pk)},
+        {"user": get_user_model().objects.get(pk=request.user.pk), "block_users": block_users, "block_cnt": block_cnt,},
     )
 
 
@@ -213,12 +215,6 @@ def block(request, pk):
         messages.warning(request, "그건 안됨.")
         return redirect("meetings:index")
 
-
-@login_required
-def block_user(request):
-    block_users = request.user.blocking.all()
-    print(block_users)
-    return render(request, "accounts/block_user.html", {"block_users": block_users})
 
 
 def profile(request, pk):
