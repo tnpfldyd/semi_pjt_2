@@ -21,10 +21,8 @@ def index(request):
     meetings = Meeting.objects.order_by("-pk")
     # 사용자가 블락안한 모임
     block = Meeting.objects.exclude(user__in=request.user.blocking.all()).order_by("-pk")
-    print(f"block:{block}")
     # 사용자가 블락한 모임
     non_block = Meeting.objects.filter(user__in=request.user.blocking.all()).order_by("-pk")
-    print(f"non_block:{non_block}")
     img = [
         "https://images.unsplash.com/photo-1615097130643-12caeab3c625?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         "https://images.unsplash.com/photo-1577042939454-8b29d442b402?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
@@ -51,9 +49,11 @@ def index(request):
         return redirect("meetings:index")
 
     if request.GET.get("local") and nw in request.GET.get("local"):
-        block = Meeting.objects.filter(user__in=request.user.blocking.all()).filter(location__contains=nw).order_by("-pk")
+        block = Meeting.objects.filter(location__contains=nw).filter(user__in=request.user.blocking.all()).order_by("-pk")
+        print(Meeting.objects.filter(location__contains=nw).filter(user__in=request.user.blocking.all()))
         meetings_local_name = nw
         # 페이지네이션
+        print(block)
         paginator = Paginator(block, 4)
         page_number = request.GET.get("local")  # key 값이 local, value 값이 노원구
         page_number = page_number.strip(nw)  # 노원구2 에서 노원구를 제거

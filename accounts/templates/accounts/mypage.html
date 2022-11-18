@@ -1,5 +1,123 @@
+
+
+
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+<div class="row p-5 wrapper justify-content-center">
+  <div class="col-3 d-flex justify-content-center align-items-center flex-column">
+    {% comment %} 프로필 이미지 if 처리 {% endcomment %}
+    {% if user.profileimage %}
+    <img id="profileimage" class="rounded-pill my-3" src="{{user.profileimage}}" style="width:200px; height:200px;">
+    {% else %}
+    이미지 없음
+    {% endif %}
+    <h2>나의 정보</h2>
+    이메일 :{{user.email}}
+    <br>
+    연령대 : {{user.age_range}}
+    <br>
+    성별 : {{user.gender}}
+    <br>
+    닉네임 : {{user.nickname}}
+    <br>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#exampleModal-block">
+      차단목록 ({{block_cnt}})
+    </button>
+    <br>
+    <div class="d-grid gap-2">
+      <a class="btn btn-primary" href="{% url 'accounts:update' %}">정보 수정</a>
+    </div>
+  </div>
+
+  <div class="col-3 d-flex justify-content-center align-items-center flex-column ">
+    <h3>트리 알림</h3> 
+    {% if user.tree_notice %}
+    <label class="switch">
+        <input type="checkbox" id='check1' checked>
+        <span class="slider round"></span>
+      </label>
+      <p>ON</p><p style="display:none;">OFF</p>
+    {% else %}
+    <label class="switch">
+        <input type="checkbox" id='check1'>
+        <span class="slider round"></span>
+      </label>
+      <p>OFF</p><p style="display:none;">ON</p>
+    {% endif %}
+    <h3>쪽지 알림</h3>
+    {% if user.note_notice %}
+    <div class="d-flex flex-column">
+    <label class="switch">
+        <input type="checkbox" id='check2' checked>
+        <span class="slider round"></span>
+      </label>
+      <h6 class="fw-bold mx-1 mt-2 text-center">ON</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">OFF</h6>
+    </div>
+    {% else %}
+    <div class="d-flex flex-column text-center">
+    <label class="switch">
+      <input type="checkbox" id='check2'>
+      <span class="slider round"></span>
+    </label>
+    <h6 class="fw-bold mx-1 mt-2">OFF</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">ON</h6>
+    </div>
+    {% endif %}
+    <form id="form-1">
+      {% csrf_token %}
+    <button type="submit" class="btn btn-primary">저장</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal-block" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">차단목록</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          {% for block_user in block_users %}
+            {% if request.user in block_user.blockers.all %}
+              <div class="row">
+                {% csrf_token %}
+                <div class="col text-center">
+                  <a href="{% url 'accounts:profile' block_user.pk %}" class="fs-3 custom-link">{{ block_user.nickname }}</a>
+                  <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{block_user.pk}}" value="{{block_user.pk}}" onclick="block(event)">
+                    해제<span class="fs-4">⭕</span>
+                  </button>
+                </div>
+                {% else %}
+                <div class="col text-center">
+                  <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{block_user.pk}}" value="{{block_user.pk}}" onclick="block(event)">
+                    차단<span class="fs-4">❌</span>
+                  </button>
+                </div>
+              </div>
+              
+              {% endif %}
+            {% endfor %}
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <a href={% url 'accounts:mypage' %} class="btn btn-primary">저장하기</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-    .switch {
+
+#profileimage {
+  box-shadow: 0 8px 5px rgba(0,0,0,0.5);
+}
+.switch {
   position: relative;
   display: inline-block;
   width: 60px;
@@ -59,10 +177,10 @@ input:checked + .slider:before {
 }
 
 p {
-	margin:0px;
-	display:inline-block;
-	font-size:15px;
-	font-weight:bold;
+  margin:0px;
+  display:inline-block;
+  font-size:15px;
+  font-weight:bold;
 }
 
 h1,
@@ -82,94 +200,23 @@ ul {
   background-size: cover;
   background-repeat : no-repeat;
   
-.inner {
-  max-width: 758px;
-  margin: auto;
-  background: #39459b;
-  border: 10px solid #0d99d7;
-  padding: 77px 99px 87px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  -ms-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-}
+  .inner {
+    max-width: 758px;
+    margin: auto;
+    background: #39459b;
+    border: 10px solid #0d99d7;
+    padding: 77px 99px 87px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    -ms-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  }
 
 }
 
-
+  
 </style>
-
-
-{% extends 'base.html' %}
-{% load django_bootstrap5 %}
-{% block content %}
-<div class="row p-5 wrapper justify-content-center">
-  <div class="col-3 d-flex justify-content-center align-items-center flex-column">
-    <h2>나의 정보</h2>
-    이메일 :{{user.email}}
-    <br>
-    연령대 : {{user.age_range}}
-    <br>
-    성별 : {{user.gender}}
-    <br>
-    닉네임 : {{user.nickname}}
-    <br>
-    <a href="{% url 'accounts:block_user' %}">차단목록</a>
-    {% comment %} 프로필 이미지 if 처리 {% endcomment %}
-    {% if user.profileimage %}
-    <img class="rounded-pill mt-3" src="{{user.profileimage}}" style="width:200px; height:200px;">
-    {% else %}
-    이미지 없음
-    {% endif %}
-    <br>
-    <div class="d-grid gap-2">
-      <a class="btn btn-primary" href="{% url 'accounts:update' %}">정보 수정</a>
-    </div>
-  </div>
-
-  <div class="col-3 d-flex justify-content-center align-items-center flex-column ">
-    <h3>트리 알림</h3> 
-    {% if user.tree_notice %}
-    <label class="switch">
-        <input type="checkbox" id='check1' checked>
-        <span class="slider round"></span>
-      </label>
-      <p>ON</p><p style="display:none;">OFF</p>
-    {% else %}
-    <label class="switch">
-        <input type="checkbox" id='check1'>
-        <span class="slider round"></span>
-      </label>
-      <p>OFF</p><p style="display:none;">ON</p>
-    {% endif %}
-    <h3>쪽지 알림</h3>
-    {% if user.note_notice %}
-    <div class="d-flex flex-column">
-    <label class="switch">
-        <input type="checkbox" id='check2' checked>
-        <span class="slider round"></span>
-      </label>
-      <h6 class="fw-bold mx-1 mt-2 text-center">ON</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">OFF</h6>
-    </div>
-    {% else %}
-    <div class="d-flex flex-column text-center">
-    <label class="switch">
-      <input type="checkbox" id='check2'>
-      <span class="slider round"></span>
-    </label>
-    <h6 class="fw-bold mx-1 mt-2">OFF</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">ON</h6>
-    </div>
-    {% endif %}
-    <form id="form-1">
-      {% csrf_token %}
-    <button type="submit" class="btn btn-primary">저장</button>
-    </form>
-  </div>
-</div>
-
-
-
 
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
@@ -211,6 +258,37 @@ check2.click(function(){
         location.reload()
       })
     })
+</script>
+
+
+<script>
+  function block(event) {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+      axios({
+        method: 'post',
+        url: `/accounts/${event.target.dataset.userId}/block/`,
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'note_pk': event.target.dataset.userId},
+      })
+      .then(response => {
+        if (response.data.isFollow === true) {
+          const e = event.target
+          const span = document.createElement('span')
+          e.innerText = '취소'
+          span.innerText = '⭕'
+          span.className = 'fs-4'
+          e.appendChild(span)
+        }
+        else {
+          const e = event.target
+          const span = document.createElement('span')
+          e.innerText = '차단'
+          span.innerText = '❌'
+          span.className = 'fs-4'
+          e.appendChild(span)
+        }
+      })
+    }
 </script>
 
 {% endblock %}
