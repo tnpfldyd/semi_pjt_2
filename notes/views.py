@@ -44,9 +44,7 @@ def send(request, pk):
 
 def detail(request, pk):
     note = get_object_or_404(Notes, pk=pk)
-    if request.user == note.from_user:
-      return render(request, "notes/detail.html", {"note": note})
-      
+
     if request.user == note.to_user:
         if not note.read:
             note.read = True
@@ -54,6 +52,8 @@ def detail(request, pk):
         if not request.user.user_to.filter(read=False).exists():
             request.user.notice_note = True
             request.user.save()
+        return render(request, "notes/detail.html", {"note": note})
+    elif request.user == note.from_user:
         return render(request, "notes/detail.html", {"note": note})
     else:
         messages.error(request, "그렇게는 볼 수 없어요.😅")

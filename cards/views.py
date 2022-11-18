@@ -7,6 +7,7 @@ import requests, os, json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.db.models import Count
 
 # Create your views here.
 
@@ -14,6 +15,8 @@ from django.contrib import messages
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
+    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by("-follow")[:5]
+    random_user = UserCard.objects.order_by("?")[:5]
     user = get_user_model().objects.get(pk=request.user.pk)
     context = {"groupcards": groupcards, "user": user}
     return render(request, "cards/index.html", context)
@@ -140,9 +143,7 @@ def usercard_comment(request, pk):
                         {
                             "object_type": "text",
                             "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
-                            "link": {
-                                "web_url": "http://localhost:8000/cards/" + str(pk)
-                            },
+                            "link": {"web_url": "http://localhost:8000/cards/" + str(pk)},
                         }
                     )
                 }

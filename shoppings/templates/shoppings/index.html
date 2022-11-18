@@ -4,9 +4,9 @@
 {% block content %}
 
 <div class="container text-center">
-  <div class="d-flex justify-content-end">
-    <form action="{% url 'shoppings:search' %}" class="text-center">
-      <input class="form-control-sm" type="text" name="keyword">
+  <div class="d-flex justify-content-evenly my-3">
+    <form action="{% url 'shoppings:search' %}" class="text-center mx-5">
+      <input class="form-control-sm" type="text" name="keyword" style="width: 200px;">
       <button class="btn btn-outline-primary" type="submit">검색</button>
     </form>
     <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
@@ -16,19 +16,28 @@
       <option value="date">날짜순</option>
     </select>
   </div>
-  <div class="row row-cols-4" id="card-div">
+  <div class="row row-cols-8 d-flex justify-content-center" id="card-div">
     {% for item in items %}
-    <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
-      <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
-      <div class="card-body">
-        <h5 class="card-title">{{item.title}}</h5>
+      <div class="card mb-3 d-flex mb-3" style="max-width: 800px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{item.image}}" class="img-fluid rounded-start" alt="{{ item.title }}" style="width: 200px; height: 200px">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text">가격
+                {{ item.lprice }}원
+                {{ item.mallName }}
+              </p>
+              <p class="card-text">
+                <a href="{{ item.link }}" class="text-muted">구매하러 가기</a>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card-footer">
-        <p class="card-text">가격 {{item.lprice}}원</p>
-        <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
-      </div>
-    </div>
-    {% endfor %}
+      {% endfor %}
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
