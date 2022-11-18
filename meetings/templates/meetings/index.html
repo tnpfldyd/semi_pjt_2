@@ -149,45 +149,24 @@
                       <a href="{% url 'notes:send' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">쪽지<span class="fs-3">✉️</span></a>
                     </div>                    
                     <div class="d-flex justify-content-evenly">
-                      <a href="{% url 'accounts:follow' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">팔로우<span class="fs-4">❤️</span></a>
+                      <div>
+                        <form id="follow-form" data-user-id="{{meeting.user.pk}}" class="custom-form">
+                          {% csrf_token %}
+                          {% if request.user in meeting.user.followers.all %}
+                          <button id='follow-btn' class='custom-link text-decoration-none text-dark fs-3' type="submit" value='팔로우 취소'>팔로우 취소<span class="fs-4">💔</span></button>
+                          {% else %}
+                          <button id='follow-btn' class='custom-link text-decoration-none text-dark fs-3' type="submit" value='팔로우'>팔로우 <span class="fs-4">❤️</span></button>
+                          {% endif %}
+                        </form>
+                      </div>
                       <a href="{% url 'accounts:block' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">차단<span class="fs-4">💢</span></a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script>
-              const modal = document.getElementById("modal")
-              function modalOn() {
-                  modal.style.display = "flex"
-              }
-              function isModalOn() {
-                  return modal.style.display === "flex"
-              }
-              function modalOff() {
-                  modal.style.display = "none"
-              }
-              const btnModal = document.getElementById(a)
-              btnModal.addEventListener("click", e => {
-                  modalOn()
-              })
-              const closeBtn = modal.querySelector(".close-area")
-              closeBtn.addEventListener("click", e => {
-                  modalOff()
-              })
-              modal.addEventListener("click", e => {
-                  const evTarget = e.target
-                  if(evTarget.classList.contains("modal-overlay")) {
-                      modalOff()
-                  }
-              })
-              window.addEventListener("keyup", e => {
-                  if(isModalOn() && e.key === "Escape") {
-                      modalOff()
-                  }
-              })
-            
             </script>
   {% endfor %}
 
