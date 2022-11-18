@@ -139,20 +139,17 @@
   <div class="row justify-content-center">
     <!-- 벽난로 주인 프로필 -->
     <div class='col-12 col-lg-3 ms-2 my-5'>
-
       <p class=' my-5 fs-1 ms-5 text-center'>개인 프로필</p>
       <div class='row'>
 
         <div class='col-6 d-flex justify-content-end'>
           <div>
-
             {% if user.profileimage %}
               <img src="{{ user.profileimage }}" class="rounded-pill" style='width:10rem;'>
             {% else %}
               <img src="{% static 'images/게스트.png' %}" class="rounded-2" style='width:10rem;'>
             {% endif %}
           </div>
-
         </div>
         <div class='col-6 d-flex justify-content-center'>
           <div>
@@ -169,7 +166,22 @@
               {{ user.age_range }}</p>
             {% if request.user == user %}
               <a href="{% url 'accounts:mypage' %}" class='btn btn-primary'>마이페이지</a>
-            {% endif %}
+              {% else %}
+              <div class="my-5 d-flex align-items-center">
+                <div class="btn">
+                {% if request.user not in followers %}
+                <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-success">Follow</button>
+                {% else %}
+                <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-danger">Unfollow</button>
+                {% endif %}
+                </div>
+                <div id="follow-cnt">
+                {% endif %}
+                  <h3 class="follow">Followers : {{ user.followers.count }}</h3>
+                  <h3 class="follow">Followings : {{ user.followings.count }}</h3>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -215,7 +227,42 @@
 
       </div>
 
-    </div>
+  <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+  
+  <script>
+    new Snowflakes();
+  </script>
+  <!-- follow -->
+  <script>
+    const followBtn = document.querySelector('#follow-btn')
+  
+    followBtn.addEventListener('click', function(event) {
+      axios({
+        method: 'get',
+        url: `/accounts/${event.target.dataset.userId}/follow/`
+      })
+      .then(response => {
+        console.log(response.data)
+        if (response.data.isFollow === true) {
+          event.target.classList.add('btn-outline-danger')
+          followBtn.innerText = 'Unfollow'
+          event.target.classList.remove('btn-outline-success')
+        } else {
+          event.target.classList.add('btn-outline-success')
+          followBtn.innerText = 'Follow'
+          event.target.classList.remove('btn-outline-danger')
+        }
+  
+        const followCnt = document.querySelector('#follow-cnt')
+        followCnt.innerHTML = `
+          <h3 class="follow">Followers : ${ response.data.followersCount }</h3>
+          <h3 class="follow">Followings : ${ response.data.followingsCount }</h3>
+        `
+      })
+    })
+  
+  </script>
+
 
     <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
     <script>

@@ -225,6 +225,8 @@ def profile(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
     context = {
         "user": user,
+        "followers": user.followers.all(),
+        "followings": user.followings.all(),
     }
     return render(request, "accounts/profile.html", context)
 
