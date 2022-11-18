@@ -57,6 +57,7 @@ def search(request):
         "items": response["items"],
         "keyword": keyword,
     }
+    print(response)
     return render(request, "shoppings/search.html", context)
 
 
