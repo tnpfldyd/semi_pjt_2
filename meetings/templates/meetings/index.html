@@ -148,19 +148,21 @@
                       <a href="{% url 'accounts:profile' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">프로필<span class="fs-4">🙂</span></a>
                       <a href="{% url 'notes:send' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">쪽지<span class="fs-3">✉️</span></a>
                     </div>                    
+                    {% if request.user != meeting.user %}
                     <div class="d-flex justify-content-evenly">
-                      <div>
-                        <form id="follow-form" data-user-id="{{meeting.user.pk}}" class="custom-form">
-                          {% csrf_token %}
-                          {% if request.user in meeting.user.followers.all %}
-                          <button id='follow-btn' class='custom-link text-decoration-none text-dark fs-3' type="submit" value='팔로우 취소'>팔로우 취소<span class="fs-4">💔</span></button>
-                          {% else %}
-                          <button id='follow-btn' class='custom-link text-decoration-none text-dark fs-3' type="submit" value='팔로우'>팔로우 <span class="fs-4">❤️</span></button>
-                          {% endif %}
-                        </form>
-                      </div>
+                      {% csrf_token %}
+                      {% if request.user in meeting.user.followers.all %}
+                      <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="follow(event)">
+                        취소<span class="fs-4">💔</span>
+                      </button>
+                      {% else %}
+                      <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="follow(event)">
+                        팔로우<span class="fs-4">❤️</span>
+                      </button>
+                      {% endif %}
                       <a href="{% url 'accounts:block' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">차단<span class="fs-4">💢</span></a>
                     </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -266,11 +268,36 @@
   </div>
 </div>
 
-
-<button id="custom-btn" value="{{note.pk}}" onclick="remove(event)">
-</button>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="{% static 'js/notes.js' %}"></script>
+<script>
+  function follow(event) {
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    axios({
+      method: 'post',
+      url: `/accounts/${event.target.dataset.userId}/follow/`,
+      headers: {'X-CSRFToken': csrftoken},
+      data: {'note_pk': event.target.dataset.userId},
+    })
+    .then(response => {
+      if (response.data.isFollow === true) {
+        const e = event.target
+        const span = document.createElement('span')
+        e.innerText = '취소'
+        span.innerText = '💔'
+        span.className = 'fs-4'
+        e.appendChild(span)
+      }
+      else {
+        const e = event.target
+        const span = document.createElement('span')
+        e.innerText = '팔로우'
+        span.innerText = '❤️'
+        span.className = 'fs-4'
+        e.appendChild(span)
+      }
+    })
+  }
+</script>
 
 <style>
   #modal.modal-overlay {
