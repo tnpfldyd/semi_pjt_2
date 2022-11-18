@@ -78,7 +78,7 @@ ul {
 
 .wrapper {
   min-height: 87vh;
-  background-image: url("/static/images/프로필배경.png");
+  background-image: url("/static/images/개인카드배경3.png");
   background-size: cover;
   background-repeat : no-repeat;
   
@@ -94,6 +94,7 @@ ul {
   -ms-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
+
 }
 
 
@@ -116,12 +117,14 @@ ul {
     <br>
     {% comment %} 프로필 이미지 if 처리 {% endcomment %}
     {% if user.profileimage %}
-    <img src="{{user.profileimage}}" style="width:200px; height:200px;">
+    <img class="rounded-pill mt-3" src="{{user.profileimage}}" style="width:200px; height:200px;">
     {% else %}
     이미지 없음
     {% endif %}
     <br>
-    <a class="btn btn-outline-primary" href="{% url 'accounts:update' %}">정보 수정</a>
+    <div class="d-grid gap-2">
+      <a class="btn btn-primary" href="{% url 'accounts:update' %}">정보 수정</a>
+    </div>
   </div>
 
   <div class="col-3 d-flex justify-content-center align-items-center flex-column ">
@@ -149,7 +152,7 @@ ul {
       <h6 class="fw-bold mx-1 mt-2 text-center">ON</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">OFF</h6>
     </div>
     {% else %}
-    <div class="d-flex">
+    <div class="d-flex flex-column text-center">
     <label class="switch">
       <input type="checkbox" id='check2'>
       <span class="slider round"></span>
@@ -170,6 +173,10 @@ ul {
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
 <script>
     var check1 = $("input[id='check1']");
 check1.click(function(){

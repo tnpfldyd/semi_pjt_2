@@ -78,6 +78,6 @@ def delete_comment(request, pk, super_pk):
     return redirect("vocies:detail", super_pk)
 
 
-# @permission_required('vocies.index', raise_exception=True)
+@permission_required('vocies.index', raise_exception=True)
 def manage_page(request):
     return render(request, "vocies/manage_page.html", {"vocies": Vocie.objects.order_by("-pk")})

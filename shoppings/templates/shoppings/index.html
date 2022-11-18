@@ -3,34 +3,65 @@
 {% load static %}
 {% block content %}
 
-<div class="container text-center">
-  <div class="d-flex justify-content-end">
-    <form action="{% url 'shoppings:search' %}" class="text-center">
-      <input class="form-control-sm" type="text" name="keyword">
-      <button class="btn btn-outline-primary" type="submit">검색</button>
-    </form>
-    <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
-      <option value="sim" selected>정확도순</option>
-      <option value="asc">최저가순</option>
-      <option value="dsc">최고가순</option>
-      <option value="date">날짜순</option>
-    </select>
-  </div>
-  <div class="row row-cols-4" id="card-div">
-    {% for item in items %}
-    <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
-      <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
-      <div class="card-body">
-        <h5 class="card-title">{{item.title}}</h5>
+  <div class="container text-center me-5 my-4">
+    <div class="container">
+      <div class="d-flex row row-cols-8 justify-content-center">
+        <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
+          <option value="sim" selected="selected">정확도순</option>
+          <option value="asc">최저가순</option>
+          <option value="dsc">최고가순</option>
+          <option value="date">날짜순</option>
+        </select>
       </div>
-      <div class="card-footer">
-        <p class="card-text">가격 {{item.lprice}}원</p>
-        <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
-      </div>
+    <div class="d-flex row row-cols-8 justify-content-end my-3">
+      <form action="{% url 'shoppings:search' %}" class="text-center me-4">
+        <input class="form-control-sm" type="text" name="keyword">
+        <button class="btn btn-outline-primary" type="submit">검색</button>
+      </form>
+
     </div>
-    {% endfor %}
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="{% static 'js/shoppings.js' %}"></script>
-{% endblock %}
+    <!-- 가로 -->
+    {% comment %} <div class="row row-cols-4" id="card-div">
+      {% for item in items %}
+        <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
+          <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
+          <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+          </div>
+          <div class="card-footer">
+            <p class="card-text">가격
+              {{item.lprice}}원</p>
+            <h5>{{item.mallName}}</h5>
+            <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div> {% endcomment %}
+
+    <!-- 세로-->
+    <div class="row row-cols-8 d-flex justify-content-center" id="card-div">
+      {% for item in items %}
+        <div class="card mb-3 d-flex mb-3" style="max-width: 800px;">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="{{item.image}}" class="img-fluid rounded-start" alt="{{ item.title }}" style="width: 200px; height: 200px">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.title }}</h5>
+                <p class="card-text">가격
+                  {{ item.lprice }}원
+                  {{ item.mallName }}
+                </p>
+                <p class="card-text">
+                  <a href="{{ item.link }}" class="text-muted">구매하러 가기</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{% static 'js/shoppings.js' %}"></script>
+  {% endblock %}
