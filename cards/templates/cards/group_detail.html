@@ -43,27 +43,30 @@
   </div>
 
   <div class="row">
-    <div class="col-6">
-      <p class="fs-1"> {{ cards.title }} </p>
-      <p class="fs-3"> {{ cards.content }} </p>
-      <!--
-      <p> 성별 : {{ cards.user.gender }} </p>
-      <p> 양말id : {{ cards.socks }} </p>
-      <p> 벽난로id :{{ cards.chimneys }} </p>
-      -->
-    </div>
-    <div class="col-6">
-      <img src="{{ cards.user.profileimage }}" class="rounded-circle">
-      <p class=""> {{ cards.user.nickname }} </p>
+    <div class="d-flex justify-content-evenly p-3">
+      <div>
+        <p class="fs-1 my-0 py-0"> {{ cards.title }} </p>
+        <p class="fs-3 my-0 py-0"> {{ cards.content }} </p>
+        <!--
+        <p> 성별 : {{ cards.user.gender }} </p>
+        <p> 양말id : {{ cards.socks }} </p>
+        <p> 벽난로id :{{ cards.chimneys }} </p>
+        -->
+      </div>
+
+      <div>
+        <img src="{{ cards.user.profileimage }}" class="rounded">
+        <p class="fs-5"> {{ cards.user.nickname }} </p>
+      </div>
+      
     </div>
   </div>
 
   <a href="{% url 'cards:gcomment_create' cards.pk %}" class="text-decoration-none"> 메시지 남기기 </a>
-  <a href="{% url 'cards:groupcard_update' cards.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
-  <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="text-decoration-none"> 벽난로 부수기 </a>
+
   <div>
     <!-- 벽난로 주인의 장식 모달 창 -->
-    <div class="modal" id="groupfire" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="groupfire" tabindex="-1" aria-labelledby="socksmodal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
@@ -81,6 +84,7 @@
         </div>
       </div>
     </div>
+
     <div class>
       {% if cards.chimneys %}
         {% if cards.socks %}
@@ -100,88 +104,43 @@
       {% endif %}
     </div>
   </div>
-</div>
 
+  <a href="{% url 'cards:groupcard_update' cards.pk %}" class="text-decoration-none"> 벽난로 바꾸기 </a>
+  <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="text-decoration-none"> 벽난로 부수기 </a>
 
-{% if cards.user != request.user %}
-<div class='d-grid'>
-  <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn btn-primary my-3 fs-4"> 벽난로 꾸며주기 </a>
-</div>
-{% endif %}
-</div>
-</div>
-
-
-
-
-
-
-{% for comment in comments %}
-{% if comment.ribbons == 1 %}
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
-  <img src="{%static 'images/리본1.png' %}">
-</button>
-
-<div class="modal" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-        {{ comment.content }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+  {% if cards.user != request.user %}
+  <div class='d-grid'>
+    <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn btn-primary my-3 fs-4"> 벽난로 꾸며주기 </a>
+  </div>
+  {% endif %}
+  
+  
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="socksmodal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="socksmodal">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 
-{% elif comment.ribbons == 2%}
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
-  <img src="{%static 'images/리본2.png' %}">
-</button>
 
-{% endif %}
-<h2> {{ comment.content }} | {{ comment.created_at }} | {{comment.ribbons}} </h2>
-
-<div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-body">
-      {{ comment.content }}
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-    </div>
-  </div>
-</div>
-</div>
-{% endfor %} 
-
-
-
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 </section>
 
 

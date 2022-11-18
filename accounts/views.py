@@ -91,6 +91,7 @@ def kakao_callback(request):
     if get_user_model().objects.filter(username=kakao_id).exists():
         kakao_user = get_user_model().objects.get(username=kakao_id)
         kakao_user.refresh_token = temp["refresh_token"]
+        kakao_user.profileimage = kakao_profile_image
         kakao_user.save()
     else:
         kakao_login_user = get_user_model().objects.create(
@@ -130,7 +131,7 @@ def logout(request):
 
 def update(request):
     if request.method == "POST":
-        print(request.POST)
+        print(request.POST, request.FILES)
         form = UpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             temp = form.save(commit=False)
@@ -173,33 +174,50 @@ def delete(request):
 
 @login_required
 def follow(request, pk):
-    user = get_object_or_404(get_user_model(), pk=pk)
-    if user != request.user:
-        if user.followers.filter(pk=request.user.pk).exists():
-            user.followers.remove(request.user)
-            user.save()
+    person = get_object_or_404(get_user_model(), pk=pk)
+    if person != request.user and request.method == "POST":
+        if person.followers.filter(pk=request.user.pk).exists():
+            person.followers.remove(request.user)
+            is_follow = False
         else:
-            user.followers.add(request.user)
-            user.save()
-    return redirect("accounts:profile", user.username)
+            person.followers.add(request.user)
+            is_follow = True
+        context = {
+            "isFollow": is_follow,
+            "followersCount": person.followers.count(),
+            "followingsCount": person.followings.count(),
+        }
+        return JsonResponse(context)
+    else:
+        messages.warning(request, "그건 안됨.")
+        return redirect("meetings:index")
 
 
 @login_required
 def block(request, pk):
-    user = get_object_or_404(get_user_model(), pk=pk)
-    if user != request.user:
-        if user.blockers.filter(pk=request.user.pk).exists():
-            user.blockers.remove(request.user)
-            user.save()
+    person = get_object_or_404(get_user_model(), pk=pk)
+    if person != request.user and request.method == "POST":
+        if person.blockers.filter(pk=request.user.pk).exists():
+            person.blockers.remove(request.user)
+            is_follow = False
+            messages.success(request, "차단이 해제되었습니다.")
         else:
-            user.blockers.add(request.user)
-            user.save()
-    return redirect("accounts:profile", user.username)
+            person.blockers.add(request.user)
+            is_follow = True
+            messages.success(request, "차단 되었습니다.")
+        context = {
+            "isFollow": is_follow,
+        }
+        return JsonResponse(context)
+    else:
+        messages.warning(request, "그건 안됨.")
+        return redirect("meetings:index")
 
 
 @login_required
 def block_user(request):
     block_users = request.user.blocking.all()
+    print(block_users)
     return render(request, "accounts/block_user.html", {"block_users": block_users})
 
 
@@ -207,6 +225,8 @@ def profile(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
     context = {
         "user": user,
+        "followers": user.followers.all(),
+        "followings": user.followings.all(),
     }
     return render(request, "accounts/profile.html", context)
 
