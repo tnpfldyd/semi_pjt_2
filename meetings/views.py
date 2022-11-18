@@ -111,10 +111,6 @@ dic = {
 }
 
 
-
-
-
-
 def create(request):
     if request.method == "POST":
         meeting_form = MeetingForm(request.POST, request.FILES)
@@ -126,7 +122,7 @@ def create(request):
             meeting.save()
 
             temp = ""
-            
+
             for i in str(meeting.pk):
                 temp += dic[i]
             meeting.text = temp
@@ -144,8 +140,6 @@ def create(request):
 
 def password(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
-    print(meeting.password)
-    print(request.POST.get("password"))
     if request.POST.get("password") == meeting.password:
 
         return detail(request, meeting_pk)
@@ -154,6 +148,7 @@ def password(request, meeting_pk):
         return redirect("meetings:index")
 
 
+# detail 주소치고 들어가면 들어가짐
 def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all()
@@ -161,9 +156,13 @@ def detail(request, meeting_pk):
 
     user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
-    user = request.user # request.user => 현재 로그인한 유저
-    if meeting.belong.filter(id = user.id).exists() == False:
-      messages.success(request, "참여를 누르면 비밀번호 없이 입장할 수 있습니다.😀")
+    user = request.user  # request.user => 현재 로그인한 유저
+    if (
+        request.method == "POST"
+        and meeting.password
+        and not meeting.belong.filter(id=user.id).exists()
+    ):
+        messages.success(request, "참여를 누르면 비밀번호 없이 입장할 수 있습니다.😀")
 
     if request.POST.get("belong_id2"):
         if meeting.belong.filter(id=user.id).exists():  # 이미 참여를 누른 유저일 때
@@ -195,13 +194,26 @@ def detail(request, meeting_pk):
         return render(request, "meetings/detail.html", context)
 
     else:
-        context = {
-            "user_list": user_list,
-            "meeting": meeting,
-            "comments": comments,
-            "commentform": form,
-        }
-        return render(request, "meetings/detail.html", context)
+        if meeting.password:
+            if request.method == "POST":
+                context = {
+                    "user_list": user_list,
+                    "meeting": meeting,
+                    "comments": comments,
+                    "commentform": form,
+                }
+                return render(request, "meetings/detail.html", context)
+            else:
+                messages.error(request, "정상적인 루트를 이용하세요.😄")
+                return redirect("meetings:index")
+        else:
+            context = {
+                "user_list": user_list,
+                "meeting": meeting,
+                "comments": comments,
+                "commentform": form,
+            }
+            return render(request, "meetings/detail.html", context)
 
 
 def update(request, meeting_pk):
