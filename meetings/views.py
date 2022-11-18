@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 import json
+import random
 
 # Create your views here.
 
@@ -18,6 +19,9 @@ def index(request):
     meetings = Meeting.objects.order_by("-pk")
     meetings_all = Meeting.objects.all()
 
+    img = ["https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80", "https://images.unsplash.com/photo-1615097130643-12caeab3c625?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" , "https://images.unsplash.com/photo-1577042939454-8b29d442b402?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" , "https://images.unsplash.com/photo-1638277267253-543e4c57cd7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"]
+    s = random.choice(img)
+    
     # 모임이 몇개 개설됐는지
     meetings_count = Meeting.objects.all().count()
 
@@ -48,6 +52,7 @@ def index(request):
         page_obj = paginator.get_page(page_number)  # 숫자만 받음
 
         context = {
+            "s": s,
             "nw": nw,
             "meetings": meetings,
             "meetings_all": meetings_all,
@@ -70,6 +75,7 @@ def index(request):
         page_obj = paginator.get_page(page_number)
 
         context = {
+            "s": s,
             "sp": sp,
             "meetings": meetings,
             "page_obj": page_obj,
@@ -85,6 +91,7 @@ def index(request):
     else:
 
         context = {
+            "s": s,
             "at_all": at_all,
             "meetings": meetings,
             "page_obj": page_obj,

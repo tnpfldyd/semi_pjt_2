@@ -61,7 +61,7 @@
             {% if meeting.image %}
             <img src="{{ meeting.image.url }}" class="card-img-top rounded-4" alt="..." >
             {% else %}
-            <img src="https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="rounded-4">
+            <img src={{ s }} class="rounded-4">
             {% endif %}
           </div>
           <div class="cus-contentBx">
