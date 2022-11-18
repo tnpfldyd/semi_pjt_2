@@ -19,21 +19,23 @@ def home(request):
 @login_required
 def index(request):
     meetings = Meeting.objects.order_by("-pk")
-    meetings_all = Meeting.objects.all()
-    test = Meeting.objects.exclude(user__in=request.user.blocking.all())
+    # 사용자가 블락안한 모임
+    block = Meeting.objects.exclude(user__in=request.user.blocking.all()).order_by("-pk")
+    print(f"block:{block}")
+    # 사용자가 블락한 모임
+    non_block = Meeting.objects.filter(user__in=request.user.blocking.all()).order_by("-pk")
+    print(f"non_block:{non_block}")
     img = [
-        "https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
         "https://images.unsplash.com/photo-1615097130643-12caeab3c625?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         "https://images.unsplash.com/photo-1577042939454-8b29d442b402?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
         "https://images.unsplash.com/photo-1638277267253-543e4c57cd7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     ]
     s = random.choice(img)
 
-    # 모임이 몇개 개설됐는지
-    meetings_count = len(meetings_all)
+    # 총 모임 - 블락한 모임
+    meetings_count = len(meetings) - len(non_block)
 
     # 지역별
-    meetings_local = meetings_all
     meetings_local_name = "모든지역"
     meetings_local_list = ["노원구", "송파구"]
 
@@ -41,7 +43,7 @@ def index(request):
     sp = "송파구"
 
     at_all = "모두보기"
-    paginator = Paginator(meetings, 4)
+    paginator = Paginator(block, 4)
     page_number = request.GET.get("local")
     page_obj = paginator.get_page(page_number)
 
@@ -49,11 +51,10 @@ def index(request):
         return redirect("meetings:index")
 
     if request.GET.get("local") and nw in request.GET.get("local"):
-
-        meetings_local = Meeting.objects.filter(location__contains=nw).order_by("-pk")
+        block = Meeting.objects.filter(user__in=request.user.blocking.all()).filter(location__contains=nw).order_by("-pk")
         meetings_local_name = nw
         # 페이지네이션
-        paginator = Paginator(meetings_local, 4)
+        paginator = Paginator(block, 4)
         page_number = request.GET.get("local")  # key 값이 local, value 값이 노원구
         page_number = page_number.strip(nw)  # 노원구2 에서 노원구를 제거
         page_obj = paginator.get_page(page_number)  # 숫자만 받음
@@ -61,10 +62,7 @@ def index(request):
         context = {
             "s": s,
             "nw": nw,
-            "meetings": meetings,
-            "meetings_all": meetings_all,
             "page_obj": page_obj,
-            "meetings_local": meetings_local,
             "meetings_local_name": meetings_local_name,
             "meetings_count": meetings_count,
             "meetings_local_list": meetings_local_list,
@@ -73,10 +71,10 @@ def index(request):
         return render(request, "meetings/index.html", context)
 
     elif request.GET.get("local") and sp in request.GET.get("local"):
-        meetings_local = Meeting.objects.filter(location__contains=sp).order_by("-pk")
+        block = Meeting.objects.filter(user__in=request.user.blocking.all()).filter(location__contains=sp).order_by("-pk")
         meetings_local_name = sp
         # 페이지네이션
-        paginator = Paginator(meetings_local, 4)
+        paginator = Paginator(block, 4)
         page_number = request.GET.get("local")
         page_number = page_number.strip(sp)
         page_obj = paginator.get_page(page_number)
@@ -84,10 +82,7 @@ def index(request):
         context = {
             "s": s,
             "sp": sp,
-            "meetings": meetings,
             "page_obj": page_obj,
-            "meetings_all": meetings_all,
-            "meetings_local": meetings_local,
             "meetings_local_name": meetings_local_name,
             "meetings_count": meetings_count,
             "meetings_local_list": meetings_local_list,
@@ -100,10 +95,7 @@ def index(request):
         context = {
             "s": s,
             "at_all": at_all,
-            "meetings": meetings,
             "page_obj": page_obj,
-            "meetings_all": meetings_all,
-            "meetings_local": meetings_local,
             "meetings_local_name": meetings_local_name,
             "meetings_count": meetings_count,
             "meetings_local_list": meetings_local_list,

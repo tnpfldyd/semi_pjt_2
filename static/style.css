@@ -224,6 +224,12 @@ a {
   cursor: pointer;
 }
 
+.custom-form{
+  color: black;
+  border: none;
+  background-color: #fff;
+}
+
 .custom-link:hover {
   color: #cc041e;
   font-weight: bold;

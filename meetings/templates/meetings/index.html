@@ -43,7 +43,7 @@
   <hr/>
 
   
-<div class="d-flex">
+<div class="d-flex justify-content-start" style="width: 320px;">
   {% for meeting in page_obj %}
       {% comment %}  {% endcomment %}
       <div class="container cus-container">
@@ -131,7 +131,7 @@
             </div>
 
             <div id="modal{{meeting.text}}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel{{meeting.text}}" aria-hidden="true">
-              <div class="modal-dialog" style="width: 300px;">
+              <div class="modal-dialog" style="width: 290px; box-shadow: 0 5px 7px rgba(0,0,0,0.5);">
                 <div class="modal-content">
                   <div class="modal-header">
                     <div class="fs-2">
@@ -144,30 +144,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <div class="d-flex justify-content-evenly">
-                      <a href="{% url 'accounts:profile' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">프로필<span class="fs-4">🙂</span></a>
-                      <a href="{% url 'notes:send' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">쪽지<span class="fs-3">✉️</span></a>
+                    <div class="row">
+                      <div class="col text-center">
+                        <a href="{% url 'accounts:profile' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">프로필<span class="fs-4">🙂</span></a>
+                      </div>
+                      <div class="col text-center">
+                        <a href="{% url 'notes:send' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">쪽지<span class="fs-3">✉️</span></a>
+                      </div>
                     </div>                    
                     {% if request.user != meeting.user %}
-                    <div class="d-flex justify-content-evenly">
+                    <div class="row">
                       {% csrf_token %}
                       {% if request.user in meeting.user.followers.all %}
-                      <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="follow(event)">
-                        취소<span class="fs-4">💔</span>
-                      </button>
+                      <div class="col text-center">
+                        <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="follow(event)">
+                          취소<span class="fs-4">💔</span>
+                        </button>
+                      </div>
                       {% else %}
-                      <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="follow(event)">
-                        팔로우<span class="fs-4">❤️</span>
-                      </button>
+                      <div class="col text-center">
+                        <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="follow(event)">
+                          팔로우<span class="fs-4">❤️</span>
+                        </button>
+                      </div>
                       {% endif %}
                       {% if request.user in meeting.user.blockers.all %}
-                        <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
-                          취소<span class="fs-4">⭕</span>
-                        </button>
+                        <div class="col text-center">
+                          <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                            취소<span class="fs-4">⭕</span>
+                          </button>
+                        </div>
                       {% else %}
-                        <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                        <div class="col text-center">
+                        <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
                           차단<span class="fs-4">❌</span>
                         </button>
+                        </div>
                       {% endif %}
                     </div>
                     {% endif %}
@@ -351,6 +363,7 @@
       -webkit-backdrop-filter: blur(1.5px);
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.18);
+      
   }
   #modal .modal-window {
       background: rgba(21, 22, 22, 0.7);
