@@ -4,6 +4,14 @@
 {% block content %}
 
 <style>
+    
+    body {
+      background-image : url('{% static 'images/쪽지배경.png' %}');
+      background-repeat : repeat;
+      background-size : cover;
+      {% comment %} color:white; {% endcomment %}
+    }
+
     #modal.modal-overlay {
         width: 100%;
         height: 100%;
@@ -20,6 +28,7 @@
         -webkit-backdrop-filter: blur(1.5px);
         border-radius: 10px;
         border: 1px solid rgba(255, 255, 255, 0.18);
+        z-index: 100;
     }
     #modal .modal-window {
         background: rgba(21, 22, 22, 0.7);
@@ -59,27 +68,72 @@
         text-shadow: 1px 1px 2px gray;
         color: white;
     }
+
+    #container {
+      position: relative;
+      margin-top: 100px;
+    }
+
+    #profileimage {
+      -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      -ms-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      -o-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      box-shadow: 0 5px 7px rgba(0,0,0,0.5);
+      position: absolute;
+      top: 10%;
+      z-index: 1;
+    }
+
+    #cust-card {
+      box-shadow: 0 10px 5px rgba(0,0,0,0.5);
+    }
+    p {
+      white-space: pre-line;
+    }
+    hr {
+      height: 2px;
+    }
+
 </style>
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
+
 </head>
 <body>
-<div id="container" class="container mt-4" style="max-width:600px;">
-    <div class="container d-flex justify-content-between">
-      <h2>{{ note.title }}</h2>
-      <a class="custom-link fs-4 mx-3" id="btn-modal">
-        {% if note.from_user.nickname %}
-        {{ note.from_user.nickname }}
-        {% else %}
-        {{ note.from_user.username }}
-        {% endif %}
-      </a>
-    </div>
-    <div class="container">
-      <div class="card">
-        <div class="d-flex justify-content-center fs-5 m-3">
-          {{ note.content }}
+
+
+<div id="container" class="container mt-4" style="max-width:500px;">
+  <div class="d-flex justify-content-center mb-2" id="profile">
+    <img id="profileimage" src="{{note.from_user.profileimage}}" alt="프로필 이미지" style="width: 120px; height:120px;" class="rounded-circle">
+  </div>
+    <div id="container" class="container p-0">
+      <div class="card" style="border-radius: 18px;"  id="cust-card">
+        <div style="height: 50px;">
+        </div>
+        <hr>
+        <div class="container ms-3">
+          <div class="fs-3">{{ note.title }}</div>
+          <div class="fs-5">
+            <p>{{ note.content }}</p>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mx-3">
+          
+          <a class="custom-link fs-4" id="btn-modal">
+            <span class="fs-6">from. </span>
+            {% if note.from_user.nickname %}
+            {{ note.from_user.nickname }}
+            {% else %}
+            {{ note.from_user.username }}
+            {% endif %}
+          </a>
         </div>
         <div class="d-flex justify-content-end">
-          <small class="m-3">
+          <small class="mx-3 mb-2">
             {{ note.created_at|date:'o.m.d' }} {{ note.created_at|time:"H:i" }}
           </small>
         </div>
