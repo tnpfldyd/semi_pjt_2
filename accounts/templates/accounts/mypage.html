@@ -64,66 +64,120 @@ p {
 	font-size:15px;
 	font-weight:bold;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul {
+  margin: 0;
+}
+
+.wrapper {
+  min-height: 87vh;
+  background-image: url("/static/images/개인카드배경3.png");
+  background-size: cover;
+  background-repeat : no-repeat;
+  
+.inner {
+  max-width: 758px;
+  margin: auto;
+  background: #39459b;
+  border: 10px solid #0d99d7;
+  padding: 77px 99px 87px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+}
+
+
 </style>
+
+
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% block content %}
-<h2>나의 정보</h2>
-이메일{{user.email}}
-<br>
-연령대{{user.age_range}}
-<br>
-성별{{user.gender}}
-<br>
-닉네임{{user.nickname}}
-<br>
-{% comment %} 프로필 이미지 if 처리 {% endcomment %}
-{% if user.profileimage %}
-프로필 이미지<img src="{{user.profileimage}}">
-{% else %}
-이미지 없음
-{% endif %}
-<br>
-<a class="btn btn-outline-primary" href="{% url 'accounts:update' %}">정보 수정</a>
-<br>
-<h3>트리 알림</h3>
-{% if user.tree_notice %}
-<label class="switch">
-    <input type="checkbox" id='check1' checked>
-    <span class="slider round"></span>
-  </label>
-  <p>ON</p><p style="display:none;">OFF</p>
-{% else %}
-<label class="switch">
-    <input type="checkbox" id='check1'>
-    <span class="slider round"></span>
-  </label>
-  <p>OFF</p><p style="display:none;">ON</p>
-{% endif %}
-<h3>쪽지 알림</h3>
-{% if user.note_notice %}
-<div class="d-flex">
-<label class="switch">
-    <input type="checkbox" id='check2' checked>
-    <span class="slider round"></span>
-  </label>
-  <h6 class="fw-bold mx-1 mt-2">ON</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">OFF</h6>
+<div class="row p-5 wrapper justify-content-center">
+  <div class="col-3 d-flex justify-content-center align-items-center flex-column">
+    <h2>나의 정보</h2>
+    이메일 :{{user.email}}
+    <br>
+    연령대 : {{user.age_range}}
+    <br>
+    성별 : {{user.gender}}
+    <br>
+    닉네임 : {{user.nickname}}
+    <br>
+    <a href="{% url 'accounts:block_user' %}">차단목록</a>
+    {% comment %} 프로필 이미지 if 처리 {% endcomment %}
+    {% if user.profileimage %}
+    <img class="rounded-pill mt-3" src="{{user.profileimage}}" style="width:200px; height:200px;">
+    {% else %}
+    이미지 없음
+    {% endif %}
+    <br>
+    <div class="d-grid gap-2">
+      <a class="btn btn-primary" href="{% url 'accounts:update' %}">정보 수정</a>
+    </div>
+  </div>
+
+  <div class="col-3 d-flex justify-content-center align-items-center flex-column ">
+    <h3>트리 알림</h3> 
+    {% if user.tree_notice %}
+    <label class="switch">
+        <input type="checkbox" id='check1' checked>
+        <span class="slider round"></span>
+      </label>
+      <p>ON</p><p style="display:none;">OFF</p>
+    {% else %}
+    <label class="switch">
+        <input type="checkbox" id='check1'>
+        <span class="slider round"></span>
+      </label>
+      <p>OFF</p><p style="display:none;">ON</p>
+    {% endif %}
+    <h3>쪽지 알림</h3>
+    {% if user.note_notice %}
+    <div class="d-flex flex-column">
+    <label class="switch">
+        <input type="checkbox" id='check2' checked>
+        <span class="slider round"></span>
+      </label>
+      <h6 class="fw-bold mx-1 mt-2 text-center">ON</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">OFF</h6>
+    </div>
+    {% else %}
+    <div class="d-flex flex-column text-center">
+    <label class="switch">
+      <input type="checkbox" id='check2'>
+      <span class="slider round"></span>
+    </label>
+    <h6 class="fw-bold mx-1 mt-2">OFF</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">ON</h6>
+    </div>
+    {% endif %}
+    <form id="form-1">
+      {% csrf_token %}
+    <button type="submit" class="btn btn-primary">저장</button>
+    </form>
+  </div>
 </div>
-{% else %}
-<div class="d-flex">
-<label class="switch">
-  <input type="checkbox" id='check2'>
-  <span class="slider round"></span>
-</label>
-<h6 class="fw-bold mx-1 mt-2">OFF</h6><h6 class="fw-bold mx-1 mt-2" style="display:none;">ON</h6>
-</div>
-{% endif %}
-<form id="form-1">
-  {% csrf_token %}
-<button type="submit" class="btn btn-primary">저장</button>
-</form>
+
+
+
+
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
 <script>
     var check1 = $("input[id='check1']");
 check1.click(function(){

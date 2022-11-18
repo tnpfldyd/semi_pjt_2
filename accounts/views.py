@@ -297,7 +297,6 @@ def notice(request):
                             )
                         ] = (i.title, i.from_user.nickname, "note", i.pk)
         dic = sorted(dic.items(), reverse=True)
-        print(dic)
         return JsonResponse({"items": dic})
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")

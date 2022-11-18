@@ -21,6 +21,7 @@ def index(request):
 
 @login_required
 def send(request, pk):
+    notes = request.user.user_to.order_by("-created_at")
     to_user = get_object_or_404(get_user_model(), pk=pk)
     form = NotesForm(request.POST or None)
     if form.is_valid():
@@ -34,6 +35,7 @@ def send(request, pk):
         messages.success(request, "쪽지 전송 완료.😀")
         return redirect("meetings:index")
     context = {
+        "notes": notes,
         "form": form,
         "to_user": to_user,
     }
@@ -42,6 +44,7 @@ def send(request, pk):
 
 def detail(request, pk):
     note = get_object_or_404(Notes, pk=pk)
+
     if request.user == note.to_user:
         if not note.read:
             note.read = True
@@ -49,6 +52,8 @@ def detail(request, pk):
         if not request.user.user_to.filter(read=False).exists():
             request.user.notice_note = True
             request.user.save()
+        return render(request, "notes/detail.html", {"note": note})
+    elif request.user == note.from_user:
         return render(request, "notes/detail.html", {"note": note})
     else:
         messages.error(request, "그렇게는 볼 수 없어요.😅")

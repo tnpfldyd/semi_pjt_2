@@ -101,7 +101,7 @@ new Snowflakes();
 <!-- 시간 js -->
 <script>
 function updateTimer() {
-  future = Date.parse("dec 11, 2022 12:00:00");
+  future = Date.parse("dec 25, 2022 12:00:00");
   now = new Date();
   diff = future - now;
 
@@ -111,7 +111,7 @@ function updateTimer() {
   secs = Math.floor(diff / 1000);
 
   d = days;
-  h = hours - days * 24;
+  h = hours - (days * 24) - 12;
   m = mins - hours * 60;
   s = secs - mins * 60;
 
