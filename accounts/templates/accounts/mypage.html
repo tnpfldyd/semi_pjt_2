@@ -114,6 +114,7 @@ ul {
     <br>
     닉네임 : {{user.nickname}}
     <br>
+    <a href="{% url 'accounts:block_user' %}">차단목록</a>
     {% comment %} 프로필 이미지 if 처리 {% endcomment %}
     {% if user.profileimage %}
     <img src="{{user.profileimage}}" style="width:200px; height:200px;">

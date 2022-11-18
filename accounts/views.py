@@ -200,9 +200,11 @@ def block(request, pk):
         if person.blockers.filter(pk=request.user.pk).exists():
             person.blockers.remove(request.user)
             is_follow = False
+            messages.success(request, "차단이 해제되었습니다.")
         else:
             person.blockers.add(request.user)
             is_follow = True
+            messages.success(request, "차단 되었습니다.")
         context = {
             "isFollow": is_follow,
         }
@@ -215,6 +217,7 @@ def block(request, pk):
 @login_required
 def block_user(request):
     block_users = request.user.blocking.all()
+    print(block_users)
     return render(request, "accounts/block_user.html", {"block_users": block_users})
 
 
