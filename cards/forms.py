@@ -42,6 +42,16 @@ class UserCommentForm(forms.ModelForm):
         fields = [
             "content",
         ]
+        labels = {
+            "content": "",
+        }
+        widgets = {
+            "content": forms.Textarea(
+                attrs={
+                    "placeholder": "메세지 내용을 입력해주세요.",
+                }
+            ),
+        }
 
 
 class GroupCommentForm(forms.ModelForm):

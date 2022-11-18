@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load mathfilters %}
 {% load static %}
 {% block content %} 
 
@@ -11,6 +12,7 @@
     {% comment %} color:white; {% endcomment %}
    }
 </style>
+
 <div class="d-flex justify-content-center">
   <div>
     {% if cards.user == request.user %}
@@ -20,7 +22,7 @@
     </div>
     {% endif %}
     <p class=' my-5 fs-1 text-center' style='color:white'>{{ cards.user.nickname }} 님에게 <span style='color:orangered '>{{ cards.usercomment_set.count }}</span>개의 메세지가 전달됐어요!</p>
-    <div class=''>
+    <div>
       <!-- 벽난로 주인의 장식 모달 창 -->
       <div class="modal fade" id="owner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -40,73 +42,62 @@
           </div>
         </div>
       </div>
-      <div class>
-        {% if cards.chimneys %}
-          {% if cards.userdeco %}
-          <div style='position:relative' class='my-5'>
-            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:4px solid white'>
-            <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
-              <div style='position: absolute; top:2rem; left:2rem;'>
-                <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:4rem;'>
-              </div>
-            </a>
+    
+      {% comment %} 댓글 메세지 띄우기 {% endcomment %}
+      <div>
+      <div style='position:relative' class='my-4 text-center'>
+        <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+        <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
+          <div style='position: absolute; top:-3rem; left:18rem;'>
+            <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:5rem; height:5rem;'>
           </div>
+        </a>
+        {% for comment in comments %}
+ 
+        {% comment %} 댓글 모달 {% endcomment %}
+        {% if forloop.counter|mod:8 == 0 %}
+        <a type="button" class="btn p-0 m-0" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'>
+          <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
+          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem'>
+        </a>
           {% else %}
-          <div>
-            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:4px solid white'>
-          </div>
+        <a type="button" class="btn p-0 ms-2" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;'>
+          <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
+          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem'>
+        </a>
+
           {% endif %}
-        {% endif %}
+
+        <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body pt-1">
+                <div class='d-flex justify-content-center'>
+                  <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
+                </div>
+                <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
+                <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
+                <p class='my-1 text-start px-2'> {{ comment.content }} </p>
+                <div class='d-grid mt-5'>
+                  <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
       </div>
     </div>
     {% if cards.user != request.user %}
     <div class='d-grid'>
-      <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn btn-primary my-3 fs-4"> 벽난로 꾸며주기 </a>
+      <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn mb-5 fs-4 mx-3" style='background-color:orangered;color:white;'> 벽난로 꾸며주기 </a>
     </div>
     {% endif %}
+
+
+
   </div>
 </div>
-{% for comment in comments %}
-  {% if comment.ribbons == 1 %}
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
-      <img src="{%static 'images/리본1.png' %}">
-    </button>
-
-    <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-            {{ comment.content }}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  {% elif comment.ribbons == 2%}
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}">
-      <img src="{%static 'images/리본2.png' %}">
-    </button>
-
-  {% endif %}
-  <h2> {{ comment.content }} | {{ comment.created_at }} | {{comment.ribbons}} </h2>
-
-  <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body">
-          {{ comment.content }}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-{% endfor %}
 
 {% endblock %}
