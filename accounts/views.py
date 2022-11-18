@@ -12,6 +12,8 @@ import requests
 from django.contrib import messages
 from django.http import JsonResponse
 from cards.models import *
+from django.db.models import *
+import datetime
 
 # Create your views here.
 def signup(request):
@@ -228,3 +230,55 @@ def save(request):
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
         return redirect("accounts:mypage")
+
+
+@login_required
+def notice(request):
+    if request.method == "POST":
+        dic = {}
+        if request.user.tree_notice:
+            if request.user.usercard:
+                card = request.user.usercard
+                false_comments = card.usercomment_set.filter(read=False)
+                for i in false_comments:
+                    if i.created_at not in dic:
+                        dic[i.created_at.strftime("%Y-%m-%dT%H:%M:%S")] = (
+                            i.content,
+                            i.user.nickname,
+                            "card",
+                            card.pk,
+                        )
+                    else:
+                        dic[
+                            (i.created_at + datetime.timedelta(minutes=1)).strftime(
+                                "%Y-%m-%dT%H:%M:%S"
+                            )
+                        ] = (
+                            i.content,
+                            i.user.nickname,
+                            "card",
+                            card.pk,
+                        )
+        if request.user.note_notice:
+            if request.user.user_to.filter(read=False).exists():
+                false_notes = request.user.user_to.filter(read=False)
+                for i in false_notes:
+                    if i.created_at not in dic:
+                        dic[i.created_at.strftime("%Y-%m-%dT%H:%M:%S")] = (
+                            i.title,
+                            i.from_user.nickname,
+                            "note",
+                            i.pk,
+                        )
+                    else:
+                        dic[
+                            (i.created_at + datetime.timedelta(minutes=1)).strftime(
+                                "%Y-%m-%dT%H:%M:%S"
+                            )
+                        ] = (i.title, i.from_user.nickname, "note", i.pk)
+        dic = sorted(dic.items(), reverse=True)
+        print(dic)
+        return JsonResponse({"items": dic})
+    else:
+        messages.error(request, "그렇게는 접근할 수 없어요.😥")
+        return redirect("meetings:index")

@@ -11,7 +11,7 @@ class UserCard(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    socks = models.IntegerField(blank=True)
+    userdeco = models.IntegerField(blank=True)
     chimneys = models.IntegerField(blank=True)
 
 
@@ -32,7 +32,7 @@ class UserComment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    ribbons = models.IntegerField()
+    socks = models.IntegerField()
     id_text = models.TextField(blank=True)
     read = models.BooleanField(default=False)
 

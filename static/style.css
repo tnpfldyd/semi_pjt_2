@@ -65,28 +65,36 @@ a {
   appearance: none;
 }
 
-.sock1 {
-  background-image: url("images/양말1.png");
+.userdeco1 {
+  background-image: url("images/유저장식1.png");
 }
 
-.sock2 {
-  background-image: url("images/양말2.png");
+.userdeco2 {
+  background-image: url("images/유저장식2.png");
 }
 
-.sock3 {
-  background-image: url("images/양말3.png");
+.userdeco3 {
+  background-image: url("images/유저장식3.png");
 }
 
-.sock4 {
-  background-image: url("images/양말4.png");
+.userdeco4 {
+  background-image: url("images/유저장식4.png");
 }
 
-.sock5 {
-  background-image: url("images/양말5.png");
+.userdeco5 {
+  background-image: url("images/유저장식5.png");
 }
 
-.sock6 {
-  background-image: url("images/양말6.png");
+.userdeco6 {
+  background-image: url("images/유저장식6.png");
+}
+
+.userdeco7 {
+  background-image: url("images/유저장식7.png");
+}
+
+.userdeco8 {
+  background-image: url("images/유저장식8.png");
 }
 
 .chim1 {
@@ -109,6 +117,57 @@ a {
   background-image: url("images/리본2.png");
 }
 
+/* 양말 */
+
+.socks1 {
+  background-image: url("images/양말1.png");
+}
+
+.socks2 {
+  background-image: url("images/양말2.png");
+}
+
+.socks3 {
+  background-image: url("images/양말3.png");
+}
+
+.socks4 {
+  background-image: url("images/양말4.png");
+}
+
+.socks5 {
+  background-image: url("images/양말5.png");
+}
+
+.socks6 {
+  background-image: url("images/양말6.png");
+}
+
+.socks7 {
+  background-image: url("images/양말7.png");
+}
+
+.socks8 {
+  background-image: url("images/양말8.png");
+}
+
+.socks9 {
+  background-image: url("images/양말9.png");
+}
+
+.socks10 {
+  background-image: url("images/양말10.png");
+}
+
+.socks11 {
+  background-image: url("images/양말11.png");
+}
+
+.socks12 {
+  background-image: url("images/양말12.png");
+}
+
+
 .cc-selector input:active+.drinkcard-cc {
   opacity: .5;
 }
@@ -124,14 +183,14 @@ a {
   background-size: contain;
   background-repeat: no-repeat;
   display: inline-block;
-  width: 100px;
+  width: 90px;
   height: 70px;
   -webkit-transition: all 100ms ease-in;
   -moz-transition: all 100ms ease-in;
   transition: all 100ms ease-in;
   -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
   -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
-  filter: brightness(1.8) grayscale(1) opacity(.7);
+  filter: brightness(1) grayscale(1) opacity(.7);
 }
 
 .drinkcard-cc:hover {
