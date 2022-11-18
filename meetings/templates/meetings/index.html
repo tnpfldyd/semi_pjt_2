@@ -160,7 +160,15 @@
                         팔로우<span class="fs-4">❤️</span>
                       </button>
                       {% endif %}
-                      <a href="{% url 'accounts:block' meeting.user.pk %}" class="custom-link text-decoration-none text-dark fs-3">차단<span class="fs-4">💢</span></a>
+                      {% if request.user in meeting.user.blockers.all %}
+                        <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                          취소<span class="fs-4">⭕</span>
+                        </button>
+                      {% else %}
+                        <button class="custom-link text-decoration-none text-dark fs-3" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                          차단<span class="fs-4">❌</span>
+                        </button>
+                      {% endif %}
                     </div>
                     {% endif %}
                   </div>
@@ -292,6 +300,33 @@
         const span = document.createElement('span')
         e.innerText = '팔로우'
         span.innerText = '❤️'
+        span.className = 'fs-4'
+        e.appendChild(span)
+      }
+    })
+  }
+  function block(event) {
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    axios({
+      method: 'post',
+      url: `/accounts/${event.target.dataset.userId}/block/`,
+      headers: {'X-CSRFToken': csrftoken},
+      data: {'note_pk': event.target.dataset.userId},
+    })
+    .then(response => {
+      if (response.data.isFollow === true) {
+        const e = event.target
+        const span = document.createElement('span')
+        e.innerText = '취소'
+        span.innerText = '⭕'
+        span.className = 'fs-4'
+        e.appendChild(span)
+      }
+      else {
+        const e = event.target
+        const span = document.createElement('span')
+        e.innerText = '차단'
+        span.innerText = '❌'
         span.className = 'fs-4'
         e.appendChild(span)
       }

@@ -176,7 +176,6 @@ def delete(request):
 def follow(request, pk):
     person = get_object_or_404(get_user_model(), pk=pk)
     if person != request.user and request.method == "POST":
-        print(1)
         if person.followers.filter(pk=request.user.pk).exists():
             person.followers.remove(request.user)
             is_follow = False
@@ -196,15 +195,21 @@ def follow(request, pk):
 
 @login_required
 def block(request, pk):
-    user = get_object_or_404(get_user_model(), pk=pk)
-    if user != request.user:
-        if user.blockers.filter(pk=request.user.pk).exists():
-            user.blockers.remove(request.user)
-            user.save()
+    person = get_object_or_404(get_user_model(), pk=pk)
+    if person != request.user and request.method == "POST":
+        if person.blockers.filter(pk=request.user.pk).exists():
+            person.blockers.remove(request.user)
+            is_follow = False
         else:
-            user.blockers.add(request.user)
-            user.save()
-    return redirect("accounts:profile", user.username)
+            person.blockers.add(request.user)
+            is_follow = True
+        context = {
+            "isFollow": is_follow,
+        }
+        return JsonResponse(context)
+    else:
+        messages.warning(request, "그건 안됨.")
+        return redirect("meetings:index")
 
 
 @login_required
