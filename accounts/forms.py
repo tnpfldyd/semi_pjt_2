@@ -21,7 +21,6 @@ class UpdateForm(UserChangeForm):
             "nickname",
             "gender",
             "email",
-            "profileimage",
             "introduce",
             "age_range",
         )
@@ -60,8 +59,4 @@ class UpdateForm(UserChangeForm):
         self.fields["introduce"].widget.attrs = {
             "class": "form-control my-3",
             "placeholder": "자기소개를 입력해주세요.",
-        }
-
-        self.fields["profileimage"].widget.attrs = {
-            "class": "form-control my-3",
         }

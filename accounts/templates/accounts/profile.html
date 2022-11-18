@@ -3,17 +3,16 @@
 {% load django_bootstrap5 %}
 {% block content %}
 
-<style>
+  <style>
     :root {
       --surface-color: #fff;
       --curve: 40;
     }
-    
+
     * {
       box-sizing: border-box;
     }
-  
-    
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -22,185 +21,252 @@
       padding: 0;
       list-style-type: none;
     }
-    
+
     .card2 {
       position: relative;
       display: block;
       width: 20rem;
-      height: auto;  
+      height: auto;
       border-radius: calc(var(--curve) * 1px);
       overflow: hidden;
       text-decoration: none;
     }
-    
-    .card__image {      
+
+    .card__image {
       width: 100%;
       height: 15rem;
     }
-    
+
     .card__overlay {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 1;      
-      border-radius: calc(var(--curve) * 1px);    
-      background-color: var(--surface-color);      
+      z-index: 1;
+      border-radius: calc(var(--curve) * 1px);
+      background-color: var(--surface-color);
       transform: translateY(100%);
-      transition: .2s ease-in-out;
+      transition: 0.2s ease-in-out;
     }
-    
+
     .card2:hover .card__overlay {
       transform: translateY(0);
     }
-    
+
     .card__header {
       position: relative;
       display: flex;
       align-items: center;
       gap: 2em;
       padding: 0.7em;
-      border-radius: calc(var(--curve) * 1px) 0 0 0;    
+      border-radius: calc(var(--curve) * 1px) 0 0 0;
       background-color: var(--surface-color);
       transform: translateY(-100%);
-      transition: .2s ease-in-out;
+      transition: 0.2s ease-in-out;
     }
-    
+
     .card__arc {
       width: 80px;
       height: 80px;
       position: absolute;
       bottom: 100%;
-      right: 0;      
+      right: 0;
       z-index: 1;
     }
-    
+
     .card__arc path {
       fill: var(--surface-color);
       d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
-    }       
-    
+    }
+
     .card2:hover .card__header {
       transform: translateY(0);
     }
-    
+
     .card__thumb {
       flex-shrink: 0;
       width: 50px;
-      height: 50px;      
-      border-radius: 50%;      
+      height: 50px;
+      border-radius: 50%;
     }
-    
+
     .card__title {
       font-size: 1em;
-      margin: 0 0 .3em;
+      margin: 0 0 0.3em;
       color: #6A515E;
     }
-    
+
     .card__tagline {
       display: block;
       margin: 1em 0;
-      font-family: "MockFlowFont";  
-      font-size: .8em; 
-      color: #6A515E;  
-    }
-    
-    .card__status {
-      font-size: .8em;
+      font-family: "MockFlowFont";
+      font-size: 0.8em;
       color: #6A515E;
     }
-    
+
+    .card__status {
+      font-size: 0.8em;
+      color: #6A515E;
+    }
+
     .card__description {
       padding: 0 2em 2em;
       margin: 0;
       color: #6A515E;
-      font-family: "MockFlowFont";   
+      font-family: "MockFlowFont";
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
       overflow: hidden;
-    }    
+    }
+
     body {
-      background-image : url('{% static 'images/프로필배경.png' %}');
-      background-repeat : repeat;
-      background-size : cover;
-      {% comment %} color:white; {% endcomment %}
-     }
-</style>
+      background-image: url("{% static 'images/프로필배경.png' %}");
+      background-repeat: repeat;
+      background-size: cover;
+
+      {
+        % comment %
+      }
+
+      color: white;
+
+      {
+        % endcomment %
+      }
+    }
+  </style>
   <div class="row justify-content-center">
     <!-- 벽난로 주인 프로필 -->
-    <div class='col-12 col-lg-5 ms-2 my-5'>
-  
+    <div class='col-12 col-lg-3 ms-2 my-5'>
       <p class=' my-5 fs-1 ms-5 text-center'>개인 프로필</p>
       <div class='row'>
 
-        <div class='col-6 d-flex justify-content-center'>
+        <div class='col-6 d-flex justify-content-end'>
           <div>
-
             {% if user.profileimage %}
-              <img src="{{ user.profileimage }}" class="rounded-2" style='width:10rem;'>
+              <img src="{{ user.profileimage }}" class="rounded-pill" style='width:10rem;'>
             {% else %}
-            <img src="{% static 'images/게스트.png' %}" class="rounded-2" style='width:10rem;'>
+              <img src="{% static 'images/게스트.png' %}" class="rounded-2" style='width:10rem;'>
             {% endif %}
           </div>
-
         </div>
         <div class='col-6 d-flex justify-content-center'>
-            <div>
-              <p> 이름 : {{ user.nickname }} </p>
-              <p> 성별 : {{ user.gender }} </p>
-              <p> 나이 : {{ user.age_range }}</p>
-              {% if request.user == user %}
+          <div>
+            <p>
+              이름 :
+              {{ user.nickname }}
+            </p>
+            <p>
+              성별 :
+              {{ user.gender }}
+            </p>
+            <p>
+              나이 :
+              {{ user.age_range }}</p>
+            {% if request.user == user %}
               <a href="{% url 'accounts:mypage' %}" class='btn btn-primary'>마이페이지</a>
-              {% endif %}
+              {% else %}
+              <div class="my-5 d-flex align-items-center">
+                <div class="btn">
+                {% if request.user not in followers %}
+                <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-success">Follow</button>
+                {% else %}
+                <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-danger">Unfollow</button>
+                {% endif %}
+                </div>
+                <div id="follow-cnt">
+                {% endif %}
+                  <h3 class="follow">Followers : {{ user.followers.count }}</h3>
+                  <h3 class="follow">Followings : {{ user.followings.count }}</h3>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 벽난로  -->
-    <div class='col-12 col-lg-6 ms-2 my-5'>
-        <div class='mb-5 d-flex p-4 justify-content-center'>
-            <div>
-              <h1 class='my-5 text-center'> 개인 벽난로 </h1> 
-              {% if user.usercard %}
-              <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
-                <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt="" />
-                <div class="card__overlay">
-                  <div class="card__header">
-                    <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
-                    {% if user.profileimage %}
-                      <img class="card__thumb" src="{{ user.profileimage }}"  />
-                    {% else %}
-                    <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
+    <!-- 벽난로 -->
+    <div class='col-12 col-lg-3 ms-2 my-5'>
+      <div class='mb-5 d-flex justify-content-center'>
+        <div>
+          <h1 class='my-5 text-center'>
+            개인 벽난로
+          </h1>
+          {% if user.usercard %}
+            <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
+              <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
+              <div class="card__overlay">
+                <div class="card__header">
+                  <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">
+                    <path/></svg>
+                  {% if user.profileimage %}
+                    <img class="card__thumb" src="{{ user.profileimage }}"/>
+                  {% else %}
+                    <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
 
-                    {% endif %}                     
-                    <div class="card__header-text">
-                      <h3 class="card__title">{{ user.nickname }}</h3>            
-                      <span class="card__status">{{ user.usercard.title }}</span>
-                    </div>
+                  {% endif %}
+                  <div class="card__header-text">
+                    <h3 class="card__title">{{ user.nickname }}</h3>
+                    <span class="card__status">{{ user.usercard.title }}</span>
                   </div>
-                  <p class="card__description">{{ user.usercard.content }}</p>
                 </div>
-              </a>      
-              {% else %}
-              <div>
-                <a href="{% url 'cards:usercard_create' %}" class="btn btn-primary"> 개인 벽난로를 생성해주세요! </a>
+                <p class="card__description">{{ user.usercard.content }}</p>
+              </div>
+            </a>
+          {% else %}
+            <div class="p-5 my-5">
+              <a href="{% url 'cards:usercard_create' %}" class="btn btn-primary">
+                개인 벽난로를 생성해주세요!
+              </a>
             </div>
-          
-            {% endif %}
+
+          {% endif %}
         </div>
-    
-    </div>
-  
-  </div>
 
-
+      </div>
 
   <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+  
   <script>
     new Snowflakes();
   </script>
+  <!-- follow -->
+  <script>
+    const followBtn = document.querySelector('#follow-btn')
+  
+    followBtn.addEventListener('click', function(event) {
+      axios({
+        method: 'get',
+        url: `/accounts/${event.target.dataset.userId}/follow/`
+      })
+      .then(response => {
+        console.log(response.data)
+        if (response.data.isFollow === true) {
+          event.target.classList.add('btn-outline-danger')
+          followBtn.innerText = 'Unfollow'
+          event.target.classList.remove('btn-outline-success')
+        } else {
+          event.target.classList.add('btn-outline-success')
+          followBtn.innerText = 'Follow'
+          event.target.classList.remove('btn-outline-danger')
+        }
+  
+        const followCnt = document.querySelector('#follow-cnt')
+        followCnt.innerHTML = `
+          <h3 class="follow">Followers : ${ response.data.followersCount }</h3>
+          <h3 class="follow">Followings : ${ response.data.followingsCount }</h3>
+        `
+      })
+    })
+  
+  </script>
 
 
-{% endblock content %}
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+    <script>
+      new Snowflakes();
+    </script>
+
+  {% endblock content %}

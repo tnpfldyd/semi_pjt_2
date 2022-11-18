@@ -3,10 +3,36 @@
 {% load static %}
 {% block content %}
 
-<div class="container">
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
+
+<style>
+  body {
+    background-image : url('{% static 'images/쪽지배경.png' %}');
+    background-repeat : repeat;
+    background-size : cover;
+    {% comment %} color:white; {% endcomment %}
+  }
+
+  #profileimage {
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    -ms-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    -o-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 1px 1px 10px 7px white;
+  }
+</style>
+
+<div class="container my-5" style="max-width:500px;">
+  <div class="d-flex justify-content-center mb-2" id="profile">
+    <img id="profileimage" src="{{to_user.profileimage}}" alt="프로필 이미지" style="width: 25%; height:25%;" class="rounded-circle">
+  </div>
   <fieldset disabled>
     <div class="mb-3">
-      <label for="disabledTextInput" class="form-label">받는 사람</label>
+      <label for="disabledTextInput" class="form-label text-white">받는 사람</label>
       {% if to_user.nickname %}
       <input type="text" id="disabledTextInput" class="form-control" placeholder="{{to_user.nickname}}">
       {% else %}
@@ -14,7 +40,7 @@
       {% endif %}
     </div>
   </fieldset>
-  <form action="" method="POST">
+  <form action="" method="POST" class="text-white">
     {% csrf_token %}
     {% bootstrap_form form %}
     <div class="text-end">

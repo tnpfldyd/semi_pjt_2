@@ -224,6 +224,12 @@ a {
   cursor: pointer;
 }
 
+.custom-form{
+  color: black;
+  border: none;
+  background-color: #fff;
+}
+
 .custom-link:hover {
   color: #cc041e;
   font-weight: bold;
@@ -278,10 +284,16 @@ a {
   position: relative;
   width: 300px;
   height: 550px;
+  box-shadow: 0 5px 7px rgba(0,0,0,0.5);
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
   border-radius: 20px;
   overflow: hidden;
 }
+
+.cus-card:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
 
 /* .container .card:before{
   content: '';
@@ -342,7 +354,7 @@ a {
   width: 100%;
   height: 150px;
   text-align: center;
-  transition: 1s;
+  transition: 0.6s;
   z-index: 10;
 }
 
@@ -352,7 +364,7 @@ a {
   width: 100%;
   height: 0px;
   text-align: center;
-  transition: 1s;
+  transition: 0.5s;
   z-index: 11;
 }
 

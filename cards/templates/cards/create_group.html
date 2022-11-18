@@ -1,45 +1,73 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
 
 {% block content %} 
-
-<h1> 그룹용 트리 </h1>
-
-<form action="" method="POST">
-  {% csrf_token %}
-  {% bootstrap_form form %}
-  <div class="cc-selector">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_sock" id="1" value="1">
-      <label class="drinkcard-cc sock1" for="sock1"></label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_sock" id="2" value="2">
-      <label class="drinkcard-cc sock2" for="sock2"> </label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_sock" id="3" value="3">
-      <label class="drinkcard-cc sock3" for="sock3"></label>
-    </div>
-  </div>
-
-  <div class="cc-selector">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_chim" id="1" value="1">
-      <label class="drinkcard-cc chim1" for="chim1"></label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_chim" id="2" value="2">
-      <label class="drinkcard-cc chim2" for="chim2"> </label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="choice_chim" id="3" value="3">
-      <label class="drinkcard-cc chim3" for="chim3"></label>
-    </div>
-  </div>
+<div class='d-flex justify-content-center my-5'>
   
-  {% bootstrap_button button_type="submit" content="OK" %}
-</form>
+  <div style='width:40rem'>
+    
+  <h1 class='text-center mb-5'> 그룹용 벽난로 만들기 </h1>
+
+  <form action="" method="POST">
+    <h1 class='fs-4 mt-5 mb-4'>벽난로를 선택하세요</h1>
+
+    <div class="cc-selector mb-5">
+
+      <input type="radio" name="choice_chim" id="chim1" value="1">
+      <label class="drinkcard-cc chim1" for="chim1"></label>
 
 
+      <input type="radio" name="choice_chim" id="chim2" value="2">
+      <label class="drinkcard-cc chim2" for="chim2"> </label>
+
+
+      <input type="radio" name="choice_chim" id="chim3" value="3">
+      <label class="drinkcard-cc chim3" for="chim3"></label>
+
+    </div>
+
+    <h2 class='fs-4 mt-5 mb-4'>벽난로 소개용 장식을 선택하세요.</h2>
+
+    <div class="cc-selector mb-5">
+      
+        <input type="radio" name="userdeco" id="userdeco1" value="1">
+        <label class="drinkcard-cc userdeco1" for="userdeco1"></label>
+      
+      
+        <input type="radio" name="userdeco" id="userdeco2" value="2">
+        <label class="drinkcard-cc userdeco2" for="userdeco2"> </label>
+      
+      
+        <input type="radio" name="userdeco" id="userdeco3" value="3">
+        <label class="drinkcard-cc userdeco3" for="userdeco3"></label>
+
+        <input type="radio" name="userdeco" id="userdeco4" value="4">
+        <label class="drinkcard-cc userdeco4" for="userdeco4"></label>
+      
+      
+        <input type="radio" name="userdeco" id="userdeco5" value="5">
+        <label class="drinkcard-cc userdeco5" for="userdeco5"> </label>
+      
+      
+        <input type="radio" name="userdeco" id="userdeco6" value="6">
+        <label class="drinkcard-cc userdeco6" for="userdeco6"></label>
+      
+        <input type="radio" name="userdeco" id="userdeco7" value="7">
+        <label class="drinkcard-cc userdeco7" for="userdeco7"></label>
+
+        <input type="radio" name="userdeco" id="userdeco8" value="8">
+        <label class="drinkcard-cc userdeco8" for="userdeco8"></label>
+    </div>
+
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <div class="d-grid">
+      <input type="submit" value="벽난로 만들기" class="btn btn-primary">
+    </div>
+    </form>
+
+  </div>
+
+</div>
 {% endblock %}

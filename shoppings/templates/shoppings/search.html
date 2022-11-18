@@ -3,35 +3,36 @@
 {% load static %}
 {% block content %}
 
-<div class="container text-center">
-  <div class="d-flex justify-content-end">
-    <form action="{% url 'shoppings:search' %}" class="text-center">
-      <input class="form-control-sm" type="text" name="keyword">
-      <button class="btn btn-outline-primary" type="submit">검색</button>
-    </form>
-    <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
-      <option value="sim" selected>정확도순</option>
-      <option value="asc">최저가순</option>
-      <option value="dsc">최고가순</option>
-      <option value="date">날짜순</option>
-    </select>
-  </div>
-  <div class="row row-cols-4" id="card-div">
-    {% for item in items %}
-    <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
-      <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
-      <div class="card-body">
-        <h5 class="card-title">{{item.title}}</h5>
-      </div>
-      <div class="card-footer">
-        <p class="card-text">가격 {{item.lprice}}원</p>
-        <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
-      </div>
+  <div class="container text-center my-4">
+    <div class="d-flex justify-content-end my-3">
+      <form action="{% url 'shoppings:search' %}" class="text-center me-4">
+        <input class="form-control-sm" type="text" name="keyword">
+        <button class="btn btn-outline-primary" type="submit">검색</button>
+      </form>
+      <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
+        <option value="sim" selected="selected">정확도순</option>
+        <option value="asc">최저가순</option>
+        <option value="dsc">최고가순</option>
+        <option value="date">날짜순</option>
+      </select>
     </div>
-    {% endfor %}
+    <div class="row row-cols-4" id="card-div">
+      {% for item in items %}
+        <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
+          <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
+          <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+          </div>
+          <div class="card-footer">
+            <p class="card-text">가격
+              {{item.lprice}}원</p>
+            <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
-</div>
-<div id="keyword" style="display: none;">{{keyword}}</div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="{% static 'js/search.js' %}"></script>
+  <div id="keyword" style="display: none;">{{keyword}}</div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}
