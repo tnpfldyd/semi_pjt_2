@@ -18,8 +18,8 @@
   <div style='width:40rem'>
     <form action="" method="POST">
 
-      <h1 class='fs-4 mt-5 mb-4'>메세지 장식을 선택해 주세요</h1>
-      <div class="cc-selector">
+      <h1 class='fs-1 mt-4 mb-4 ms-3'>메세지 장식을 선택해 주세요</h1>
+      <div class="cc-selector my-5 text-center">
 
           <input type="radio" name="socks" id="socks1" value="1">
           <label class="drinkcard-cc socks1" for="socks1"></label>
@@ -28,48 +28,48 @@
           <input type="radio" name="socks" id="socks2" value="2">
           <label class="drinkcard-cc socks2" for="socks2"> </label>
 
-          <input type="radio" name="socks" id="3" value="3">
+          <input type="radio" name="socks" id="socks3" value="3">
           <label class="drinkcard-cc socks3" for="socks3"></label>
 
 
-          <input type="radio" name="socks" id="4" value="4">
+          <input type="radio" name="socks" id="socks4" value="4">
           <label class="drinkcard-cc socks4" for="socks4"> </label>
 
-          <input type="radio" name="socks" id="5" value="5">
+          <input type="radio" name="socks" id="socks5" value="5">
           <label class="drinkcard-cc socks5" for="socks5"></label>
 
 
-          <input type="radio" name="socks" id="6" value="6">
+          <input type="radio" name="socks" id="socks6" value="6">
           <label class="drinkcard-cc socks6" for="socks6"> </label>
 
-          <input type="radio" name="socks" id="7" value="7">
+          <input type="radio" name="socks" id="socks7" value="7">
           <label class="drinkcard-cc socks7" for="socks7"></label>
 
 
-          <input type="radio" name="socks" id="8" value="8">
+          <input type="radio" name="socks" id="socks8" value="8">
           <label class="drinkcard-cc socks8" for="socks8"> </label>
 
-          <input type="radio" name="socks" id="9" value="9">
+          <input type="radio" name="socks" id="socks9" value="9">
           <label class="drinkcard-cc socks9" for="socks9"></label>
 
 
-          <input type="radio" name="socks" id="10" value="10">
+          <input type="radio" name="socks" id="socks10" value="10">
           <label class="drinkcard-cc socks10" for="socks10"> </label>
 
-          <input type="radio" name="socks" id="11" value="11">
+          <input type="radio" name="socks" id="socks11" value="11">
           <label class="drinkcard-cc socks11" for="socks11"></label>
 
 
-          <input type="radio" name="socks" id="12" value="12">
+          <input type="radio" name="socks" id="socks12" value="12">
           <label class="drinkcard-cc socks12" for="socks12"> </label>
 
       </div>
       
       {% csrf_token %}
       {% bootstrap_form comment_form %}
-
-      <input class="btn" type="submit" value="제출하기">
-
+      <div class="d-grid">
+        <input class="btn btn-success" type="submit" value="메세지 남기기">
+      </div>
     </form>
   </div>
 </div>

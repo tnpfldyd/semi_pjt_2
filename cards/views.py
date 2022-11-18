@@ -37,7 +37,7 @@ def usercard_create(request):
                 temp.save()
                 return redirect("accounts:profile", request.user.pk)
             except:
-                messages.error(request, "벽난로와 장식을 반드시 선택해주세요.😥")
+                messages.error(request, "벽난로와 본인의 아이덴티티 장식을 반드시 선택해주세요.😥")
                 return redirect("cards:usercard_create")
     else:
         form = UserCardForm()
@@ -61,6 +61,7 @@ def usercard_detail(request, pk):
     context = {
         "cards": cards,
         "comments": comments,
+        "cl": list(range(1, comments.count() // 40 + 2)),
     }
     return render(request, "cards/usercard_detail.html", context)
 
@@ -110,44 +111,48 @@ def usercard_comment(request, pk):
         card = UserCard.objects.get(pk=pk)
         comment_form = UserCommentForm(request.POST, request.FILES)
         if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.user = request.user
-            comment.usercard = card
-            comment.socks = request.POST["socks"]
-            comment.save()
-            if card.user.tree_notice:
-                card.user.notice_tree = False
-                card.user.save()
-            temp = ""
-            for i in str(comment.pk):
-                temp += dic[i]
-            comment.id_text = temp
-            comment.save()
-            if card.user.refresh_token:
-                url = "https://kauth.kakao.com/oauth/token"
-                data = {
-                    "grant_type": "refresh_token",
-                    "client_id": os.getenv("KAKAO_ID"),
-                    "refresh_token": card.user.refresh_token,
-                    "client_secret": os.getenv("KAKAO_SECRET"),
-                }
-                response = requests.post(url, data=data).json()
-                url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-                access_token = response["access_token"]
-                headers = {"Authorization": "Bearer " + access_token}
-                data = {
-                    "template_object": json.dumps(
-                        {
-                            "object_type": "text",
-                            "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
-                            "link": {
-                                "web_url": "http://localhost:8000/cards/" + str(pk)
-                            },
-                        }
-                    )
-                }
-                response = requests.post(url, headers=headers, data=data)
-            return redirect("cards:usercard_detail", pk)
+            try:
+                comment = comment_form.save(commit=False)
+                comment.user = request.user
+                comment.usercard = card
+                comment.socks = request.POST["socks"]
+                comment.save()
+                if card.user.tree_notice:
+                    card.user.notice_tree = False
+                    card.user.save()
+                temp = ""
+                for i in str(comment.pk):
+                    temp += dic[i]
+                comment.id_text = temp
+                comment.save()
+                if card.user.refresh_token:
+                    url = "https://kauth.kakao.com/oauth/token"
+                    data = {
+                        "grant_type": "refresh_token",
+                        "client_id": os.getenv("KAKAO_ID"),
+                        "refresh_token": card.user.refresh_token,
+                        "client_secret": os.getenv("KAKAO_SECRET"),
+                    }
+                    response = requests.post(url, data=data).json()
+                    url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
+                    access_token = response["access_token"]
+                    headers = {"Authorization": "Bearer " + access_token}
+                    data = {
+                        "template_object": json.dumps(
+                            {
+                                "object_type": "text",
+                                "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
+                                "link": {
+                                    "web_url": "http://localhost:8000/cards/" + str(pk)
+                                },
+                            }
+                        )
+                    }
+                    response = requests.post(url, headers=headers, data=data)
+                return redirect("cards:usercard_detail", pk)
+            except:
+                messages.error(request, "메세지의 장식을 반드시 선택해주세요.😥")
+                return redirect("cards:usercard_comment", pk)
     else:
         comment_form = UserCommentForm()
     context = {"comment_form": comment_form}

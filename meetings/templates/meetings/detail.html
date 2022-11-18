@@ -1,97 +1,107 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load mathfilters %}
 {% block content %}
 <body class="wrapper">
-  <div class="inner">
-    <div class=" mt-4 text-black">
-      <a class="text-dark" style="text-decoration:none; " href="{% url 'meetings:index' %}">&laquo; 뒤로</a>
-      <div class="d-flex row">
-        <div class="col-8"> {% comment %}  {% endcomment %}
-          <div class="text-muted mt-1">
-            {{ meeting.user.nickname}}님이 주최한 모임 ({{ meeting.location }})
-          </div>
-          <div class="row">
-            <div class="col-8 fs-2 d-flex align-items-center">
-              {{ meeting.title }}
-            </div>
-          </div>
-          <div style="min-height: 150px;">
-            {{ meeting.content }}
-          </div>
-          <div class="mx-2">
-            {% if request.user == meeting.user %}
-              <a class="float-end btn btn-primary" href="{% url 'meetings:update' meeting.pk %}">
-                수정
-              </a>
-              <a class="float-end btn btn-danger me-1" href="{% url 'meetings:delete' meeting.pk %}">
-                삭제
-              </a>
-            {% endif %}
-          </div>
-          <div class="text-black mt-5">
-            <h4 class="fw-bold mb-3">댓글 <span class="text-success">{{comments.count}}</span></h4>
-            {% if request.user.is_authenticated %}
-              <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
-                {% csrf_token %}
-                <div class="d-flex" style="height:40px;">
-                  <input type="text" class="form-control" name="content" placeholder="댓글을 달아주세요" aria-label="Username" aria-describedby="basic-addon1">
-                  <button style="width: 60px;" class="btn btn-primary mx-1">작성</button>
-                </div>
-              </form>
-            {% endif %}
-          </div>
-          {% for comment in comments %}
-            <div class="fw-bold mt-2">
-              <a class="text-dark" href="{% url 'accounts:profile' comment.pk %}" style="text-decoration:none;">
-              {{ comment.user.nickname }}
-              </a>
+  <div class="row justify-content-center" style='width:100%'>
+    <div class="inner p-3 col-6 m-1">
+      <div class=" mt-4 text-black">
+        <a class="text-dark" style="text-decoration:none; " href="{% url 'meetings:index' %}">&laquo; 뒤로</a>
+        <div class="row">
+          <div class="col-6"> {% comment %}  {% endcomment %}
+            <div class="text-muted mt-1">
+              {{ meeting.user.nickname}}님이 주최한 모임 ({{ meeting.location }})
             </div>
             <div class="row">
-              <div class="col-10 d-flex align-items-center">
-                {{ comment.content }}
+              <div class="col-8 fs-2 d-flex align-items-center">
+                {{ meeting.title }}
               </div>
-              <div class="col-2">
-                {% if request.user == comment.user %}
-                <form class="mx-2" action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
-                  {% csrf_token %}
-                  <button class="btn btn-danger" type="submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                      <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
-                    </svg>
-                  </button>
-                </form>
-              </div>
-            {% endif %}
             </div>
-            <div style="font-size:12px;" class="text-muted">{{ comment.created_at|date:"o-m-d"}} {{comment.created_at|time:"H:i"}}</div>
-            <hr>
-            {% empty %}
-            <p class="text-black">댓글이 없습니다.</p>
-          {% endfor %}
-        </div>
-        <div class="col-4 p-2"> {% comment %}  {% endcomment %}
-          <div class="d-flex jusify-content-between mt-4">
-            <form style="min-width:80px; max-width:80px;" action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
-              {% csrf_token %}
-              <button class="btn btn-success" name="belong_id" value="belong_id">
-                참여 {{meeting.belong.count}}
-              </button>
-            </form>
-            <div class="cus-card" style="min-width:160px; max-width:160px; min-height:120px">
-              <div class="d-flex justify-content-center">
-                참여 유저
+            <div style="min-height: 150px;">
+              {{ meeting.content }}
+            </div>
+            <div class="mx-2">
+              {% if request.user == meeting.user %}
+                <a class="float-end btn btn-primary" href="{% url 'meetings:update' meeting.pk %}">
+                  수정
+                </a>
+                <a class="float-end btn btn-danger me-1" href="{% url 'meetings:delete' meeting.pk %}">
+                  삭제
+                </a>
+              {% endif %}
+            </div>
+            <div class="text-black mt-5">
+              <h4 class="fw-bold mb-3">댓글 <span class="text-success">{{comments.count}}</span></h4>
+              {% if request.user.is_authenticated %}
+                <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
+                  {% csrf_token %}
+                  <div class="d-flex" style="height:40px;">
+                    <input type="text" class="form-control" name="content" placeholder="댓글을 달아주세요" aria-label="Username" aria-describedby="basic-addon1">
+                    <button style="width: 60px;" class="btn btn-primary mx-1">작성</button>
+                  </div>
+                </form>
+              {% endif %}
+            </div>
+            {% for comment in comments %}
+              <div class="fw-bold mt-2">
+                <a class="text-dark" href="{% url 'accounts:profile' comment.pk %}" style="text-decoration:none;">
+                {{ comment.user.nickname }}
+                </a>
               </div>
-              <div>
-                {% for user in user_list %}                
-                  <a class="ms-2 text-decoration-none text-black d-flex justify-content-center" href="{% url 'accounts:profile' meeting.pk %}">{{ user.nickname }}</a>
-                {% endfor %}
+              <div class="row">
+                <div class="col-10 d-flex align-items-center">
+                  {{ comment.content }}
+                </div>
+                <div class="col-2">
+                  {% if request.user == comment.user %}
+                  <form class="mx-2" action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+              {% endif %}
+              </div>
+              <div style="font-size:12px;" class="text-muted">{{ comment.created_at|date:"o-m-d"}} {{comment.created_at|time:"H:i"}}</div>
+              <hr>
+              {% empty %}
+              <p class="text-black">댓글이 없습니다.</p>
+            {% endfor %}
+          </div>
+          <div class="col-4 p-2"> {% comment %}  {% endcomment %}
+            <div class="d-flex jusify-content-between mt-4">
+              <form style="min-width:80px; max-width:80px;" action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
+                {% csrf_token %}
+                <button class="btn btn-success" name="belong_id" value="belong_id">
+                  참여 {{meeting.belong.count}}
+                </button>
+              </form>
+              <div class="cus-card" style="min-width:160px; max-width:160px; min-height:120px">
+                <div class="d-flex justify-content-center">
+                  참여 유저
+                </div>
+                <div>
+                  {% for user in user_list %}                
+                    <a class="ms-2 text-decoration-none text-black d-flex justify-content-center" href="{% url 'accounts:profile' meeting.pk %}">{{ user.nickname }}</a>
+                  {% endfor %}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="col-5">
+      {% if meeting.password %}
+      <iframe id="inlineFrameExample" title="Inline Frame Example" width="100%" height="820" src="{% url 'chat:room' meeting.pk|add:meeting.password|mul:meeting.user.username|mul:meeting.password|mul:meeting.password %}" style='border-radius:50px;border:10px solid #0d99d2;overflow-y:hidden' scrolling='no'></iframe>
+      {% else %}
+      <iframe id="inlineFrameExample" title="Inline Frame Example" width="100%" height="820" src="{% url 'chat:room' meeting.pk|mul:meeting.user.username|add:meeting.user.username|sub:meeting.user.username|mul:meeting.user.username %}" style='border-radius:50px;border:10px solid #0d99d2;overflow-y:hidden'  scrolling='no'></iframe>
+      {% endif %}
+    </div>
+  </div>
 </body>
 
   {% comment %} js {% endcomment %}
