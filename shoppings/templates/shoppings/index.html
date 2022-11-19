@@ -18,49 +18,33 @@
     </select>
   </div>
 </div>
-    <!-- 가로 -->
-    {% comment %} <div class="row row-cols-4" id="card-div">
-      {% for item in items %}
-        <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
-          <img src="{{item.image}}" class="card-img-top my_images" alt="{{item.title}}" style="width: 100%;">
-          <div class="card-body">
-            <h5 class="card-title">{{item.title}}</h5>
-          </div>
-          <div class="card-footer">
-            <p class="card-text">가격
-              {{item.lprice}}원</p>
-            <h5>{{item.mallName}}</h5>
-            <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
-          </div>
-        </div>
-      {% endfor %}
-    </div> {% endcomment %}
 
-    <!-- 세로-->
-    <div class="row row-cols-12 d-flex justify-content-center" id="card-div">
-      {% for item in items %}
-        <div class="card mb-3 d-flex p-0 btn-1" style="max-width: 800px;">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <a href="{{ item.link }}"><img src="{{ item.image }}" class="img-fluid rounded-start" alt="{{ item.title }}" style="width: 210px; height: 200px"></a>
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">{{ item.title }}</h5>
-                <p class="card-text text-danger">
-                  {{ item.lprice }}원
-                </p>
-                <p>
-                  {{ item.mallName }}
-                </p>
-                <p class="card-text">
-                  <a href="{{ item.link }}" class="text-light btn btn-secondary btn-sm">구매하러 가기</a>
-                </p>
+    <div class="container">
+      <div class="row row-cols-8 d-flex justify-content-center" id="card-div">
+        {% for item in items %}
+          <div class="card mb-3 d-flex mb-3 p-0 btn-1" style="max-width: 800px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <a href="{{ item.link }}"><img src="{{ item.image }}" class="img-fluid rounded-start" alt="{{ item.title }}" style="width: 210px; height: 200px"></a>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.title }}</h5>
+                  <p class="card-text text-danger">
+                    {{ item.lprice }}원
+                  </p>
+                  <p>
+                    {{ item.mallName }}
+                  </p>
+                  <p class="card-text">
+                    <a href="{{ item.link }}" class="text-light btn btn-secondary btn-sm">구매하러 가기</a>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {% endfor %}
+          {% endfor %}
+      </div>
     </div>
   </body>
 

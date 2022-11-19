@@ -19,4 +19,5 @@ urlpatterns = [
     # path("profile/<str:username>/", views.profile, name="profile"),
     path("save/", views.save, name="save"),
     path("notice/", views.notice, name="notice"),
+    path("test/", views.test, name="test"),
 ]
