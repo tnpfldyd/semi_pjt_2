@@ -93,6 +93,7 @@
   position: absolute;
   background: var(--star-face-color, var(--star-face-color-default));
   transition: background 0.2s, box-shadow 0.2s;
+  
 }
 .favorite-button .icon .star:before {
   width: 2px;
@@ -119,6 +120,7 @@
   --star-color: var(--star-color-active);
   --star-face-color: var(--star-face-color-active);
   --star-face-radius: 0 0 2px 2px;
+  
 }
 
 html {
