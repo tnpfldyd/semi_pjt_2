@@ -3,36 +3,105 @@
 {% load static %}
 {% block content %}
 
-  <div class="container text-center my-4">
-    <div class="d-flex justify-content-end my-3">
-      <form action="{% url 'shoppings:search' %}" class="text-center me-4">
-        <input class="form-control-sm" type="text" name="keyword">
-        <button class="btn btn-outline-primary" type="submit">검색</button>
-      </form>
-      <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
-        <option value="sim" selected="selected">정확도순</option>
-        <option value="asc">최저가순</option>
-        <option value="dsc">최고가순</option>
-        <option value="date">날짜순</option>
-      </select>
-    </div>
-    <div class="row row-cols-4" id="card-div">
+<body class="wrapper" id="hz">
+<div class="container text-center">
+  <div class="d-flex justify-content-evenly my-3">
+    <form action="{% url 'shoppings:search' %}" class="text-center me-5">
+      <input class="form-control-sm" type="text" name="keyword" style="width: 200px;">
+      <button class="btn btn-outline-dark" type="submit">검색</button>
+    </form>
+    <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
+      <option value="sim" selected>정확도순</option>
+      <option value="asc">최저가순</option>
+      <option value="dsc">최고가순</option>
+      <option value="date">날짜순</option>
+    </select>
+  </div>
+</div>
+    <!-- 가로 -->
+    {% comment %} <div class="row row-cols-4" id="card-div">
       {% for item in items %}
         <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
-          <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}" style="width: 100%;">
+          <img src="{{item.image}}" class="card-img-top my_images" alt="{{item.title}}" style="width: 100%;">
           <div class="card-body">
             <h5 class="card-title">{{item.title}}</h5>
           </div>
           <div class="card-footer">
             <p class="card-text">가격
               {{item.lprice}}원</p>
+            <h5>{{item.mallName}}</h5>
             <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
           </div>
         </div>
       {% endfor %}
+    </div> {% endcomment %}
+
+    <!-- 세로-->
+    <div class="row row-cols-8 d-flex justify-content-center" id="card-div">
+      {% for item in items %}
+        <div class="card mb-3 d-flex mb-3 p-0 btn-1" style="max-width: 800px;">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <a href="{{ item.link }}"><img src="{{ item.image }}" class="img-fluid rounded-start" alt="{{ item.title }}" style="width: 210px; height: 200px"></a>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.title }}</h5>
+                <p class="card-text text-danger">
+                  {{ item.lprice }}원
+                </p>
+                <p>
+                  {{ item.mallName }}
+                </p>
+                <p class="card-text">
+                  <a href="{{ item.link }}" class="text-light btn btn-secondary btn-sm">구매하러 가기</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
     </div>
-  </div>
-  <div id="keyword" style="display: none;">{{keyword}}</div>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="{% static 'js/search.js' %}"></script>
-{% endblock %}
+  </body>
+
+  <style>
+    .wrapper {
+      align-items: center;
+      /* background-color: rgb(181, 183, 161); */
+      background-size: cover;
+      background-image: linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -o-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -moz-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -webkit-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5)61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -ms-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5)61%, rgba(15, 176, 52, 0.5) 81%);
+    }
+
+    .btn-1:hover {
+      background: rgb(81, 81, 81);
+      background: linear-gradient(0deg, rgba(157, 156, 156, 0.2) 0%, rgba(109, 152, 196, 0.8) 100%);
+   }
+
+  </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{% static 'js/shoppings.js' %}"></script>
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js">var sf = new Snowflakes();</script>
+
+    <script>
+    var snowflakes = new Snowflakes({
+        color: 'rgb(81,81,81)', // Default: "#5ECDEF"
+        container: document.querySelector('#hz'), // Default: document.body
+        count: 100, // 100 snowflakes. Default: 50
+        minOpacity: 0.1, // From 0 to 1. Default: 0.6
+        maxOpacity: 0.95, // From 0 to 1. Default: 1
+        minSize: 10, // Default: 10
+        maxSize: 25, // Default: 25
+        rotation: true, // Default: true
+        speed: 2.5, // 낙하속도 Default: 1
+        wind: true, // 바람 유무 Default: true
+        width: 1000, // Default: container 너비
+        height: 1000, // Default: container 높이
+        zIndex: 100 // Default: 9999
+    });
+    </script>
+    
+  {% endblock %}

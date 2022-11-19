@@ -3,12 +3,12 @@
 {% load static %}
 {% block content %}
 
-<body class="wrapper">
+<body class="wrapper" id="hz">
 <div class="container text-center">
   <div class="d-flex justify-content-evenly my-3">
     <form action="{% url 'shoppings:search' %}" class="text-center me-5">
       <input class="form-control-sm" type="text" name="keyword" style="width: 200px;">
-      <button class="btn btn-outline-primary" type="submit">검색</button>
+      <button class="btn btn-outline-dark" type="submit">검색</button>
     </form>
     <select class="form-select" aria-label="Default select example" style="width: 200px;" id="select">
       <option value="sim" selected>정확도순</option>
@@ -39,10 +39,10 @@
     <!-- 세로-->
     <div class="row row-cols-8 d-flex justify-content-center" id="card-div">
       {% for item in items %}
-        <div class="card mb-3 d-flex mb-3 p-0" style="max-width: 800px;">
+        <div class="card mb-3 d-flex mb-3 p-0 btn-1" style="max-width: 800px;">
           <div class="row g-0">
             <div class="col-md-4">
-              <img src="{{item.image}}" class="img-fluid rounded-start" alt="{{ item.title }}" style="width: 210px; height: 200px">
+              <a href="{{ item.link }}"><img src="{{ item.image }}" class="img-fluid rounded-start" alt="{{ item.title }}" style="width: 210px; height: 200px"></a>
             </div>
             <div class="col-md-8">
               <div class="card-body">
@@ -69,14 +69,39 @@
       align-items: center;
       /* background-color: rgb(181, 183, 161); */
       background-size: cover;
-      background-image: linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 63%, rgba(33,166,166,0.5) 91%);
-      background-image: -o-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 63%, rgba(33,166,166,0.5) 91%);
-      background-image: -moz-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 63%, rgba(33,166,166,0.5) 91%);
-      background-image: -webkit-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 63%, rgba(33,166,166,0.5)91%);
-      background-image: -ms-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 63%, rgba(33,166,166,0.5)91%);
+      background-image: linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -o-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -moz-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -webkit-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5)61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: -ms-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5)61%, rgba(15, 176, 52, 0.5) 81%);
     }
+
+    .btn-1:hover {
+      background: rgb(81, 81, 81);
+      background: linear-gradient(0deg, rgba(157, 156, 156, 0.2) 0%, rgba(109, 152, 196, 0.8) 100%);
+   }
 
   </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{% static 'js/shoppings.js' %}"></script>
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js">var sf = new Snowflakes();</script>
+
+    <script>
+    var snowflakes = new Snowflakes({
+        color: 'rgb(81,81,81)', // Default: "#5ECDEF"
+        container: document.querySelector('#hz'), // Default: document.body
+        count: 100, // 100 snowflakes. Default: 50
+        minOpacity: 0.1, // From 0 to 1. Default: 0.6
+        maxOpacity: 0.95, // From 0 to 1. Default: 1
+        minSize: 10, // Default: 10
+        maxSize: 25, // Default: 25
+        rotation: true, // Default: true
+        speed: 2.5, // 낙하속도 Default: 1
+        wind: true, // 바람 유무 Default: true
+        width: 1000, // Default: container 너비
+        height: 1000, // Default: container 높이
+        zIndex: 100 // Default: 9999
+    });
+    </script>
+    
   {% endblock %}
