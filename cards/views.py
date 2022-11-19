@@ -15,7 +15,9 @@ from django.db.models import Count
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
-    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by("-follow")[:5]
+    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by(
+        "-follow"
+    )[:5]
     random_user = UserCard.objects.order_by("?")[:5]
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
@@ -34,22 +36,55 @@ def usercard_create(request):
         if form.is_valid():
             try:
                 temp = form.save(commit=False)
-                temp.user = request.user
                 # 라디오 버튼 'name'='id'로 들어옴
                 # name==choice, id=1,2,3으로 설정
+                temp.user = request.user
                 temp.userdeco = request.POST["userdeco"]
                 temp.chimneys = request.POST["choice_chim"]
                 temp.save()
-                return redirect("accounts:profile", request.user.pk)
+                return redirect("cards:usercard_create2")
             except:
-                messages.error(request, "벽난로와 본인의 아이덴티티 장식을 반드시 선택해주세요.😥")
-                return redirect("cards:usercard_create")
+                cards = UserCard.objects.get(user=request.user)
+                form = UserCardForm(request.POST, instance=cards)
+                temp = form.save(commit=False)
+                if temp.userdeco and temp.chimneys:
+                    temp.user = request.user
+                    temp.userdeco = request.POST["userdeco"]
+                    temp.chimneys = request.POST["choice_chim"]
+                    temp.save()
+                    return redirect("cards:usercard_create2")
+                else:
+                    messages.error(request, "벽난로와 본인의 아이덴티티 장식을 반드시 선택해주세요.😥")
+                    return redirect("cards:usercard_create")
     else:
         form = UserCardForm()
     context = {
         "form": form,
     }
     return render(request, "cards/usercard_create.html", context)
+
+
+@login_required
+def usercard_create2(request):
+    cards = UserCard.objects.get(user=request.user)
+    if request.method == "POST":
+        form = UserCardForm(request.POST, instance=cards)
+        if form.is_valid():
+            temp = form.save(commit=False)
+            temp.user = request.user
+            # 라디오 버튼 'name'='id'로 들어옴
+            # name==choice, id=1,2,3으로 설정
+            temp.userdeco = cards.userdeco
+            temp.chimneys = cards.chimneys
+            temp.save()
+            return redirect("accounts:profile", request.user.pk)
+    else:
+        form = UserCardForm(instance=cards)
+    context = {
+        "form": form,
+        "cards": cards,
+    }
+    return render(request, "cards/usercard_create2.html", context=context)
 
 
 def usercard_detail(request, pk):
@@ -76,7 +111,7 @@ def usercard_update(request, pk):
     if request.method == "POST":
         form = UserCardForm(request.POST, instance=cards)
         if form.is_valid():
-            if form.is_valid():
+            try:
                 temp = form.save(commit=False)
                 temp.user = request.user
                 # 라디오 버튼 'name'='id'로 들어옴
@@ -84,11 +119,44 @@ def usercard_update(request, pk):
                 temp.userdeco = request.POST["userdeco"]
                 temp.chimneys = request.POST["choice_chim"]
                 temp.save()
-                return redirect("cards:usercard_detail", cards.pk)
+                return redirect("cards:usercard_update2", cards.pk)
+            except:
+                temp = form.save(commit=False)
+                if temp.userdeco and temp.chimneys:
+                    temp.user = request.user
+                    temp.userdeco = request.POST["userdeco"]
+                    temp.chimneys = request.POST["choice_chim"]
+                    temp.save()
+                    return redirect("cards:usercard_update2", cards.pk)
+                else:
+                    messages.error(request, "벽난로와 본인의 아이덴티티 장식을 반드시 선택해주세요.😥")
+                    return redirect("cards:usercard_update", cards.pk)
     else:
         form = UserCardForm(instance=cards)
     context = {"form": form}
     return render(request, "cards/usercard_update.html", context=context)
+
+
+def usercard_update2(request, pk):
+    cards = UserCard.objects.get(user=request.user)
+    if request.method == "POST":
+        form = UserCardForm(request.POST, instance=cards)
+        if form.is_valid():
+            temp = form.save(commit=False)
+            temp.user = request.user
+            # 라디오 버튼 'name'='id'로 들어옴
+            # name==choice, id=1,2,3으로 설정
+            temp.userdeco = cards.userdeco
+            temp.chimneys = cards.chimneys
+            temp.save()
+            return redirect("cards:usercard_detail", cards.pk)
+    else:
+        form = UserCardForm(instance=cards)
+    context = {
+        "form": form,
+        "cards": cards,
+    }
+    return render(request, "cards/usercard_update2.html", context=context)
 
 
 def usercard_delete(request):
