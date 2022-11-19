@@ -190,8 +190,8 @@ def follow(request, pk):
             is_follow = True
         context = {
             "isFollow": is_follow,
-            "followersCount": person.followers.count(),
-            "followingsCount": person.followings.count(),
+            "followersCount": person.followers.all().count(),
+            "followingsCount": person.followings.all().count(),
         }
         return JsonResponse(context)
     else:
