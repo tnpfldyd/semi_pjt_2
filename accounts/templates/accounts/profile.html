@@ -3,7 +3,7 @@
 {% load django_bootstrap5 %}
 {% block content %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
-{% comment %} <link rel="stylesheet" href="{% static 'css/profile.css' %}"> {% endcomment %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <style>
   :root {
     --surface-color: #fff;
@@ -200,14 +200,13 @@
       </div>
     </div>
     <!-- 벽난로 -->
-    <div class='col ms-2 my-5'>
+    <div class='col-12 col-lg-3 ms-2 my-5'>
       <div class='mb-5 d-flex justify-content-center'>
         <div>
           <h1 class='my-5 text-center'>
             개인 벽난로
           </h1>
           {% if user.usercard %}
-          <div class="p-5 my-5 pt-0">
             <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
               {% if user.usercard.chimneys == 9 %}
               <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
@@ -222,32 +221,27 @@
                     <img class="card__thumb" src="{{ user.profileimage }}"/>
                   {% else %}
                     <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
-                </div>
-              </div>
-            </a>
+
                   {% endif %}
                   <div class="card__header-text">
                     <h3 class="card__title">{{ user.nickname }}</h3>
                     <span class="card__status">{{ user.usercard.title }}</span>
                   </div>
-                  <p class="card__description">{{ user.usercard.content }}</p>
-          </div>
+                </div>
+                <p class="card__description">{{ user.usercard.content }}</p>
+              </div>
+            </a>
           {% else %}
-           {% if user == request.user %}
             <div class="p-5 my-5">
               <a href="{% url 'cards:usercard_create' %}" class="btn btn-primary">
                 개인 벽난로를 생성해주세요!
               </a>
             </div>
-            {% else %}
-            <div class="p-5 my-5">
-              <h5>아직 벽난로가 없어요 😂</h5>
-            </div>
-            {% endif %}
+
           {% endif %}
         </div>
       </div>
-    </div>
+      </div>
   </div>
   
   <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
