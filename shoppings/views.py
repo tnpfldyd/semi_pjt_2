@@ -62,6 +62,7 @@ def search(request):
 
 
 def ssort(request, string):
+    print(request.GET.get("keyword"))
     if request.GET.get("keyword"):
         keyword = request.GET.get("keyword")
     else:

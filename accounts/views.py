@@ -122,7 +122,11 @@ def mypage(request):
     return render(
         request,
         "accounts/mypage.html",
-        {"user": get_user_model().objects.get(pk=request.user.pk), "block_users": block_users, "block_cnt": block_cnt,},
+        {
+            "user": get_user_model().objects.get(pk=request.user.pk),
+            "block_users": block_users,
+            "block_cnt": block_cnt,
+        },
     )
 
 
@@ -216,7 +220,6 @@ def block(request, pk):
         return redirect("meetings:index")
 
 
-
 def profile(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
     context = {
@@ -250,6 +253,7 @@ def save(request):
 
 @login_required
 def notice(request):
+    print(request.user.usercard)
     if request.method == "POST":
         dic = {}
         if request.user.tree_notice:
@@ -297,3 +301,7 @@ def notice(request):
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
         return redirect("meetings:index")
+
+
+def test(request):
+    return render(request, "accounts/test.html")
