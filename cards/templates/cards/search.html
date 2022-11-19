@@ -117,8 +117,15 @@
     -webkit-line-clamp: 3;
     overflow: hidden;
   }    
+  body {
+    background-image : url('{% static 'images/그룹카드배경2.jpg' %}');
+    background-repeat : repeat;
+    background-size : cover;
+    {% comment %} color:white; {% endcomment %}
+   }
 </style>
 
+<div class="background">
 
 <div class="container py-3">
   <!-- 상단 바-->
@@ -150,7 +157,7 @@
                   {% if user.profileimage %}
                     <img class="card__thumb" src="{{ user.profileimage }}"  />
                   {% else %}
-                    <img class="card__thumb" src="{{ user.profileimage.url }}"  />
+                    <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
                   {% endif %}                     
                   <div class="card__header-text">
                     <h3 class="card__title">{{ cards.title }}</h3>            
@@ -213,4 +220,6 @@
     {% endif %} 
   </div>
 </div> 
+  
+</div>
 {% endblock %}

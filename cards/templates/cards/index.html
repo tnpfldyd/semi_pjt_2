@@ -118,24 +118,32 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     overflow: hidden;
-  }    
+  }
+  .background {
+    background-image : url('{% static 'images/그룹카드배경2.jpg' %}');
+    background-repeat : repeat;
+    background-size : cover;
+    {% comment %} color:white; {% endcomment %}
+   }
+      
 </style>
 <div style='height:25rem;overflow: hidden;'>
   <img src="{% static 'images/벽난로배너2.png' %}" style='width:100%;' alt="">
 </div>
 
+<div class="background">
 <div class="container">
   <div class="banner d-flex p-3 w-100 align-items-center justify-content-center">
     <form action="{% url 'cards:search' %}" role='search' class='mb-0 w-100'>
-      <div class="d-flex w-100 justify-content-center">
-        <input type="search" id="mySearch" onkeyup="myFunction()" placeholder="벽난로 검색" title="Type in a category" class='ps-3 py-3 w-100' style="max-width: 500px;" name='search'>
-        <button class="btn btn-link" type="submit">
+      <div class="d-flex w-100 justify-content-center mt-5" style='position:relative'>
+        <input type="search" id="mySearch" onkeyup="myFunction()" placeholder="벽난로 검색" title="Type in a category" class='px-3 py-3 rounded-3' style="width: 500px; height:70px" name='search'>
+        <button class="btn btn-link" type="submit" style='position:absolute;top:-7px;right:290px'>
           <script src="https://cdn.lordicon.com/qjzruarw.js"></script>
           <lord-icon
               src="https://cdn.lordicon.com/hgbzryoa.json"
               trigger="hover"
               colors="primary:#000000,secondary:#ffffff,tertiary:#000000,quaternary:#242424"
-              style="width:75px;height:75px">
+              style="width:75px;height:75px" >
           </lord-icon>
         </button>
       </div>
@@ -147,15 +155,15 @@
 
 
 
-<div class='my-5'>
-  <a href="{% url 'cards:group_create' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>
-  <h1 class='my-5 text-center'> 내가 만든 벽난로 </h1> 
+<div class='my-2'>
+  <div class='text-end mx-4'>
+    <a href="{% url 'cards:group_create' %}" class="btn fs-4" style='background-color:orangered;color:white'> 그룹 벽난로 만들기</a>
+  </div>
   <div class="row" style='width:100%'>  
     <h1 class='text-center'>그룹 벽난로</h1>
     {% if groupcards %}
-    
       {% for card in groupcards %}
-      <div class="col-12 col-sm-6 col-md-2 my-3">
+      <div class="col-12 col-lg-3 ms-2 my-3 d-flex justify-content-center">
         <a href="{% url 'cards:group_detail' card.pk %}" class="card2">
           <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt="" />
           <div class="card__overlay">
@@ -176,19 +184,17 @@
       </div>
       {% endfor %}      
     {% else %}
-    <div class='mx-4'>
-      <h1 class='my-5 fs-4 text-center'> 그룹 벽난로를 만들어보세요. </h1> 
-    </div>  
+    <h1 class='my-5 fs-4 text-center'> 그룹 벽난로를 만들어보세요. </h1> 
   {% endif %}
   </div>
 </div>
 
-<div class='my-5'>
-  <h1 class='my-5 text-center'> 인기 벽난로 </h1> 
+
+  <h1 class='my-4 text-center'> 인기 벽난로 </h1> 
   <div class="row" style='width:100%'>  
     {% if popular != '' %}
       {% for card in popular %}
-      <div class='col-12 col-lg-3 ms-2 my-5'>
+      <div class='col-12 col-lg-3 ms-2 my-3'>
         <div class='mb-5 d-flex justify-content-center'>
           <div>
               <a href="{% url 'cards:usercard_detail' card.pk %}" class="card2">
@@ -225,10 +231,10 @@
     </div>  
   {% endif %}
   </div>
-</div>
 
-<div class='my-5'>
-  <h1 class='my-5 text-center'> 랜덤 벽난로 </h1> 
+
+
+  <h1 class='my-4 text-center'> 랜덤 벽난로 </h1> 
   <div class="row" style='width:100%'>
     {% if random_user != '' %}
       {% for card in random_user %}
@@ -269,8 +275,9 @@
     </div>  
   {% endif %}
   </div>
-</div>
 
+  
+</div>
 <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
 <script>
   new Snowflakes();

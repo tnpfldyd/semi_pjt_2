@@ -5,6 +5,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <style>
+  body {
+    background-image : url('{% static 'images/그룹카드배경1.jpg' %}');
+    background-repeat : repeat;
+    background-size : cover;
+    {% comment %} color:white; {% endcomment %}
+   }
+
   :root {
     --surface-color: #fff;
     --curve: 40;
@@ -121,40 +128,51 @@
     overflow: hidden;
   }
 
-  body {
-    background-image: url("{% static 'images/프로필배경.png' %}");
-    background-repeat: repeat;
-    background-size: cover;
-
-    {
-      % comment %
-    }
-
-    color: white;
-
-    {
-      % endcomment %
-    }
-  }
 #profileimage {
   box-shadow: 0 8px 5px rgba(0,0,0,0.5);
 }
 </style>
   <div class="row row-cols-6 justify-content-evenly" style='width:100%'>
     <!-- 벽난로 주인 프로필 -->
-    <div class='col col-lg-3 ms-2 my-5 text-center'>
+    <div class='col col-lg-5 ms-2 my-5'>
       <p class=' my-5 fs-1 text-center'>개인 프로필</p>
       <div class='row'>
-        <div class='col-6 d-flex justify-content-end'>
-          <div>
+        <div class='col-5 d-flex flex-column align-content-center'>
+          <div class='text-center'>
             {% if user.profileimage %}
               <img id="profileimage" src="{{ user.profileimage }}" class="rounded-pill" style='width:10rem;'>
             {% else %}
               <img src="{% static 'images/게스트.png' %}" class="rounded-2" style='width:10rem;'>
             {% endif %}
           </div>
+          <div class='text-center my-4'>
+            {% if request.user == user %}
+            <a href="{% url 'accounts:mypage' %}" class='btn btn-outline-primary'>마이페이지</a>
+            {% else %}
+            </div>
+              {% csrf_token %}
+              {% if request.user not in user.followers.all %}
+              <button class="favorite-button" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+                <div class="icon">
+                  <div class="star"></div>
+                </div>
+                <span id="span">Follow</span>
+              </button>
+              {% else %}
+              <button class="favorite-button active" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+                <div class="icon">
+                  <div class="star"></div>
+                </div>
+                <span id="span">UnFollow</span>
+              </button>
+              {% endif %}
+
+              <div id="follow-cnt">
+            
+            {% endif %}
+          </div>
         </div>
-        <div class='col-6 d-flex justify-content-center'>
+        <div class='col-7 '>
           <div>
             <p>
               이름 :
@@ -167,35 +185,11 @@
             <p>
               나이 :
               {{ user.age_range }}</p>
-              <div class="">
-              {% if request.user == user %}
-              <a href="{% url 'accounts:mypage' %}" class='btn btn-outline-primary'>마이페이지</a>
-              {% else %}
+              <div class='d-flex'>
+                  <h5 id='followers-cnt' class="me-1 text-primary">팔로워 : </h5><h5 class='me-3'> {{ user.followers.count }}</h5>
+                  <h5 id='followers-cnt' class="me-1 text-primary">팔로잉  : </h5><h5 class='me-3'> {{ user.followings.count }}</h5>
               </div>
-                {% csrf_token %}
-                {% if request.user not in user.followers.all %}
-                <button class="favorite-button" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
-                  <div class="icon">
-                    <div class="star"></div>
-                  </div>
-                  <span id="span">Follow</span>
-                </button>
-                {% else %}
-                <button class="favorite-button active" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
-                  <div class="icon">
-                    <div class="star"></div>
-                  </div>
-                  <span id="span">UnFollow</span>
-                </button>
-                {% endif %}
-
-                <div id="follow-cnt">
-              
-              {% endif %}
-                  <h5 id='followers-cnt' class="my-3">Followers : {{ user.followers.count }}</h3>
-                  <h5 id='followings-cnt' class="my-3">Followings : {{ user.followings.count }}</h3>
-                </div>
-              </div>
+          </div>
         </div>
       </div>
     </div>
