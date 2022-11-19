@@ -51,16 +51,12 @@ def usercard_create(request):
             except:
                 cards = UserCard.objects.get(user=request.user)
                 form = UserCardForm(request.POST, instance=cards)
-                temp = form.save(commit=False)
-                if temp.userdeco and temp.chimneys:
-                    temp.user = request.user
-                    temp.userdeco = request.POST["userdeco"]
-                    temp.chimneys = request.POST["choice_chim"]
-                    temp.save()
+                if cards.userdeco and cards.chimneys:
+                    cards.user = request.user
+                    cards.userdeco = request.POST["userdeco"]
+                    cards.chimneys = request.POST["choice_chim"]
+                    cards.save()
                     return redirect("cards:usercard_create2")
-                else:
-                    messages.error(request, "벽난로와 본인의 아이덴티티 장식을 반드시 선택해주세요.😥")
-                    return redirect("cards:usercard_create")
     else:
         form = UserCardForm()
     context = {
@@ -126,16 +122,8 @@ def usercard_update(request, pk):
                 temp.save()
                 return redirect("cards:usercard_update2", cards.pk)
             except:
-                temp = form.save(commit=False)
-                if temp.userdeco and temp.chimneys:
-                    temp.user = request.user
-                    temp.userdeco = request.POST["userdeco"]
-                    temp.chimneys = request.POST["choice_chim"]
-                    temp.save()
-                    return redirect("cards:usercard_update2", cards.pk)
-                else:
-                    messages.error(request, "벽난로와 본인의 아이덴티티 장식을 반드시 선택해주세요.😥")
-                    return redirect("cards:usercard_update", cards.pk)
+                messages.error(request, "벽난로와 본인의 아이덴티티 장식을 반드시 선택해주세요.😥")
+                return redirect("cards:usercard_update", cards.pk)
     else:
         form = UserCardForm(instance=cards)
     context = {"form": form}
@@ -187,7 +175,7 @@ dic = {
 def usercard_comment(request, pk):
     if request.method == "POST":
         card = UserCard.objects.get(pk=pk)
-        comment_form = UserCommentForm(request.POST, request.FILES)
+        comment_form = UserCommentForm(request.POST)
         if comment_form.is_valid():
             try:
                 comment = comment_form.save(commit=False)
@@ -203,33 +191,33 @@ def usercard_comment(request, pk):
                     temp += dic[i]
                 comment.id_text = temp
                 comment.save()
-                if card.user.refresh_token:
-                    url = "https://kauth.kakao.com/oauth/token"
-                    data = {
-                        "grant_type": "refresh_token",
-                        "client_id": os.getenv("KAKAO_ID"),
-                        "refresh_token": card.user.refresh_token,
-                        "client_secret": os.getenv("KAKAO_SECRET"),
-                    }
-                    response = requests.post(url, data=data).json()
-                    url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-                    access_token = response["access_token"]
-                    headers = {"Authorization": "Bearer " + access_token}
-                    data = {
-                        "template_object": json.dumps(
-                            {
-                                "object_type": "text",
-                                "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
-                                "link": {
-                                    "web_url": "http://localhost:8000/cards/detail/usercard/"
-                                    + str(pk)
-                                    + "/"
-                                },
-                            }
-                        )
-                    }
-                    response = requests.post(url, headers=headers, data=data)
-                return redirect("cards:usercard_detail", pk)
+                # if card.user.refresh_token:
+                #     url = "https://kauth.kakao.com/oauth/token"
+                #     data = {
+                #         "grant_type": "refresh_token",
+                #         "client_id": os.getenv("KAKAO_ID"),
+                #         "refresh_token": card.user.refresh_token,
+                #         "client_secret": os.getenv("KAKAO_SECRET"),
+                #     }
+                #     response = requests.post(url, data=data).json()
+                #     url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
+                #     access_token = response["access_token"]
+                #     headers = {"Authorization": "Bearer " + access_token}
+                #     data = {
+                #         "template_object": json.dumps(
+                #             {
+                #                 "object_type": "text",
+                #                 "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
+                #                 "link": {
+                #                     "web_url": "http://localhost:8000/cards/detail/usercard/"
+                #                     + str(pk)
+                #                     + "/"
+                #                 },
+                #             }
+                #         )
+                #     }
+                #     response = requests.post(url, headers=headers, data=data)
+                return redirect("cards:usercard_comment2", comment.pk)
             except:
                 messages.error(request, "메세지의 장식을 반드시 선택해주세요.😥")
                 return redirect("cards:usercard_comment", pk)
@@ -239,6 +227,62 @@ def usercard_comment(request, pk):
     context = {"comment_form": comment_form}
 
     return render(request, "cards/usercard_comment.html", context)
+
+
+def usercard_comment2(request, pk):
+    comment = UserComment.objects.get(pk=pk)
+    card = comment.usercard
+    if request.method == "POST":
+        comment_form = UserCommentForm(request.POST, instance=comment)
+        if comment_form.is_valid():
+            comments = comment_form.save(commit=False)
+            comments.user = request.user
+            comments.usercard = card
+            comments.socks = comment.socks
+            comments.save()
+            if card.user.tree_notice:
+                card.user.notice_tree = False
+                card.user.save()
+            temp = ""
+            for i in str(comment.pk):
+                temp += dic[i]
+            comments.id_text = temp
+            comments.save()
+            if card.user.refresh_token:
+                url = "https://kauth.kakao.com/oauth/token"
+                data = {
+                    "grant_type": "refresh_token",
+                    "client_id": os.getenv("KAKAO_ID"),
+                    "refresh_token": card.user.refresh_token,
+                    "client_secret": os.getenv("KAKAO_SECRET"),
+                }
+                response = requests.post(url, data=data).json()
+                url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
+                access_token = response["access_token"]
+                headers = {"Authorization": "Bearer " + access_token}
+                data = {
+                    "template_object": json.dumps(
+                        {
+                            "object_type": "text",
+                            "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
+                            "link": {
+                                "web_url": "http://localhost:8000/cards/detail/usercard/"
+                                + str(pk)
+                                + "/"
+                            },
+                        }
+                    )
+                }
+                response = requests.post(url, headers=headers, data=data)
+            return redirect("cards:usercard_detail", card.pk)
+    else:
+        comment_form = UserCommentForm()
+    context = {
+        "comment_form": comment_form,
+        "comment": comment,
+    }
+
+    return render(request, "cards/usercard_comment2.html", context)
 
 
 # 그룹카드 생성, 수정, 삭제, 디테일
@@ -308,24 +352,10 @@ def group_detail(request, pk):
     return render(request, "cards/group_detail.html", context)
 
 
-dic = {
-    "0": "zero",
-    "1": "one",
-    "2": "two",
-    "3": "three",
-    "4": "four",
-    "5": "five",
-    "6": "six",
-    "7": "seven",
-    "8": "eight",
-    "9": "nine",
-}
-
-
 def gcomment_create(request, pk):
     if request.method == "POST":
         card = Groupcard.objects.get(pk=pk)
-        comment_form = GroupCommentForm(request.POST, request.FILES)
+        comment_form = GroupCommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.user = request.user

@@ -151,8 +151,9 @@
   <a href="{% url 'cards:group_create' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>
   <h1 class='my-5 text-center'> 내가 만든 벽난로 </h1> 
   <div class="row" style='width:100%'>  
+    <h1 class='text-center'>그룹 벽난로</h1>
     {% if groupcards %}
-    <h1>그룹 벽난로</h1>
+    
       {% for card in groupcards %}
       <div class="col-12 col-sm-6 col-md-2 my-3">
         <a href="{% url 'cards:group_detail' card.pk %}" class="card2">
@@ -163,7 +164,7 @@
               {% if user.profileimage %}
                 <img class="card__thumb" src="{{ user.profileimage }}"  />
               {% else %}
-                <img class="card__thumb" src="{{ user.profileimage.url }}"  />
+                <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
               {% endif %}                     
               <div class="card__header-text">
                 <h3 class="card__title">{{ card.title }}</h3>            

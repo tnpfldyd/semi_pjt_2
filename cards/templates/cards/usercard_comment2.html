@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+{% load static %}
+{% block content %}
+
+<style>
+  body {
+   background-image : url('{% static 'images/개인카드배경3.png' %}');
+   background-repeat : no-repeat;
+   background-size : cover;
+   color: white
+  }
+</style>
+
+
+<div class='d-flex justify-content-center my-5'>
+  
+  <div style='width:40rem'>
+    <form action="" method="POST">
+        <div class='d-flex justify-content-between mb-5'>
+            <img src="/static/images/양말{{comment.socks}}.png" alt="" style='width:7rem'>
+            <h1 class='text-center fs-1' style='padding-top:5.2rem'>
+                메세지를 남겨주세요
+              </h1>
+            <img src="/static/images/양말{{comment.socks}}.png" alt="" style='width:7rem'>
+        </div>
+      {% csrf_token %}
+      {% bootstrap_form comment_form %}
+      <div class="d-grid">
+        <input class="btn " type="submit" value="메세지 남기기" style='background-color:orangered;color:white'>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
