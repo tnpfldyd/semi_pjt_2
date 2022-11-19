@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.db.models import Count
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Create your views here.
 
@@ -366,3 +368,28 @@ def gcomment_create(request, pk):
     context = {"comment_form": comment_form}
 
     return render(request, "cards/gcomment_create.html", context)
+
+
+def search(request):
+    all_data = Groupcard.objects.filter(is_private=0).order_by("-pk")
+    search = request.GET.get("search", "")
+    page = request.GET.get("page", "1")
+    paginator = Paginator(all_data, 6)
+    page_obj = paginator.get_page(page)
+    if search:
+        search_list = all_data.filter(Q(title__icontains=search))
+        paginator = Paginator(search_list, 6)
+        page_obj = paginator.get_page(page)
+        context = {
+            "search": search,
+            "search_list": search_list,
+            "question_list": page_obj,
+        }
+    else:
+        context = {
+            "search": search,
+            "search_list": all_data,
+            "question_list": page_obj,
+        }
+
+    return render(request, "cards/search.html", context)
