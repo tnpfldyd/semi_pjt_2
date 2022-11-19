@@ -1,5 +1,6 @@
 
 {% extends 'base.html' %}
+{% load static %}
 {% load django_bootstrap5 %}
 {% block content %}
 <div class="row p-5 wrapper justify-content-center" style='width:100%'>
@@ -181,19 +182,11 @@ p {
   font-weight:bold;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-ul {
-  margin: 0;
-}
 
 .wrapper {
+
   min-height: 89.9vh;
+
   background-image: url("/static/images/개인카드배경3.png");
   background-size: cover;
   background-repeat : repeat;
