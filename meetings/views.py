@@ -155,6 +155,29 @@ def password(request, meeting_pk):
         messages.warning(request, "비밀번호가 일치하지 않습니다.😀")
         return redirect("meetings:index")
 
+@login_required
+def belong(request, meeting_pk):
+    meeting = Meeting.objects.get(pk=meeting_pk)
+    user = request.user  # request.user => 현재 로그인한 유저
+    if request.method == "POST":
+        if meeting.belong.filter(id=user.id).exists():  # 이미 참여를 누른 유저일 때
+            meeting.belong.remove(user)
+            is_belong = False
+            messages.error(request, "참여 취소😀")
+            print("펄스?")
+        else:  # 참여를 누르지 않은 유저일 때
+            meeting.belong.add(user)  # belong 필드에 현재 유저 삭제
+            is_belong = True
+            messages.success(request, "참여 성공😀")
+            print("트루?")
+        context={
+          "is_belong": is_belong,
+          "belongCount": meeting.belong.count(),
+          "belongCount": meeting.belong.count(),
+        }
+        return JsonResponse(context)
+
+    
 
 @login_required
 def detail(request, meeting_pk):
@@ -162,6 +185,7 @@ def detail(request, meeting_pk):
     comments = meeting.comment_set.all()
     form = CommentForm()
 
+    
     user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
     user = request.user  # request.user => 현재 로그인한 유저
@@ -180,14 +204,7 @@ def detail(request, meeting_pk):
             meeting.belong.add(user)  # belong 필드에 현재 유저 삭제
             messages.success(request, "참여 성공😀")
         return redirect("meetings:index")
-
-    if request.POST.get("belong_id"):
-        if meeting.belong.filter(id=user.id).exists():  # 이미 참여를 누른 유저일 때
-            meeting.belong.remove(user)
-            messages.error(request, "참여 취소😀")
-        else:  # 참여를 누르지 않은 유저일 때
-            meeting.belong.add(user)  # belong 필드에 현재 유저 삭제
-            messages.success(request, "참여 성공😀")
+    
 
     # DB에 존재하면 바로 입장.
 
@@ -257,9 +274,7 @@ def comment_create(request, meeting_pk):
 
     if request.user.is_authenticated:
         form = CommentForm(request.POST)
-        print("여기?!")
         if form.is_valid():
-            print("여긴되나?")
             comment = form.save(commit=False)
             comment.meeting = meeting_data
             comment.user = request.user
@@ -281,13 +296,5 @@ def comment_delete(request, meeting_pk, comment_pk):
     return redirect("meetings:detail", meeting_pk)
 
 
-@login_required
-def belong_meeting(request, pk):
-    meeting = Meeting.objects.get(pk=pk)
 
-    if request.user in meeting.belong_meeting.all():
-        meeting.belong_meeting.remove(request.user)
-    else:
-        meeting.belong_meeting.add(request.user)
 
-    return redirect("meetings:detail", pk)
