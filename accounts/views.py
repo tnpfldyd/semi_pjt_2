@@ -45,7 +45,7 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("accounts:index")
+            return redirect("home")
     else:
         form = AuthenticationForm()
     context = {
@@ -143,7 +143,7 @@ def update(request):
             temp = form.save(commit=False)
             temp.age_range = temp.age_range[-2:-1] + "0~" + temp.age_range[-2:-1] + "9"
             temp.save()
-            return redirect("accounts:index")
+            return redirect("accounts:mypage")
     else:
         form = UpdateForm(instance=request.user)
     context = {
@@ -253,6 +253,7 @@ def save(request):
 
 @login_required
 def notice(request):
+    print(request.user.usercard)
     if request.method == "POST":
         dic = {}
         if request.user.tree_notice:
@@ -300,3 +301,7 @@ def notice(request):
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
         return redirect("meetings:index")
+
+
+def test(request):
+    return render(request, "accounts/test.html")

@@ -249,6 +249,7 @@ a {
 
 #custom-form {
   color: #006f57;
+  
 
 }
 
@@ -261,7 +262,7 @@ a {
 .custom-form {
   color: black;
   border: none;
-  background-color: #fff;
+  background-color: none;
 }
 
 .custom-link:hover {

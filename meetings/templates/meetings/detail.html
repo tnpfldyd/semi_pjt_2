@@ -4,11 +4,11 @@
 {% block content %}
 <body class="wrapper">
   <div class="row justify-content-center" style='width:100%'>
-    <div class="inner p-3 col-6 m-1">
+    <div class="inner p-5 col-5 m-1">
       <div class=" mt-4 text-black">
         <a class="text-dark" style="text-decoration:none; " href="{% url 'meetings:index' %}">&laquo; 뒤로</a>
-        <div class="row">
-          <div class="col-6"> {% comment %}  {% endcomment %}
+        <div class="row" style="">
+          <div class="col-8"> {% comment %}  {% endcomment %}
             <div class="text-muted mt-1">
               {{ meeting.user.nickname}}님이 주최한 모임 ({{ meeting.location }})
             </div>
@@ -17,7 +17,7 @@
                 {{ meeting.title }}
               </div>
             </div>
-            <div style="min-height: 150px;">
+            <div style="width: 300px; min-height: 150px;">
               {{ meeting.content }}
             </div>
             <div class="mx-2">
@@ -30,7 +30,7 @@
                 </a>
               {% endif %}
             </div>
-            <div class="text-black mt-5">
+            <div class="text-black mt-5" style="width:330px;">
               <h4 class="fw-bold mb-3">댓글 <span class="text-success">{{comments.count}}</span></h4>
               {% if request.user.is_authenticated %}
                 <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
@@ -48,13 +48,13 @@
                 {{ comment.user.nickname }}
                 </a>
               </div>
-              <div class="row">
+              <div sytle="width:350px;">
                 <div class="col-10 d-flex align-items-center">
                   {{ comment.content }}
                 </div>
                 <div class="col-2">
                   {% if request.user == comment.user %}
-                  <form class="mx-2" action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
+                  <form class="" action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
                     {% csrf_token %}
                     <button class="btn btn-danger" type="submit">
                       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
@@ -73,13 +73,11 @@
           </div>
           <div class="col-4 p-2"> {% comment %}  {% endcomment %}
             <div class="d-flex jusify-content-between mt-4">
-              <form style="min-width:80px; max-width:80px;" action="{% url 'meetings:detail' meeting.pk %}" method="POST" class="m-1">
                 {% csrf_token %}
-                <button class="btn btn-success" name="belong_id" value="belong_id">
-                  참여 {{meeting.belong.count}}
+                <button class="text-decoration-none text-dark fs-4 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                  참여<span class="fs-4">❌</span>
                 </button>
-              </form>
-              <div class="cus-card" style="min-width:160px; max-width:160px; min-height:120px">
+              <div class="" style="min-width:120px; max-width:160px; min-height:120px">
                 <div class="d-flex justify-content-center">
                   참여 유저
                 </div>
@@ -111,7 +109,6 @@
     </div>
   </div>
 </body>
-
   {% comment %} js {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -148,6 +145,34 @@
             console.log(error.response)
           })
       })
+
+      function block(event) {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+          axios({
+            method: 'post',
+            url: `belong/`,
+            headers: {'X-CSRFToken': csrftoken},
+            data: {'note_pk': event.target.dataset.userId},
+          })
+          .then(response => {
+            if (response.data.is_belong === true) {
+              const e = event.target
+              const span = document.createElement('span')
+              e.innerText = '취소'
+              span.innerText = '❌'
+              span.className = 'fs-4'
+              e.appendChild(span)
+            }
+            else {
+              const e = event.target
+              const span = document.createElement('span')
+              e.innerText = '참여'
+              span.innerText = '✅'
+              span.className = 'fs-4'
+              e.appendChild(span)
+            }
+          })
+        }
     </script>
 
     <style>
@@ -157,7 +182,7 @@
         background-size: cover;
       }
       .inner {
-        max-width: 1000px;
+        width: 633px;
         margin: auto;
         border-radius: 50px;
         background: #f1f4f4;

@@ -2,7 +2,8 @@
 {% load static %}
 {% load django_bootstrap5 %}
 {% block content %}
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
   <style>
     :root {
       --surface-color: #fff;
@@ -139,10 +140,10 @@
     box-shadow: 0 8px 5px rgba(0,0,0,0.5);
   }
   </style>
-  <div class="row justify-content-center">
+  <div class="row row-cols-6 justify-content-evenly">
     <!-- 벽난로 주인 프로필 -->
-    <div class='col-12 col-lg-3 ms-2 my-5'>
-      <p class=' my-5 fs-1 ms-5 text-center'>개인 프로필</p>
+    <div class='col col-lg-3 ms-2 my-5 text-center'>
+      <p class=' my-5 fs-1 text-center'>개인 프로필</p>
       <div class='row'>
         <div class='col-6 d-flex justify-content-end'>
           <div>
@@ -166,37 +167,47 @@
             <p>
               나이 :
               {{ user.age_range }}</p>
-            {% if request.user == user %}
-              <a href="{% url 'accounts:mypage' %}" class='btn btn-primary'>마이페이지</a>
+              <div class="">
+              {% if request.user == user %}
+              <a href="{% url 'accounts:mypage' %}" class='btn btn-outline-primary'>마이페이지</a>
               {% else %}
-              <div class="my-5 d-flex align-items-center">
-                <div class="btn">
-                {% if request.user not in followers %}
-                <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-success">Follow</button>
+              </div>
+                {% csrf_token %}
+                {% if request.user not in user.followers.all %}
+                <button class="favorite-button" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+                  <div class="icon">
+                    <div class="star"></div>
+                  </div>
+                  <span id="span">Follow</span>
+                </button>
                 {% else %}
-                <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-danger">Unfollow</button>
+                <button class="favorite-button active" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+                  <div class="icon">
+                    <div class="star"></div>
+                  </div>
+                  <span id="span">UnFollow</span>
+                </button>
                 {% endif %}
-                </div>
+
                 <div id="follow-cnt">
-                {% endif %}
-                  <h3 class="follow">Followers : {{ user.followers.count }}</h3>
-                  <h3 class="follow">Followings : {{ user.followings.count }}</h3>
+              
+              {% endif %}
+                  <h5 id='followers-cnt' class="my-3">Followers : {{ user.followers.count }}</h3>
+                  <h5 id='followings-cnt' class="my-3">Followings : {{ user.followings.count }}</h3>
                 </div>
               </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
-
     <!-- 벽난로 -->
-    <div class='col-12 col-lg-3 ms-2 my-5'>
+    <div class='col ms-2 my-5'>
       <div class='mb-5 d-flex justify-content-center'>
         <div>
           <h1 class='my-5 text-center'>
             개인 벽난로
           </h1>
           {% if user.usercard %}
+          <div class="p-5 my-5 pt-0">
             <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
               {% if user.usercard.chimneys == 9 %}
               <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
@@ -211,62 +222,131 @@
                     <img class="card__thumb" src="{{ user.profileimage }}"/>
                   {% else %}
                     <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
-
+                </div>
+              </div>
+            </a>
                   {% endif %}
                   <div class="card__header-text">
                     <h3 class="card__title">{{ user.nickname }}</h3>
                     <span class="card__status">{{ user.usercard.title }}</span>
                   </div>
-                </div>
-                <p class="card__description">{{ user.usercard.content }}</p>
-              </div>
-            </a>
+                  <p class="card__description">{{ user.usercard.content }}</p>
+          </div>
           {% else %}
+           {% if user == request.user %}
             <div class="p-5 my-5">
               <a href="{% url 'cards:usercard_create' %}" class="btn btn-primary">
                 개인 벽난로를 생성해주세요!
               </a>
             </div>
-
+            {% else %}
+            <div class="p-5 my-5">
+              <h5>아직 벽난로가 없어요 😂</h5>
+            </div>
+            {% endif %}
           {% endif %}
         </div>
-
       </div>
-
-  <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+    </div>
+  </div>
   
+  <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
   <script>
     new Snowflakes();
   </script>
   <!-- follow -->
   <script>
-    const followBtn = document.querySelector('#follow-btn')
-  
-    followBtn.addEventListener('click', function(event) {
-      axios({
-        method: 'get',
-        url: `/accounts/${event.target.dataset.userId}/follow/`
-      })
-      .then(response => {
-        console.log(response.data)
-        if (response.data.isFollow === true) {
-          event.target.classList.add('btn-outline-danger')
-          followBtn.innerText = 'Unfollow'
-          event.target.classList.remove('btn-outline-success')
-        } else {
-          event.target.classList.add('btn-outline-success')
-          followBtn.innerText = 'Follow'
-          event.target.classList.remove('btn-outline-danger')
+    function follow(e) {
+      const button = e.target
+            if(button.classList.contains('animated')) {
+                return
+            }
+            button.classList.add('animated')
+
+            gsap.to(button, {
+                keyframes: [{
+                    '--star-y': '-36px',
+                    duration: .3,
+                    ease: 'power2.out'
+                }, {
+                    '--star-y': '48px',
+                    '--star-scale': .4,
+                    duration: .325,
+                    onStart() {
+                        button.classList.add('star-round')
+                    }
+                }, {
+                    '--star-y': '-64px',
+                    '--star-scale': 1,
+                    duration: .45,
+                    ease: 'power2.out',
+                    onStart() {
+                        button.classList.toggle('active')
+                        setTimeout(() => button.classList.remove('star-round'), 100)
+                    }
+                }, {
+                    '--star-y': '0px',
+                    duration: .45,
+                    ease: 'power2.in'
+                }, {
+                    '--button-y': '3px',
+                    duration: .11
+                }, {
+                    '--button-y': '0px',
+                    '--star-face-scale': .65,
+                    duration: .125
+                }, {
+                    '--star-face-scale': 1,
+                    duration: .15
+                }],
+                clearProps: true,
+                onComplete() {
+                    button.classList.remove('animated')
+                }
+            })
+
+            gsap.to(button, {
+                keyframes: [{
+                    '--star-hole-scale': .8,
+                    duration: .5,
+                    ease: 'elastic.out(1, .75)'
+                }, {
+                    '--star-hole-scale': 0,
+                    duration: .2,
+                    delay: .2
+                }]
+            })
+
+            gsap.to(button, {
+                '--star-rotate': '360deg',
+                duration: 1.55,
+                clearProps: true
+            })
+          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+          axios({
+            method: 'post',
+            url: `/accounts/${e.target.dataset.userId}/follow/`,
+            headers: {'X-CSRFToken': csrftoken},
+            data: {'note_pk': event.target.dataset.userId},
+          })
+          .then(response => {
+            console.log(response.data.followersCount)
+            console.log(response.data.followingsCount)
+            if (response.data.isFollow === true) {
+              const span = document.querySelector('#span')
+              span.innerText = 'UnFollow'
+            }
+            else {
+              const span = document.querySelector('#span')
+              span.innerText = 'Follow'
+            }
+            const followingsCnt = document.querySelector('#followings-cnt')
+            const followersCnt = document.querySelector('#followers-cnt')
+            followingsCnt.innerText = `Followings : ${response.data.followingsCount}`
+            followersCnt.innerText = `Followers : ${response.data.followersCount}`
+          })
         }
-  
-        const followCnt = document.querySelector('#follow-cnt')
-        followCnt.innerHTML = `
-          <h3 class="follow">Followers : ${ response.data.followersCount }</h3>
-          <h3 class="follow">Followings : ${ response.data.followingsCount }</h3>
-        `
-      })
-    })
-  
   </script>
 
 
