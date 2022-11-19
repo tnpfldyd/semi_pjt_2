@@ -20,8 +20,8 @@ class Groupcard(models.Model):
     content = models.TextField()
     is_private = models.BooleanField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    socks = models.IntegerField()
-    chimneys = models.IntegerField()
+    groupdeco = models.IntegerField(blank=True)
+    chimneys = models.IntegerField(blank=True)
 
 
 class UserComment(models.Model):

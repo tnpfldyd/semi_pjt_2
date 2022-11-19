@@ -15,12 +15,19 @@ from django.db.models import Count
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
-    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by("-follow")[:5]
-    random_user = UserCard.objects.order_by("?")[:5]
+    pop_list = UserCard.objects.annotate(follow=Count("user__followers")).order_by(
+        "-follow"
+    )[:5]
+    random_list = UserCard.objects.order_by("?")[:5]
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
 
-    context = {"groupcards": groupcards, "user": user, "random_list": random_list}
+    context = {
+        "groupcards": groupcards,
+        "user": user,
+        "random_list": random_list,
+        "pop_list": pop_list,
+    }
     return render(request, "cards/index.html", context)
 
 
@@ -148,7 +155,9 @@ def usercard_comment(request, pk):
                                 "object_type": "text",
                                 "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
                                 "link": {
-                                    "web_url": "http://localhost:8000/cards/detail/usercard/" + str(pk)+ "/"
+                                    "web_url": "http://localhost:8000/cards/detail/usercard/"
+                                    + str(pk)
+                                    + "/"
                                 },
                             }
                         )
@@ -167,10 +176,8 @@ def usercard_comment(request, pk):
 
 
 # 그룹카드 생성, 수정, 삭제, 디테일
-
-
 @login_required
-def create_group(request):
+def group_create(request):
     if request.method == "POST":
         form = GroupCardForm(request.POST)
         if form.is_valid():
@@ -178,8 +185,8 @@ def create_group(request):
             temp.user = request.user
             # 라디오 버튼 'name'='id'로 들어옴
             # name==choice, id=1,2,3으로 설정
+            temp.groupdeco = request.POST["groupdeco"]
             temp.chimneys = request.POST["choice_chim"]
-            temp.socks = request.POST["userdeco"]
             temp.save()
             return redirect("cards:index")
     else:
@@ -187,8 +194,7 @@ def create_group(request):
     context = {
         "form": form,
     }
-
-    return render(request, "cards/create_group.html", context)
+    return render(request, "cards/group_create.html", context)
 
 
 def group_detail(request, pk):
@@ -201,10 +207,6 @@ def group_detail(request, pk):
     return render(request, "cards/group_detail.html", context)
 
 
-def card_delete(request):
-    card = Groupcard.objects.get(user_id=request.user.pk, is_indiv=1)
-
-
 def groupcard_update(request, pk):
     cards = Groupcard.objects.get(pk=pk)
     if request.method == "POST":
@@ -214,7 +216,7 @@ def groupcard_update(request, pk):
             temp.user = request.user
             # 라디오 버튼 'name'='id'로 들어옴
             # name==choice, id=1,2,3으로 설정
-            temp.socks = request.POST["choice_sock"]
+            temp.groupdeco = request.POST["groupdeco"]
             temp.chimneys = request.POST["choice_chim"]
             temp.save()
             return redirect("cards:group_detail", cards.pk)
@@ -227,8 +229,6 @@ def groupcard_update(request, pk):
 def groupcard_delete(request, pk):
     card = Groupcard.objects.get(pk=pk)
     card.delete()
-    request.user.card_created = 0
-    request.user.save()
     return redirect("cards:index")
 
 

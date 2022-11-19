@@ -139,10 +139,10 @@
     box-shadow: 0 8px 5px rgba(0,0,0,0.5);
   }
   </style>
-  <div class="row justify-content-center">
-    <!-- 벽난로 주인 프로필 -->
-    <div class='col-12 col-lg-3 ms-2 my-5'>
-      <p class=' my-5 fs-1 ms-5 text-center'>개인 프로필</p>
+<div class="row justify-content-center">
+<!-- 벽난로 주인 프로필 -->
+  <div class='col-12 col-lg-3 ms-2 my-5'>
+    <p class=' my-5 fs-1 ms-5 text-center'>개인 프로필</p>
       <div class='row'>
         <div class='col-6 d-flex justify-content-end'>
           <div>
@@ -153,81 +153,64 @@
             {% endif %}
           </div>
         </div>
-        <div class='col-6 d-flex justify-content-center'>
-          <div>
-            <p>
-              이름 :
-              {{ user.nickname }}
-            </p>
-            <p>
-              성별 :
-              {{ user.gender }}
-            </p>
-            <p>
-              나이 :
-              {{ user.age_range }}</p>
-            {% if request.user == user %}
-              <a href="{% url 'accounts:mypage' %}" class='btn btn-primary'>마이페이지</a>
-              {% else %}
-              <div class="my-5 d-flex align-items-center">
-                <div class="btn">
-                {% if request.user not in followers %}
+      <div class='col-6 d-flex justify-content-center'>
+        <div>
+          <p> 이름 : {{ user.nickname }} </p>
+          <p> 성별 : {{ user.gender }} </p>
+          <p> 나이 : {{ user.age_range }} </p>
+        {% if request.user == user %}
+          <a href="{% url 'accounts:mypage' %}" class='btn btn-primary'>마이페이지</a>
+        {% else %}
+          <div class="my-5 d-flex align-items-center">
+            <div class="btn">
+              {% if request.user not in followers %}
                 <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-success">Follow</button>
-                {% else %}
+              {% else %}
                 <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-danger">Unfollow</button>
-                {% endif %}
-                </div>
-                <div id="follow-cnt">
-                {% endif %}
-                  <h3 class="follow">Followers : {{ user.followers.count }}</h3>
-                  <h3 class="follow">Followings : {{ user.followings.count }}</h3>
-                </div>
-              </div>
+              {% endif %}
+            </div>
+              <div id="follow-cnt">
+        {% endif %}
+          <h3 class="follow">Followers : {{ followers.count }}</h3>
+          <h3 class="follow">Followings : {{ followings.count }}</h3>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 벽난로 -->
-    <div class='col-12 col-lg-3 ms-2 my-5'>
-      <div class='mb-5 d-flex justify-content-center'>
-        <div>
-          <h1 class='my-5 text-center'>
-            개인 벽난로
-          </h1>
-          {% if user.usercard %}
-            <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
-              <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
-              <div class="card__overlay">
-                <div class="card__header">
-                  <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">
-                    <path/></svg>
-                  {% if user.profileimage %}
-                    <img class="card__thumb" src="{{ user.profileimage }}"/>
-                  {% else %}
-                    <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
-
-                  {% endif %}
-                  <div class="card__header-text">
-                    <h3 class="card__title">{{ user.nickname }}</h3>
-                    <span class="card__status">{{ user.usercard.title }}</span>
-                  </div>
-                </div>
-                <p class="card__description">{{ user.usercard.content }}</p>
+  <!-- 벽난로 -->
+  <div class='col-12 col-lg-3 ms-2 my-5'>
+    <div class='mb-5 d-flex justify-content-center'>
+      <div>
+        <h1 class='my-5 text-center'> 개인 벽난로 </h1>
+        {% if user.usercard %}
+          <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
+          <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
+          <div class="card__overlay">
+            <div class="card__header">
+              <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"> <path/></svg>
+              {% if user.profileimage %}
+                <img class="card__thumb" src="{{ user.profileimage }}"/>
+              {% else %}
+                <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
+              {% endif %}
+              <div class="card__header-text">
+                <h3 class="card__title">{{ user.nickname }}</h3>
+                <span class="card__status">{{ user.usercard.title }}</span>
               </div>
-            </a>
-          {% else %}
-            <div class="p-5 my-5">
-              <a href="{% url 'cards:usercard_create' %}" class="btn btn-primary">
-                개인 벽난로를 생성해주세요!
-              </a>
             </div>
-
-          {% endif %}
-        </div>
-
-      </div>
+            <p class="card__description">{{ user.usercard.content }}</p>
+            </div>
+          </a>
+          {% else %}
+          <div class="p-5 my-5">
+            <a href="{% url 'cards:usercard_create' %}" class="btn btn-primary"> 개인 벽난로를 생성해주세요! </a>
+          </div>
+        {% endif %}
+  </div>
+</div>
 
   <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
   
@@ -245,7 +228,7 @@
       })
       .then(response => {
         console.log(response.data)
-        if (response.data.isFollow === true) {
+        if (response.context.isFollowing === true) {
           event.target.classList.add('btn-outline-danger')
           followBtn.innerText = 'Unfollow'
           event.target.classList.remove('btn-outline-success')
@@ -257,8 +240,8 @@
   
         const followCnt = document.querySelector('#follow-cnt')
         followCnt.innerHTML = `
-          <h3 class="follow">Followers : ${ response.data.followersCount }</h3>
-          <h3 class="follow">Followings : ${ response.data.followingsCount }</h3>
+          <h3 class="follow">Followers : ${ response.context.followersCount }</h3>
+          <h3 class="follow">Followings : ${ response.context.followingsCount }</h3>
         `
       })
     })

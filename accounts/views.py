@@ -122,7 +122,11 @@ def mypage(request):
     return render(
         request,
         "accounts/mypage.html",
-        {"user": get_user_model().objects.get(pk=request.user.pk), "block_users": block_users, "block_cnt": block_cnt,},
+        {
+            "user": get_user_model().objects.get(pk=request.user.pk),
+            "block_users": block_users,
+            "block_cnt": block_cnt,
+        },
     )
 
 
@@ -186,8 +190,8 @@ def follow(request, pk):
             is_follow = True
         context = {
             "isFollow": is_follow,
-            "followersCount": person.followers.count(),
-            "followingsCount": person.followings.count(),
+            "followersCount": person.followers.all().count(),
+            "followingsCount": person.followings.all().count(),
         }
         return JsonResponse(context)
     else:
@@ -214,7 +218,6 @@ def block(request, pk):
     else:
         messages.warning(request, "그건 안됨.")
         return redirect("meetings:index")
-
 
 
 def profile(request, pk):

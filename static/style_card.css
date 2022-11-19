@@ -321,7 +321,6 @@
 
 
 /* 화면 전환용 */
-
 [data-page] {
   position: fixed;
   /* fixed or absolute if the content exceeds the height of the page */
@@ -334,7 +333,7 @@
   left: 100%;
   transition: left 1.0s ease-in; 
   */
-  z-index: 10;
+  z-index: 1051;
 }
 
 /* 첫 번째 페이지 */
@@ -354,7 +353,7 @@
   /**
   left: 0;
   **/
-  z-index: 100;
+  z-index: 1051;
 }
 
 [data-role="link"] {
