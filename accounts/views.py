@@ -253,11 +253,10 @@ def save(request):
 
 @login_required
 def notice(request):
-    print(request.user.usercard)
     if request.method == "POST":
         dic = {}
         if request.user.tree_notice:
-            if request.user.usercard:
+            if UserCard.objects.filter(user=request.user).exists():
                 card = request.user.usercard
                 false_comments = card.usercomment_set.filter(read=False)
                 for i in false_comments:
