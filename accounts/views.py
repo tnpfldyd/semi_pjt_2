@@ -112,7 +112,7 @@ def kakao_callback(request):
         messages.error(request, "누적 신고 횟수가 많아 로그인 할 수 없어요.😥")
     else:
         messages.success(request, "오신걸 환영합니다.😀")
-    return redirect(request.GET.get("next") or "accounts:index")
+    return redirect(request.GET.get("next") or "home")
 
 
 @login_required
@@ -122,13 +122,17 @@ def mypage(request):
     return render(
         request,
         "accounts/mypage.html",
-        {"user": get_user_model().objects.get(pk=request.user.pk), "block_users": block_users, "block_cnt": block_cnt,},
+        {
+            "user": get_user_model().objects.get(pk=request.user.pk),
+            "block_users": block_users,
+            "block_cnt": block_cnt,
+        },
     )
 
 
 def logout(request):
     auth_logout(request)
-    return redirect("accounts:index")
+    return redirect("home")
 
 
 def update(request):
@@ -214,7 +218,6 @@ def block(request, pk):
     else:
         messages.warning(request, "그건 안됨.")
         return redirect("meetings:index")
-
 
 
 def profile(request, pk):

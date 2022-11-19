@@ -17,7 +17,7 @@
   
   <div style='width:40rem'>
     
-  <h1 class='text-center mb-5'> 개인 벽난로 수정하기 </h1>
+  <h1 class='text-center mb-5'> 개인 벽난로 수정 </h1>
 
   <form action="" method="POST">
     <h1 class='fs-4 mt-5 mb-4'>벽난로를 선택하세요</h1>
@@ -25,16 +25,35 @@
     <div class="cc-selector mb-5">
 
       <input type="radio" name="choice_chim" id="chim1" value="1" required>
-      <label class="drinkcard-cc chim1" for="chim1"></label>
+      <label class="drinkcard-cc chim1 me-2 mb-1 rounded-1" for="chim1"></label>
 
 
       <input type="radio" name="choice_chim" id="chim2" value="2" required>
-      <label class="drinkcard-cc chim2" for="chim2"> </label>
-
+      <label class="drinkcard-cc chim2 me-2 mb-1 rounded-1" for="chim2"> </label>
 
       <input type="radio" name="choice_chim" id="chim3" value="3" required>
-      <label class="drinkcard-cc chim3" for="chim3"></label>
+      <label class="drinkcard-cc chim3 me-2 mb-1 rounded-1" for="chim3"></label>
 
+      <input type="radio" name="choice_chim" id="chim4" value="4">
+      <label class="drinkcard-cc chim4 me-2 mb-1 rounded-1" for="chim4"></label>
+
+      <input type="radio" name="choice_chim" id="chim5" value="5">
+      <label class="drinkcard-cc chim5 me-2 mb-1 rounded-1" for="chim5"></label>
+
+      <input type="radio" name="choice_chim" id="chim6" value="6">
+      <label class="drinkcard-cc chim6 me-2 mb-1 rounded-1" for="chim6"></label>
+
+      <input type="radio" name="choice_chim" id="chim7" value="7">
+      <label class="drinkcard-cc chim7 me-2 mb-1 rounded-1" for="chim7"></label>
+
+      <input type="radio" name="choice_chim" id="chim8" value="8">
+      <label class="drinkcard-cc chim8 me-2 mb-1 rounded-1" for="chim8"></label>
+
+      <input type="radio" name="choice_chim" id="chim9" value="9">
+      <label class="drinkcard-cc chim9 me-2 mb-1 rounded-1" for="chim9"></label>
+
+      <input type="radio" name="choice_chim" id="chim11" value="11">
+      <label class="drinkcard-cc chim11 me-2 mb-1 rounded-1" for="chim11"></label>
     </div>
 
     <h2 class='fs-4 mt-5 mb-4'>벽난로 장식을 선택하세요.</h2>
@@ -68,12 +87,14 @@
 
         <input type="radio" name="userdeco" id="userdeco8" value="8">
         <label class="drinkcard-cc userdeco8" for="userdeco8"></label>
+
+        <input type="radio" name="userdeco" id="userdeco9" value="9">
+        <label class="drinkcard-cc userdeco9" for="userdeco9"></label>
     </div>
 
     {% csrf_token %}
-    {% bootstrap_form form %}
     <div class="d-grid">
-      <input type="submit" value="벽난로 바꾸기" class="btn btn-primary">
+      <input type="submit" value="메세지 변경하기" class="btn btn-primary">
     </div>
     </form>
 

@@ -198,7 +198,11 @@
           </h1>
           {% if user.usercard %}
             <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
+              {% if user.usercard.chimneys == 9 %}
+              <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
+              {% else %}
               <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
+              {% endif %}
               <div class="card__overlay">
                 <div class="card__header">
                   <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">

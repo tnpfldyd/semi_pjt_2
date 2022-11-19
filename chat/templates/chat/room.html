@@ -1,7 +1,10 @@
-{% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
+{% bootstrap_css %}
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap"
+rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'style.css' %}?{% now 'U'%}" />
 <style>
    body {
     background-image : url('{% static 'images/채팅방.jpg' %}');
@@ -32,7 +35,7 @@
 {{ user|json_script:"user" }}
 {{ userid|json_script:"userid" }}
 {{ room_name|json_script:"room-name" }}
-
+{% bootstrap_javascript %}
 <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
     const user = document.getElementById('user').value

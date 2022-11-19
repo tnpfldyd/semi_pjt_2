@@ -5,8 +5,8 @@ from django.conf import settings
 
 # Create your tests here.
 class UserCard(models.Model):
-    title = models.CharField(max_length=20)
-    content = models.TextField()
+    title = models.CharField(max_length=20, blank=True)
+    content = models.TextField(blank=True)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

@@ -19,7 +19,7 @@
     {% bootstrap_css %}
 
 <body>
-  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header d-flex flex-column">
@@ -49,9 +49,6 @@
           </li>
           <li class="navbar-brand">
             <a class="nav-link" href="{% url 'meetings:index' %}">모임</a>
-          </li>
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'chat:index' %}">채팅</a>
           </li>
           {% if request.user.is_authenticated %}
           <li class="navbar-brand">
@@ -96,9 +93,6 @@
             </button>
           </li>
           {% endif %} 
-              <audio controls>
-                <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
-              </audio>
           <li class="navbar-brand">
               {% for message in messages %}
               <div class="nav-link alert {{ message.tags }} alert-auto-dismissible text-center d-flex align-items-center m-0" role="alert" style="height: 40px; font-size: 16px;">

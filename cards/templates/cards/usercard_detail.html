@@ -29,14 +29,14 @@
           <div class="modal-content">
             <div class="modal-body">
               <div class='d-flex justify-content-center'>
-                <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:4rem;'>
+                <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:5rem;'>
               </div>
               <div class='mb-2 rounded-2 p-1'>
                 <p class='text-center fs-5 my-5'>{{ cards.title }} </p>
                 <p class='my-1 text-center'>{{ cards.content }} </p>
               </div>
               <div class='d-grid mt-5'>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
               </div>
             </div>
           </div>
@@ -46,10 +46,14 @@
       {% comment %} 댓글 메세지 띄우기 {% endcomment %}
       <div>
       <div style='position:relative' class='my-4 text-center'>
+        {% if cards.chimneys == 9 %}
+        <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+        {% else %}
         <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+        {% endif %}
         <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
-          <div style='position: absolute; top:-3rem; left:18rem;'>
-            <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:5rem; height:5rem;'>
+          <div style='position: absolute; top:-3.3rem; left:17.4rem;'>
+            <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:6rem;'>
           </div>
         </a>
         {% for comment in comments %}
@@ -57,16 +61,24 @@
         {% comment %} 댓글 모달 {% endcomment %}
         {% if forloop.counter|mod:8 == 0 %}
         <a type="button" class="btn p-0 m-0" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'>
+          {% if comment.user.nickname %}
+          <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user.nickname }} </p>   
+          {% else %}
           <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
+          {% endif %}
           <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem'>
         </a>
           {% else %}
         <a type="button" class="btn p-0 ms-2" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;'>
+          {% if comment.user.nickname %}
+          <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user.nickname }} </p>   
+          {% else %}
           <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
+          {% endif %}
           <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem'>
         </a>
 
-          {% endif %}
+        {% endif %}
 
         <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -75,7 +87,11 @@
                 <div class='d-flex justify-content-center'>
                   <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
                 </div>
+                {% if comment.user.nickname %}
+                <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
+                {% else %}
                 <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
+                {% endif %}
                 <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
                 <p class='my-1 text-start px-2'> {{ comment.content }} </p>
                 <div class='d-grid mt-5'>

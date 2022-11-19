@@ -97,6 +97,12 @@ a {
   background-image: url("images/유저장식8.png");
 }
 
+.userdeco9 {
+  background-image: url("images/유저장식9.png");
+}
+
+/* 벽난로 모음 */
+
 .chim1 {
   background-image: url("images/벽난로1.jpg");
 }
@@ -107,6 +113,34 @@ a {
 
 .chim3 {
   background-image: url("images/벽난로3.jpg");
+}
+
+.chim4 {
+  background-image: url("images/벽난로4.jpg");
+}
+
+.chim5 {
+  background-image: url("images/벽난로5.jpg");
+}
+
+.chim6 {
+  background-image: url("images/벽난로6.jpg");
+}
+
+.chim7 {
+  background-image: url("images/벽난로7.jpg");
+}
+
+.chim8 {
+  background-image: url("images/벽난로8.jpg");
+}
+
+.chim9 {
+  background-image: url("images/벽난로9.png");
+}
+
+.chim11 {
+  background-image: url("images/벽난로11.jpg");
 }
 
 .ribbon1 {
@@ -183,8 +217,8 @@ a {
   background-size: contain;
   background-repeat: no-repeat;
   display: inline-block;
-  width: 90px;
-  height: 70px;
+  width: 100px;
+  height: 90px;
   -webkit-transition: all 100ms ease-in;
   -moz-transition: all 100ms ease-in;
   transition: all 100ms ease-in;
@@ -224,7 +258,7 @@ a {
   cursor: pointer;
 }
 
-.custom-form{
+.custom-form {
   color: black;
   border: none;
   background-color: #fff;
@@ -284,14 +318,14 @@ a {
   position: relative;
   width: 300px;
   height: 550px;
-  box-shadow: 0 5px 7px rgba(0,0,0,0.5);
+  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
   border-radius: 20px;
   overflow: hidden;
 }
 
 .cus-card:hover {
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 
