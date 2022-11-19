@@ -99,23 +99,23 @@
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <!-- <i class="bi bi-bell fw-bold text-danger "></i> -->
             </a>
-            <ul class="dropdown-menu p-0">
-              <li class="p-3">새로운 알림이 <br> 없어요😊</li>
+            <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
+              <li class="p-3 dropdown-item">새로운 알림이 <br> 없어요😊</li>
             </ul>
             {% else %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
               <!-- <i class="bi bi-bell-fill fw-bold text-danger"></i> -->
             </a>
             {% csrf_token %}
-            <ul class="dropdown-menu p-0" id="dropul">
+            <ul class="dropdown-menu p-0" id="dropul" style="background: rgba(0, 0, 0, 0.0); border: none;">
             </ul>
             {% endif %}
           {% else %}
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-bell-slash-fill fw-bold text-danger"></i>
           </a>
-          <ul class="dropdown-menu p-0">
-            <li class="p-3">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
+          <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
+            <li class="p-3 dropdown-item">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
           </ul>
           {% endif %}
         </li>
@@ -151,7 +151,6 @@
     {% bootstrap_javascript %}
 
     <!-- JavaScript -->
-    <script src="js/script.js"></script>
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -336,5 +335,7 @@
     background-color: #4070F4;
     border-top-left-radius: 25px;
 } */
+
   </style>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </html>
