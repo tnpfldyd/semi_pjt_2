@@ -3,11 +3,13 @@ from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
 
-import requests, os, json
+import requests, os, json, re
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.db.models import Count
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Create your views here.
 
@@ -15,21 +17,17 @@ from django.db.models import Count
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
-    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by(
-        "-follow"
-    )[:5]
+    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by("-follow")[:5]
     random_user = UserCard.objects.order_by("?")[:5]
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
-
+    print(popularity, random_user)
     context = {
         "groupcards": groupcards,
         "user": user,
         "random_user": random_user,
         "popular": popularity,
     }
-    print(popularity)
-    print(random_user)
     return render(request, "cards/index.html", context)
 
 
@@ -396,3 +394,28 @@ def gcomment_create(request, pk):
     context = {"comment_form": comment_form}
 
     return render(request, "cards/gcomment_create.html", context)
+
+
+def search(request):
+    all_data = Groupcard.objects.filter(is_private=0).order_by("-pk")
+    search = re.sub(r"[0-9]", "", request.GET.get("search"))
+    page = request.GET.get("page", "1")
+    paginator = Paginator(all_data, 6)
+    page_obj = paginator.get_page(page)
+    if search:
+        search_list = all_data.filter(Q(title__icontains=search))
+        paginator = Paginator(search_list, 6)
+        page_obj = paginator.get_page(re.sub(r"[^0-9]", "", request.GET.get("search")))
+        context = {
+            "search": search,
+            "search_list": search_list,
+            "question_list": page_obj,
+        }
+    else:
+        context = {
+            "search": search,
+            "search_list": all_data,
+            "question_list": page_obj,
+        }
+
+    return render(request, "cards/search.html", context)

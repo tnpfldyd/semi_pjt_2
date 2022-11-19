@@ -124,9 +124,32 @@
   <img src="{% static 'images/벽난로배너2.png' %}" style='width:100%;' alt="">
 </div>
 
+<div class="container">
+  <div class="banner d-flex p-3 w-100 align-items-center justify-content-center">
+    <form action="{% url 'cards:search' %}" role='search' class='mb-0 w-100'>
+      <div class="d-flex w-100 justify-content-center">
+        <input type="search" id="mySearch" onkeyup="myFunction()" placeholder="벽난로 검색" title="Type in a category" class='ps-3 py-3 w-100' style="max-width: 500px;" name='search'>
+        <button class="btn btn-link" type="submit">
+          <script src="https://cdn.lordicon.com/qjzruarw.js"></script>
+          <lord-icon
+              src="https://cdn.lordicon.com/hgbzryoa.json"
+              trigger="hover"
+              colors="primary:#000000,secondary:#ffffff,tertiary:#000000,quaternary:#242424"
+              style="width:75px;height:75px">
+          </lord-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
 
 <div class='my-5'>
-  <a href="{% url 'cards:group_create' %}" class="btn btn-warning"> 그룹 벽난로 생성</a>
+  <a href="{% url 'cards:group_create' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>
+  <h1 class='my-5 text-center'> 내가 만든 벽난로 </h1> 
   <div class="row" style='width:100%'>  
     <h1 class='text-center'>그룹 벽난로</h1>
     {% if groupcards %}
