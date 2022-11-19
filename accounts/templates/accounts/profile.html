@@ -123,23 +123,13 @@
 
     body {
       background-image: url("{% static 'images/프로필배경.png' %}");
-
-      {
-        % comment %
-      }
-
-      color: white;
-
-      {
-        % endcomment %
-      }
     }
 
     #profileimage {
       box-shadow: 0 8px 5px rgba(0, 0, 0, 0.5);
     }
   </style>
-  <div class="row justify-content-evenly">
+  <div class="row justify-content-evenly" style="max-width: 100%;">
     <!-- 벽난로 주인 프로필 -->
     <div class='col-4 col-lg-3 ms-2 my-5 text-center'>
       <p class=' my-5 fs-1 text-center'>개인 프로필</p>
@@ -168,7 +158,7 @@
               {{ user.age_range }}</p>
             <div class="">
               {% if request.user == user %}
-                <a href="{% url 'accounts:mypage' %}" class='btn btn-outline-primary'>마이페이지</a>
+                <a href="{% url 'accounts:mypage' %}" class='btn btn-primary'>마이페이지</a>
               {% else %}
               </div>
               {% csrf_token %}
@@ -201,7 +191,7 @@
       </div>
     </div>
     <!-- 벽난로 -->
-    <div class='col-4 col-lg-3 ms-2 my-5'>
+    <div class='col-4 ms-2 my-5'>
       <div class='mb-5 d-flex justify-content-center'>
         <div>
           <h1 class='my-5 text-center'>
