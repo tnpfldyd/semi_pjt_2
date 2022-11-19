@@ -7,8 +7,10 @@ urlpatterns = [
     path("", views.index, name="index"),
     # 개인카드
     path("create/indiv/", views.usercard_create, name="usercard_create"),
+    path("create/indiv/2", views.usercard_create2, name="usercard_create2"),
     path("detail/usercard/<int:pk>/", views.usercard_detail, name="usercard_detail"),
     path("<int:pk>/usercard/update/", views.usercard_update, name="usercard_update"),
+    path("<int:pk>/usercard/update/2", views.usercard_update2, name="usercard_update2"),
     path("usercard/delete/", views.usercard_delete, name="usercard_delete"),
     path(
         "<int:pk>/usercard/comments/", views.usercard_comment, name="usercard_comment"

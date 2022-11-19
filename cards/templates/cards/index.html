@@ -34,7 +34,7 @@
   
   .card__image {      
     width: 100%;
-    height: auto;
+    height: 20rem;
   }
   
   .card__overlay {
@@ -126,10 +126,11 @@
 
 
 <div class='my-5'>
-  <a href="{% url 'cards:group_create' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>
+  <a href="{% url 'cards:create_group' %}" class="btn btn-warning"> 그룹 벽난로 만들기</a>
   <h1 class='my-5 text-center'> 내가 만든 벽난로 </h1> 
-  <div class="row">  
+  <div class="row" style='width:100%'>  
     {% if groupcards %}
+    <h1>그룹 벽난로</h1>
       {% for card in groupcards %}
       <div class="col-12 col-sm-6 col-md-2 my-3">
         <a href="{% url 'cards:group_detail' card.pk %}" class="card2">
@@ -152,8 +153,8 @@
       </div>
       {% endfor %}      
     {% else %}
-    <div>
-      <h1 class='my-5 text-center'> 벽난로를 만들어보세요. </h1> 
+    <div class='mx-4'>
+      <h1 class='my-5 fs-4 text-center'> 그룹 벽난로를 만들어보세요. </h1> 
     </div>  
   {% endif %}
   </div>
@@ -161,32 +162,43 @@
 
 <div class='my-5'>
   <h1 class='my-5 text-center'> 인기 벽난로 </h1> 
-  <div class="row">  
-    {% if pop_list %}
-      {% for card in pop_list %}
-      <div class="col-12 col-sm-6 col-md-2 my-3">
-        <a href="{% url 'cards:usercard_detail' card.user.pk %}" class="card2">
-          <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt="" />
-          <div class="card__overlay">
-            <div class="card__header">
-              <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
-              {% if card.user.profileimage %}
-                <img class="card__thumb" src="{{ user.profileimage }}"  />
-              {% else %}
-                <img class="card__thumb" src="{{ user.profileimage.url }}"  />
-              {% endif %}                     
-              <div class="card__header-text">
-                <h3 class="card__title">{{ card.title }}</h3>            
-              </div>
-            </div>
-            <p class="card__description">{{ card.content }}</p>
+  <div class="row" style='width:100%'>  
+    {% if popular != '' %}
+      {% for card in popular %}
+      <div class='col-12 col-lg-3 ms-2 my-5'>
+        <div class='mb-5 d-flex justify-content-center'>
+          <div>
+              <a href="{% url 'cards:usercard_detail' card.pk %}" class="card2">
+                {% if card.chimneys == 9 %}
+                <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt=""/>
+                {% else %}
+                <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt=""/>
+                {% endif %}
+                <div class="card__overlay">
+                  <div class="card__header">
+                    <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">
+                      <path/></svg>
+                    {% if card.user.profileimage %}
+                      <img class="card__thumb" src="{{ card.user.profileimage }}"/>
+                    {% else %}
+                      <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
+  
+                    {% endif %}
+                    <div class="card__header-text">
+                      <h3 class="card__title">{{ card.user.nickname }}</h3>
+                      <span class="card__status">{{ card.title }}</span>
+                    </div>
+                  </div>
+                  <p class="card__description">{{ card.content }}</p>
+                </div>
+              </a>
           </div>
-        </a>
-      </div>
+        </div>
+    </div>
       {% endfor %}      
     {% else %}
     <div>
-      <h1 class='my-5 text-center'> 벽난로를 만들어보세요. </h1> 
+      <h1 class='my-5 fs-4'> 벽난로를 만들어보세요. </h1> 
     </div>  
   {% endif %}
   </div>
@@ -194,32 +206,43 @@
 
 <div class='my-5'>
   <h1 class='my-5 text-center'> 랜덤 벽난로 </h1> 
-  <div class="row">  
-    {% if random_list %}
-      {% for card in random_list %}
-      <div class="col-12 col-sm-6 col-md-2 my-3">
-        <a href="{% url 'cards:usercard_detail' card.user.pk %}" class="card2">
-          <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt="" />
-          <div class="card__overlay">
-            <div class="card__header">
-              <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
-              {% if card.user.profileimage %}
-                <img class="card__thumb" src="{{ user.profileimage }}"  />
-              {% else %}
-                <img class="card__thumb" src="{{ user.profileimage.url }}"  />
-              {% endif %}                     
-              <div class="card__header-text">
-                <h3 class="card__title">{{ card.title }}</h3>            
-              </div>
-            </div>
-            <p class="card__description">{{ card.content }}</p>
+  <div class="row" style='width:100%'>
+    {% if random_user != '' %}
+      {% for card in random_user %}
+      <div class='col-12 col-lg-3 ms-2 my-5'>
+        <div class='mb-5 d-flex justify-content-center'>
+          <div>
+              <a href="{% url 'cards:usercard_detail' card.pk %}" class="card2">
+                {% if card.chimneys == 9 %}
+                <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt=""/>
+                {% else %}
+                <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt=""/>
+                {% endif %}
+                <div class="card__overlay">
+                  <div class="card__header">
+                    <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">
+                      <path/></svg>
+                    {% if card.user.profileimage %}
+                      <img class="card__thumb" src="{{ card.user.profileimage }}"/>
+                    {% else %}
+                      <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
+  
+                    {% endif %}
+                    <div class="card__header-text">
+                      <h3 class="card__title">{{ card.user.nickname }}</h3>
+                      <span class="card__status">{{ card.title }}</span>
+                    </div>
+                  </div>
+                  <p class="card__description">{{ card.content }}</p>
+                </div>
+              </a>
           </div>
-        </a>
-      </div>
-      {% endfor %}      
-    {% else %}
+        </div>
+    </div>
+      {% endfor %} 
+    {% else %}    
     <div>
-      <h1 class='my-5 text-center'> 벽난로를 만들어보세요. </h1> 
+      <h1 class='my-5 fs-4'> 벽난로를 만들어보세요. </h1> 
     </div>  
   {% endif %}
   </div>

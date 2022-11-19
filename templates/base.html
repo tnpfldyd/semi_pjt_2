@@ -1,7 +1,9 @@
 {% load django_bootstrap5 %}
 {% load static %}
 <!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com-->
 <html lang="ko">
+
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,103 +19,139 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <script src="{% static 'js/chat.js' %}"></script>
     {% bootstrap_css %}
+    <title></title>
+    <!-- Boxicons CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+  </head>
 
-<body>
-  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header d-flex flex-column">
-          <h1 class='text-center my-5'>카카오 로그인</h1>
-          <div class="d-grid">
-            <a href="{% url 'accounts:kakao' %}">
-              <img src="{% static 'images/kakao_login.jpg' %}" alt="카카오 간편로그인" style='width:30rem' class='rounded-3'>
-            </a>
+  <body>
+    <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header d-flex flex-column">
+            <h1 class='text-center my-5'>카카오 로그인</h1>
+            <div class="d-grid">
+              <a href="{% url 'accounts:kakao' %}">
+                <img src="{% static 'images/kakao_login.jpg' %}" alt="카카오 간편로그인" style='width:30rem' class='rounded-3'>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <nav class="nav justify-content-between">
+      <ul class="nav-content">
+        <li class="nav-list">
+          <a href="{% url 'home' %}" class="link-item active">
+            <i class='bx bxs-home link-icon'></i>
+            <span class="link-text">대표이사 문경욱</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-content">
+        {% if request.user.is_authenticated %}
+        <li class="nav-list btn2" style="height: 80px;">
+          <a class="link-item active" href="{% url 'cards:index' %}" style="height: 80px;">
+              <i class='bx bxs-paper-plane link-icon'></i>
+              <span class="link-text">벽난로</span>
+          </a>
+          </li>
 
-  <nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">대표이사 문경욱</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'accounts:index' %}">회원</a>
-          </li>
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'cards:index' %}">벽난로</a>
-          </li>
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'meetings:index' %}">모임</a>
-          </li>
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'chat:index' %}">채팅</a>
-          </li>
-          {% if request.user.is_authenticated %}
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
-          </li>
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'accounts:profile' request.user.pk %}">프로필</a>
-          </li>
-          <li class="navbar-brand">
-            <a class="nav-link" href="{% url 'vocies:index' %}">문의</a>
-          </li>
-          <li class="nav-item dropdown d-flex align-items-center">
-            {% if request.user.tree_notice or request.user.note_notice %}
-              {% if request.user.notice_tree and request.user.notice_note %}
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-bell fw-bold text-danger "></i>
-              </a>
-              <ul class="dropdown-menu p-0">
-                <li class="p-3">새로운 알림이 <br> 없어요😊</li>
-              </ul>
-              {% else %}
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
-                <i class="bi bi-bell-fill fw-bold text-danger"></i>
-              </a>
-              {% csrf_token %}
-              <ul class="dropdown-menu p-0" id="dropul">
-              </ul>
-              {% endif %}
-            {% else %}
+        <li class="nav-list btn2" style="height: 80px;">
+          <a href="{% url 'meetings:index' %}" class="link-item active" style="height: 80px;">
+            <i class='bx bxs-conversation link-icon'></i>
+            <span class="link-text">모임</span>
+          </a>
+        </li>
+        <li class="nav-list btn2" style="height: 80px;">
+          <a href="{% url 'notes:index' %}" class="link-item active" style="height: 80px;">
+            <i class='bx bxs-message-rounded link-icon'></i>
+            <span class="link-text">쪽지</span>
+          </a>
+        </li>
+        <li class="nav-list btn2" style="height: 80px;">
+          <a href="{% url 'shoppings:index' %}" class="link-item active" style="height: 80px;">
+            <i class='bx bxs-shopping-bag link-icon'></i>
+            <span class="link-text">쇼핑</span>
+          </a>
+        </li>
+        <li class="nav-list btn2" style="height: 80px;">
+          <a href="{% url 'accounts:profile' request.user.pk %}" class="link-item active" style="height: 80px;">
+            <i class='bx bxs-user link-icon'></i>
+            <span class="link-text">프로필</span>
+          </a>
+        </li>
+        <li class="nav-list btn2" style="height: 80px;">
+          <a href="{% url 'accounts:logout' %}" class="link-item active" style="height: 80px;">
+            <i class='bx bxs-log-out-circle link-icon'></i>
+            <span class="link-text">로그아웃</span>
+          </a>
+        </li>
+        <li class="nav-list btn2" style="height: 80px;">
+          <a href="{% url 'vocies:index' %}" class="link-item active" style="height: 80px;">
+            <i class='bx bxs-user link-icon'></i>
+            <span class="link-text">문의</span>
+          </a>
+        </li>
+        <li class="nav-item dropdown d-flex align-items-center">
+          {% if request.user.tree_notice or request.user.note_notice %}
+            {% if request.user.notice_tree and request.user.notice_note %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-bell-slash-fill fw-bold text-danger"></i>
+              <!-- <i class="bi bi-bell fw-bold text-danger "></i> -->
             </a>
             <ul class="dropdown-menu p-0">
-              <li class="p-3">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
+              <li class="p-3">새로운 알림이 <br> 없어요😊</li>
+            </ul>
+            {% else %}
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
+              <!-- <i class="bi bi-bell-fill fw-bold text-danger"></i> -->
+            </a>
+            {% csrf_token %}
+            <ul class="dropdown-menu p-0" id="dropul">
             </ul>
             {% endif %}
-          </li>
           {% else %}
-          <li class="navbar-brand">
-            <button type="button" class="nav-link border-0 bg-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              로그인
-            </button>
-          </li>
-          {% endif %} 
-              <audio controls>
-                <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
-              </audio>
-          <li class="navbar-brand">
-              {% for message in messages %}
-              <div class="nav-link alert {{ message.tags }} alert-auto-dismissible text-center d-flex align-items-center m-0" role="alert" style="height: 40px; font-size: 16px;">
-            {{ message }}
-              </div>
-              {% endfor %}
-          </li>
-        </ul>
-      </div> 
-    </div>
-  </nav>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-bell-slash-fill fw-bold text-danger"></i>
+          </a>
+          <ul class="dropdown-menu p-0">
+            <li class="p-3">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
+          </ul>
+          {% endif %}
+        </li>
+        {% else %}
+        <li class="nav-list">
+          <a type="button" class="link-item active btn2" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 80px;">
+            <i class='bx bxs-log-in-circle link-icon'></i>
+            <span class="link-text">로그인</span>
+          </a>
+        </li>
+        <li class="nav-list">
+          <a href="{% url 'vocies:index' %}" class="link-item active btn2" style="height: 80px;">
+            <i class='bx bxs-user link-icon'></i>
+            <span class="link-text">문의</span>
+          </a>
+        </li>
+        {% endif %} 
+        {% comment %} <audio controls>
+          <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
+        </audio>
+    <li class="navbar-brand">
+        {% for message in messages %}
+        <div class="nav-link alert {{ message.tags }} alert-auto-dismissible text-center d-flex align-items-center m-0" role="alert" style="height: 40px; font-size: 16px;">
+      {{ message }}
+        </div>
+        {% endfor %}
+      </li> {% endcomment %}
+        <!-- <div class="indicator"></div> -->
+      </ul>
+    </nav>
     {% block content %}
     {% endblock  %}
     {% bootstrap_javascript %}
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -175,6 +213,128 @@
             }
           })
         }
+        const linkItems = document.querySelectorAll(".link-item");
+
+        linkItems.forEach((linkItem, index) => {
+          linkItem.addEventListener("click", () => {
+            document.querySelector(".active").classList.remove("active");
+            linkItem.classList.add("active");
+    
+            const indicator = document.querySelector(".indicator");
+    
+            indicator.style.left = `${index * 95 + 48}px`;
+          })
+        })
     </script>
   </body>
+
+  <style>
+    /* Google Fonts - Poppins */
+
+    body {
+      align-items: center;
+      justify-content: center;
+    }
+
+    nav {
+      background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
+      padding: 0 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-content {
+      display: flex;
+      top: 6px;
+      height: 70px;
+      align-items: center;
+      list-style: none;
+      position: relative;
+    }
+
+    .link-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 120px;
+      width: 95px;
+      text-decoration: none;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .link-item.active {
+      transform: translateY(-10px);
+    }
+
+    .link-icon {
+      font-size: 38px;
+      color: #999;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .link-item.active .link-icon {
+      color: #ffffff;
+    }
+
+    .link-text {
+      position: absolute;
+      font-size: 12px;
+      font-weight: 500;
+      color: #FFF;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .link-item.active .link-text {
+      opacity: 1;
+    }
+
+    /* .btn2:hover {
+      margin: auto;
+      height: -60px;
+      width: -20px;
+      border-radius: 50%;
+      background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
+      background-position: right center;
+    } */
+
+    .btn2:hover {
+    
+    border-radius: 50%;
+    background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 51%, #ffecd2 100%);
+}
+
+    /* .indicator{
+    position:absolute;
+    top: 2px;
+    left: 48px;
+    height: 30px;
+    width: 30px;
+    background-color: #ffffff;
+    border: 6px solid #4070F4;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.indicator::before,
+.indicator::after{
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    height: 24px;
+    width: 19px;
+}
+.indicator::before{
+    left: -20px;
+    background-color: #4070F4;
+    border-top-right-radius: 25px;
+
+}
+.indicator::after{
+    right: -20px;
+    background-color: #4070F4;
+    border-top-left-radius: 25px;
+} */
+  </style>
 </html>
