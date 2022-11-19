@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  :root {
+    --surface-color: #fff;
+    --curve: 40;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 5vw;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  .card2 {
+    position: relative;
+    display: block;
+    width: 20rem;
+    height: auto;  
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+  }
+  
+  .card__image {      
+    width: 100%;
+    height: 20rem;
+  }
+  
+  .card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;      
+    border-radius: calc(var(--curve) * 1px);    
+    background-color: var(--surface-color);      
+    transform: translateY(100%);
+    transition: .2s ease-in-out;
+  }
+  
+  .card2:hover .card__overlay {
+    transform: translateY(0);
+  }
+  
+  .card__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    padding: 0.7em;
+    border-radius: calc(var(--curve) * 1px) 0 0 0;    
+    background-color: var(--surface-color);
+    transform: translateY(-100%);
+    transition: .2s ease-in-out;
+  }
+  
+  .card__arc {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    bottom: 100%;
+    right: 0;      
+    z-index: 1;
+  }
+  
+  .card__arc path {
+    fill: var(--surface-color);
+    d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+  }       
+  
+  .card2:hover .card__header {
+    transform: translateY(0);
+  }
+  
+  .card__thumb {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;      
+    border-radius: 50%;      
+  }
+  
+  .card__title {
+    font-size: 1em;
+    margin: 0 0 .3em;
+    color: #6A515E;
+  }
+  
+  .card__tagline {
+    display: block;
+    margin: 1em 0;
+    font-family: "MockFlowFont";  
+    font-size: .8em; 
+    color: #6A515E;  
+  }
+  
+  .card__status {
+    font-size: .8em;
+    color: #6A515E;
+  }
+  
+  .card__description {
+    padding: 0 2em 2em;
+    margin: 0;
+    color: #6A515E;
+    font-family: "MockFlowFont";   
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }    
+</style>
+
+
+<div class="container py-3">
+  <!-- 상단 바-->
+  <div class="d-flex align-items-center">
+    <a href="{% url 'cards:index' %}" class="display-2 me-3 link-btn text-dark text-decoration-none" >
+      <i class="bi bi-arrow-left-short"></i>
+    </a>
+  </div>
+  {% if question_list %}
+  <div class="free-banner p-3 d-flex justify-content-center">
+    <div class="d-flex align-items-center">
+        <h3 class="m-0">{{ search }}인 벽난로 </h3>
+    </div>
+  </div>
+
+  <!-- 검색결과 -->
+  <div class="row">
+    {% for cards in question_list %}
+    <div class="col-12 col-sm-6 col-md-4 my-3">
+      <div class="box back mx-auto">
+        <a href="{% url 'cards:group_detail' cards.pk %}" class="text-decoration-none text-black">
+        <div class="box front position-relative py-3 px-2">
+          <div class="col-12 col-sm-6 col-md-2 my-3">
+            <a href="{% url 'cards:group_detail' cards.pk %}" class="card2">
+              <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class="card__image" alt="" />
+              <div class="card__overlay">
+                <div class="card__header">
+                  <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                  {% if user.profileimage %}
+                    <img class="card__thumb" src="{{ user.profileimage }}"  />
+                  {% else %}
+                    <img class="card__thumb" src="{{ user.profileimage.url }}"  />
+                  {% endif %}                     
+                  <div class="card__header-text">
+                    <h3 class="card__title">{{ cards.title }}</h3>            
+                  </div>
+                </div>
+                <p class="card__description">{{ cards.content }}</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+    
+    <hr>
+     <br>
+     <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if question_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link text-danger" href="?page={{ question_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in question_list.paginator.page_range %}
+          {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
+            {% if page_number == question_list.number %}
+              <li class="page-item active" aria-current="page">
+                <a class="page-link text-bg-danger border-danger" href="?page={{ page_number }}">{{ page_number }}</a>
+              </li>
+            {% else %}
+              <li class="page-item">
+                  <a class="page-link text-danger" href="?page={{ page_number }}">{{ page_number }}</a>
+              </li>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if question_list.has_next %}
+        <li class="page-item">
+            <a class="page-link text-danger" href="?page={{ question_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    {% else %}
+    <div class="free-banner bg-light rounded-4 p-3 d-flex justify-content-center">
+      <div class="d-flex align-items-center">
+          <h3 class="m-0">"{{ search }}"에 해당하는 벽난로는 없습니다</h3>
+      </div>
+    </div>
+    {% endif %} 
+  </div>
+</div> 
+{% endblock %}
