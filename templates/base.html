@@ -97,14 +97,14 @@
           {% if request.user.tree_notice or request.user.note_notice %}
             {% if request.user.notice_tree and request.user.notice_note %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-bell fw-bold text-danger "></i>
+              <!-- <i class="bi bi-bell fw-bold text-danger "></i> -->
             </a>
             <ul class="dropdown-menu p-0">
               <li class="p-3">새로운 알림이 <br> 없어요😊</li>
             </ul>
             {% else %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
-              <i class="bi bi-bell-fill fw-bold text-danger"></i>
+              <!-- <i class="bi bi-bell-fill fw-bold text-danger"></i> -->
             </a>
             {% csrf_token %}
             <ul class="dropdown-menu p-0" id="dropul">
@@ -230,7 +230,6 @@
 
   <style>
     /* Google Fonts - Poppins */
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
     body {
       align-items: center;
