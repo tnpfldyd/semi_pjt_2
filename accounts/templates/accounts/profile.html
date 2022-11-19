@@ -2,144 +2,143 @@
 {% load static %}
 {% load django_bootstrap5 %}
 {% block content %}
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
-  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-  <style>
-    :root {
-      --surface-color: #fff;
-      --curve: 40;
-    }
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<style>
+  :root {
+    --surface-color: #fff;
+    --curve: 40;
+  }
 
-    * {
-      box-sizing: border-box;
-    }
+  * {
+    box-sizing: border-box;
+  }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin: 4rem 5vw;
-      padding: 0;
-      list-style-type: none;
-    }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 5vw;
+    padding: 0;
+    list-style-type: none;
+  }
 
-    .card2 {
-      position: relative;
-      display: block;
-      width: 20rem;
-      height: auto;
-      border-radius: calc(var(--curve) * 1px);
-      overflow: hidden;
-      text-decoration: none;
-    }
+  .card2 {
+    position: relative;
+    display: block;
+    width: 20rem;
+    height: auto;
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+  }
 
-    .card__image {
-      width: 100%;
-      height: 15rem;
-    }
+  .card__image {
+    width: 100%;
+    height: 15rem;
+  }
 
-    .card__overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1;
-      border-radius: calc(var(--curve) * 1px);
-      background-color: var(--surface-color);
-      transform: translateY(100%);
-      transition: 0.2s ease-in-out;
-    }
+  .card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    border-radius: calc(var(--curve) * 1px);
+    background-color: var(--surface-color);
+    transform: translateY(100%);
+    transition: 0.2s ease-in-out;
+  }
 
-    .card2:hover .card__overlay {
-      transform: translateY(0);
-    }
+  .card2:hover .card__overlay {
+    transform: translateY(0);
+  }
 
-    .card__header {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 2em;
-      padding: 0.7em;
-      border-radius: calc(var(--curve) * 1px) 0 0 0;
-      background-color: var(--surface-color);
-      transform: translateY(-100%);
-      transition: 0.2s ease-in-out;
-    }
+  .card__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    padding: 0.7em;
+    border-radius: calc(var(--curve) * 1px) 0 0 0;
+    background-color: var(--surface-color);
+    transform: translateY(-100%);
+    transition: 0.2s ease-in-out;
+  }
 
-    .card__arc {
-      width: 80px;
-      height: 80px;
-      position: absolute;
-      bottom: 100%;
-      right: 0;
-      z-index: 1;
-    }
+  .card__arc {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    z-index: 1;
+  }
 
-    .card__arc path {
-      fill: var(--surface-color);
-      d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
-    }
+  .card__arc path {
+    fill: var(--surface-color);
+    d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+  }
 
-    .card2:hover .card__header {
-      transform: translateY(0);
-    }
+  .card2:hover .card__header {
+    transform: translateY(0);
+  }
 
-    .card__thumb {
-      flex-shrink: 0;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
+  .card__thumb {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
 
-    .card__title {
-      font-size: 1em;
-      margin: 0 0 0.3em;
-      color: #6A515E;
-    }
+  .card__title {
+    font-size: 1em;
+    margin: 0 0 0.3em;
+    color: #6A515E;
+  }
 
-    .card__tagline {
-      display: block;
-      margin: 1em 0;
-      font-family: "MockFlowFont";
-      font-size: 0.8em;
-      color: #6A515E;
-    }
+  .card__tagline {
+    display: block;
+    margin: 1em 0;
+    font-family: "MockFlowFont";
+    font-size: 0.8em;
+    color: #6A515E;
+  }
 
-    .card__status {
-      font-size: 0.8em;
-      color: #6A515E;
-    }
+  .card__status {
+    font-size: 0.8em;
+    color: #6A515E;
+  }
 
-    .card__description {
-      padding: 0 2em 2em;
-      margin: 0;
-      color: #6A515E;
-      font-family: "MockFlowFont";
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-    }
+  .card__description {
+    padding: 0 2em 2em;
+    margin: 0;
+    color: #6A515E;
+    font-family: "MockFlowFont";
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
 
     body {
       background-image: url("{% static 'images/프로필배경.png' %}");
 
-      {
-        % comment %
-      }
-
-      color: white;
-
-      {
-        % endcomment %
-      }
+    {
+      % comment %
     }
 
+    color: white;
+
+    {
+      % endcomment %
+    }
     #profileimage {
       box-shadow: 0 8px 5px rgba(0, 0, 0, 0.5);
     }
   </style>
   <div class="row justify-content-evenly">
+
     <!-- 벽난로 주인 프로필 -->
     <div class='col-4 col-lg-3 ms-2 my-5 text-center'>
       <p class=' my-5 fs-1 text-center'>개인 프로필</p>
@@ -248,7 +247,7 @@
           {% endif %}
         </div>
       </div>
-    </div>
+      </div>
   </div>
 
   <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
