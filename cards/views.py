@@ -148,7 +148,9 @@ def usercard_comment(request, pk):
                                 "object_type": "text",
                                 "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
                                 "link": {
-                                    "web_url": "http://localhost:8000/cards/detail/usercard/" + str(pk)+ "/"
+                                    "web_url": "http://localhost:8000/cards/detail/usercard/"
+                                    + str(pk)
+                                    + "/"
                                 },
                             }
                         )
@@ -286,7 +288,7 @@ def gcomment_create(request, pk):
                 "template_object": json.dumps(
                     {
                         "object_type": "text",
-                        "text": request.user.nickname + "님이 트리에 글을 남겨주셨어요.",
+                        "text": request.user.nickname + "님이 벽난로에 글을 남겨주셨어요.",
                         "link": {"web_url": "http://localhost:8000/cards/" + str(pk)},
                     }
                 )
