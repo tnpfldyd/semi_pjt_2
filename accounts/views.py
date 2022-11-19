@@ -45,7 +45,7 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("accounts:index")
+            return redirect("home")
     else:
         form = AuthenticationForm()
     context = {
@@ -112,7 +112,7 @@ def kakao_callback(request):
         messages.error(request, "누적 신고 횟수가 많아 로그인 할 수 없어요.😥")
     else:
         messages.success(request, "오신걸 환영합니다.😀")
-    return redirect(request.GET.get("next") or "accounts:index")
+    return redirect(request.GET.get("next") or "home")
 
 
 @login_required
@@ -128,7 +128,7 @@ def mypage(request):
 
 def logout(request):
     auth_logout(request)
-    return redirect("accounts:index")
+    return redirect("home")
 
 
 def update(request):
@@ -139,7 +139,7 @@ def update(request):
             temp = form.save(commit=False)
             temp.age_range = temp.age_range[-2:-1] + "0~" + temp.age_range[-2:-1] + "9"
             temp.save()
-            return redirect("accounts:index")
+            return redirect("accounts:mypage")
     else:
         form = UpdateForm(instance=request.user)
     context = {

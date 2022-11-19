@@ -84,7 +84,12 @@
   </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{% static 'js/shoppings.js' %}"></script>
-    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js">var sf = new Snowflakes();</script>
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+    <script>
+    new Snowflakes();
+    </script>
+
+    <!-- <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js">var sf = new Snowflakes();</script>
 
     <script>
     var snowflakes = new Snowflakes({
@@ -103,5 +108,5 @@
         zIndex: 100 // Default: 9999
     });
     </script>
-    
+     -->
   {% endblock %}
