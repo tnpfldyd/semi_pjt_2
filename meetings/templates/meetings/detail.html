@@ -2,6 +2,9 @@
 {% load static %}
 {% load mathfilters %}
 {% block content %}
+
+
+
 <body class="wrapper">
   <div class="row justify-content-center" style='width:100%'>
     <div class="inner p-5 col-5 m-1">
@@ -33,13 +36,15 @@
             <div class="text-black mt-5" style="width:330px;">
               <h4 class="fw-bold mb-3">댓글 <span class="text-success">{{comments.count}}</span></h4>
               {% if request.user.is_authenticated %}
-                <form action="{% url 'meetings:comment_create' meeting.pk %}" method="POST">
+              <div id="meeting-comments">
+                <form id="meeintg-comment-form" data-comment-id="{{ meeting.pk }}" method="POST">
                   {% csrf_token %}
                   <div class="d-flex" style="height:40px;">
-                    <input type="text" class="form-control" name="content" placeholder="댓글을 달아주세요" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control" placeholder="댓글을 달아주세요">
                     <button style="width: 60px;" class="btn btn-primary mx-1">작성</button>
                   </div>
                 </form>
+              </div>
               {% endif %}
             </div>
             {% for comment in comments %}
@@ -71,19 +76,19 @@
               <p class="text-black">댓글이 없습니다.</p>
             {% endfor %}
           </div>
-          <div class="col-4 p-2"> {% comment %}  {% endcomment %}
-            <div class="d-flex jusify-content-between mt-4">
-                {% csrf_token %}
-                <button class="text-decoration-none text-dark fs-4 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
-                  참여<span class="fs-4">❌</span>
+          <div class="col-4 d-flex flex-column align-items-center"> {% comment %}  {% endcomment %}
+              {% csrf_token %}
+                <button class="text-decoration-none fs-4 btn btn-outline-dark" style="width: 110px;" data-user-nickname="{{meeting.user.nickname}}" value="{{meeting.user.pk}}" onclick="block(event)">
+                  참여하기
                 </button>
-              <div class="" style="min-width:120px; max-width:160px; min-height:120px">
+            <div class="d-flex jusify-content-center mt-4">
+              <div class="" style="min-width:150px; max-width:160px; min-height:120px">
                 <div class="d-flex justify-content-center">
                   참여 유저
                 </div>
-                <div>
+                <div id="nickname">
                   {% for user in user_list %}                
-                    <a class="ms-2 text-decoration-none text-black d-flex justify-content-center" href="{% url 'accounts:profile' meeting.pk %}">{{ user.nickname }}</a>
+                    <a class="ms-2 text-decoration-none text-black d-flex justify-content-center" href="{% url 'accounts:profile' user.pk %}">{{ user.nickname }}</a>
                   {% endfor %}
                 </div>
               </div>
@@ -112,68 +117,63 @@
   {% comment %} js {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-      const form = document.querySelector("#belong-form")
+
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-
-      form.addEventListener('submit', function (event) {
-        event.preventDefault()
-        const userId = event.target.dataset.userId
-
+      function block(event) {
         axios({
           method: 'post',
-          url: `/accounts/${userId}/belonging/`,
-          headers: {
-            'X-CSRFToken': csrftoken
+          url: `belong/`,
+          headers: {'X-CSRFToken': csrftoken},
+          data: {'note_pk': event.target.dataset.userId},
+        })
+        .then(response => {
+          if (response.data.is_belong === true) {
+            const e = event.target
+            const span = document.createElement('span')
+            const a = document.createElement('a')
+            e.innerText = '참여✅'
+            e.className = 'btn btn-success'
+            e.appendChild(span)
+            const nickName = document.getElementById("nickname")
+            nickName.innerText = `${event.target.dataset.userNickname}`
+            nickName.className = 'text-center'
+            
+          }
+          else {
+            const e = event.target
+            const span = document.createElement('span')
+            const a = document.createElement('a')
+            e.innerText = '취소❌'
+            e.className = 'btn btn-warning'
+            e.appendChild(span)
+            const nickName = document.getElementById("nickname")
+            nickName.innerText = ""
           }
         })
-          .then((response) => {
-            const isBelonged = response.data.is_belonged
-            const belongBtn = document.querySelector('#belong-form > input[type=submit]')
-            if (isBelonged === true) {
-              belongBtn.value = '모임참여 취소'
-            } else {
-              belongBtn.value = '모임참여'
-            }
-            // const followerCountTag = document.querySelector('#followers-count')
-            // const followingCountTag = document.querySelector('#followings-count')
-            // const followersCount = response.data.followers_count
-            // const followingsCount = response.data.followings_count
-            // followerCountTag.innerText = followersCount
-            // followingCountTag.innerText = followingsCount
-          })
-          .catch((error) => {
-            console.log(error.response)
-          })
-      })
-
-      function block(event) {
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-          axios({
-            method: 'post',
-            url: `belong/`,
-            headers: {'X-CSRFToken': csrftoken},
-            data: {'note_pk': event.target.dataset.userId},
-          })
-          .then(response => {
-            if (response.data.is_belong === true) {
-              const e = event.target
-              const span = document.createElement('span')
-              e.innerText = '취소'
-              span.innerText = '❌'
-              span.className = 'fs-4'
-              e.appendChild(span)
-            }
-            else {
-              const e = event.target
-              const span = document.createElement('span')
-              e.innerText = '참여'
-              span.innerText = '✅'
-              span.className = 'fs-4'
-              e.appendChild(span)
-            }
-          })
-        }
+      }
     </script>
+    <script>
+      const commentForm = document.querySelector('#meeintg-comment-form')
+
+      commentForm.addEventListner('submit', function(event) {
+        event.preventDefault();
+        axios({
+          method: 'post',
+          url: `/comment/create/`,
+          headers: {'X-CSRFToken': csrftoken},
+          data: new FormData(commentForm)
+          console.log(response.data)
+        })
+        .then(response => {
+          const comments = document.querySelector("#meeintg-comment-form")
+          const p = document.createElement('p')
+          p.innerText = `${response.data.userName} | ${response.data.content}`
+          const hr = document.createElement('hr')
+          comments.append(p, hr)
+        })
+      })
+    </script>
+    
 
     <style>
       .wrapper {

@@ -182,7 +182,7 @@ def belong(request, meeting_pk):
 @login_required
 def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
-    comments = meeting.comment_set.all()
+    comments = meeting.comment_set.all().order_by('-pk')
     form = CommentForm()
 
     
@@ -270,17 +270,20 @@ def delete(request, meeting_pk):
 
 @login_required
 def comment_create(request, meeting_pk):
-    meeting_data = Meeting.objects.get(pk=meeting_pk)
-
+    meeting_data = get_object_or_404(Meeting, pk=meeting_pk)
     if request.user.is_authenticated:
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
+        commentForm = CommentForm(request.POST)
+        if commentForm.is_valid():
+            comment = commentForm.save(commit=False)
             comment.meeting = meeting_data
             comment.user = request.user
             comment.save()
+            context = {
+              'content': comment.content,
+              'userName': comment.user.nickname
+            }
 
-        return redirect("meetings:detail", meeting_pk)
+        return JsonResponse(context)
     else:
         return redirect("accounts:login")
 
