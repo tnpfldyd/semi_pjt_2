@@ -8,7 +8,7 @@
 {% comment %} 모임생성 버튼 및 숫자 {% endcomment %}
 
 {% comment %} 모임 목록 {% endcomment %}
-
+<div class="background">
 <div class="mt-2 mx-4">
   <div class="d-flex justify-content-between align-items-center">
     <div class="fs-3 mx-2">모임 목록 ({{ meetings_count }})</div>
@@ -246,7 +246,7 @@
     </span>
   </div>
 </div>
-
+</div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   function follow(event) {
@@ -306,6 +306,13 @@
 </script>
 
 <style>
+  body {
+    background-image : url('{% static 'images/그룹카드배경3.jpg' %}');
+    background-repeat : repeat;
+    background-size : cover;
+    {% comment %} color:white; {% endcomment %}
+   }
+
   #modal.modal-overlay {
       width: 100%;
       height: 100%;

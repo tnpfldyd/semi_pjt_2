@@ -23,13 +23,9 @@
 </section>
 
 <!-- 2 -->
-<section class="entry2">
+<section class="entry2 d-flex flex-column justify-content-center">
   <div class="text-center">
-    <h1 class="my-4">나의
-      <span class="text-danger">벽난로</span>를 채워줘!</h1>
-    <p class="my-0"></p>
-    <p class="my-0"></p>
-    <p class="my-0"></p>
+    <h1>나의 <span class="text-danger">벽난로</span>를 채워줘!</h1>
   </div>
 </section>
 
@@ -124,6 +120,13 @@ setInterval("updateTimer()", 1000);
 
 <!-- 시간 스타일 -->
 <style>
+body {
+  background-image : url('{% static 'images/그룹카드배경3.jpg' %}');
+  background-repeat : repeat;
+  background-size : cover;
+  {% comment %} color:white; {% endcomment %}
+  }
+
 time-body {
   text-align: center;
   padding: 70px 50px;
