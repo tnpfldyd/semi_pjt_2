@@ -87,23 +87,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{% static 'js/search.js' %}"></script>
     <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js">var sf = new Snowflakes();</script>
-
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
     <script>
-    var snowflakes = new Snowflakes({
-        color: 'rgb(81,81,81)', // Default: "#5ECDEF"
-        container: document.querySelector('#hz'), // Default: document.body
-        count: 100, // 100 snowflakes. Default: 50
-        minOpacity: 0.1, // From 0 to 1. Default: 0.6
-        maxOpacity: 0.95, // From 0 to 1. Default: 1
-        minSize: 10, // Default: 10
-        maxSize: 25, // Default: 25
-        rotation: true, // Default: true
-        speed: 2.5, // 낙하속도 Default: 1
-        wind: true, // 바람 유무 Default: true
-        width: 1000, // Default: container 너비
-        height: 1000, // Default: container 높이
-        zIndex: 100 // Default: 9999
-    });
+    new Snowflakes();
     </script>
-    
   {% endblock %}

@@ -18,25 +18,7 @@
     </select>
   </div>
 </div>
-    <!-- 가로 -->
-    {% comment %} <div class="row row-cols-4" id="card-div">
-      {% for item in items %}
-        <div class="card col mx-xl-auto my-3 p-0" style="width: 18rem;">
-          <img src="{{item.image}}" class="card-img-top my_images" alt="{{item.title}}" style="width: 100%;">
-          <div class="card-body">
-            <h5 class="card-title">{{item.title}}</h5>
-          </div>
-          <div class="card-footer">
-            <p class="card-text">가격
-              {{item.lprice}}원</p>
-            <h5>{{item.mallName}}</h5>
-            <a href="{{item.link}}" class="btn btn-primary">구매하러 가기</a>
-          </div>
-        </div>
-      {% endfor %}
-    </div> {% endcomment %}
 
-    <!-- 세로-->
     <div class="container">
       <div class="row row-cols-8 d-flex justify-content-center" id="card-div">
         {% for item in items %}
@@ -71,24 +53,25 @@
       align-items: center;
       /* background-color: rgb(181, 183, 161); */
       background-size: cover;
-      background-image: linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
-      background-image: -o-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
-      background-image: -moz-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5) 61%, rgba(15, 176, 52, 0.5) 81%);
-      background-image: -webkit-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5)61%, rgba(15, 176, 52, 0.5) 81%);
-      background-image: -ms-linear-gradient(bottom, rgba(156,26,230,0.5) 26%, rgba(54, 211, 200, 0.5) 43%, rgba(33,166,166,0.5)61%, rgba(15, 176, 52, 0.5) 81%);
+      background-image: linear-gradient(bottom, #fbc2eb 26%,  #a6c1ee 43%, #fbc2eb 61%, #a6c1ee 81%);
+      background-image: -o-linear-gradient(bottom, #fbc2eb 26%,  #a6c1ee 43%,#fbc2eb 61%, #a6c1ee 81%);
+      background-image: -moz-linear-gradient(bottom, #fbc2eb 26%,  #a6c1ee 43%,#fbc2eb 61%, #a6c1ee 81%);
+      background-image: -webkit-linear-gradient(bottom, #fbc2eb 26%,  #a6c1ee 43%,#fbc2eb 61%, #a6c1ee 81%);
+      background-image: -ms-linear-gradient(bottom, #fbc2eb 26%,  #a6c1ee 43%,#fbc2eb 61%, #a6c1ee 81%);
     }
-
+      
     .btn-1:hover {
-      background: rgb(81, 81, 81);
       background: linear-gradient(0deg, rgba(157, 156, 156, 0.2) 0%, rgba(255, 255, 255, 0.8) 100%);
    }
 
   </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{% static 'js/shoppings.js' %}"></script>
-    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js">var sf = new Snowflakes();</script>
-
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
     <script>
+    new Snowflakes();
+    </script>
+    <!-- <script>
     var snowflakes = new Snowflakes({
         color: 'rgb(81,81,81)', // Default: "#5ECDEF"
         container: document.querySelector('#hz'), // Default: document.body
@@ -104,6 +87,6 @@
         height: 1000, // Default: container 높이
         zIndex: 100 // Default: 9999
     });
-    </script>
+    </script> -->
     
   {% endblock %}
