@@ -4,143 +4,143 @@
 {% block content %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-  <style>
-    :root {
-      --surface-color: #fff;
-      --curve: 40;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin: 4rem 5vw;
-      padding: 0;
-      list-style-type: none;
-    }
-
-    .card2 {
-      position: relative;
-      display: block;
-      width: 20rem;
-      height: auto;
-      border-radius: calc(var(--curve) * 1px);
-      overflow: hidden;
-      text-decoration: none;
-    }
-
-    .card__image {
-      width: 100%;
-      height: 15rem;
-    }
-
-    .card__overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1;
-      border-radius: calc(var(--curve) * 1px);
-      background-color: var(--surface-color);
-      transform: translateY(100%);
-      transition: 0.2s ease-in-out;
-    }
-
-    .card2:hover .card__overlay {
-      transform: translateY(0);
-    }
-
-    .card__header {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 2em;
-      padding: 0.7em;
-      border-radius: calc(var(--curve) * 1px) 0 0 0;
-      background-color: var(--surface-color);
-      transform: translateY(-100%);
-      transition: 0.2s ease-in-out;
-    }
-
-    .card__arc {
-      width: 80px;
-      height: 80px;
-      position: absolute;
-      bottom: 100%;
-      right: 0;
-      z-index: 1;
-    }
-
-    .card__arc path {
-      fill: var(--surface-color);
-      d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
-    }
-
-    .card2:hover .card__header {
-      transform: translateY(0);
-    }
-
-    .card__thumb {
-      flex-shrink: 0;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-
-    .card__title {
-      font-size: 1em;
-      margin: 0 0 0.3em;
-      color: #6A515E;
-    }
-
-    .card__tagline {
-      display: block;
-      margin: 1em 0;
-      font-family: "MockFlowFont";
-      font-size: 0.8em;
-      color: #6A515E;
-    }
-
-    .card__status {
-      font-size: 0.8em;
-      color: #6A515E;
-    }
-
-    .card__description {
-      padding: 0 2em 2em;
-      margin: 0;
-      color: #6A515E;
-      font-family: "MockFlowFont";
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-    }
-
-    body {
-      background-image: url("{% static 'images/프로필배경.png' %}");
-      background-repeat: repeat;
-      background-size: cover;
-
-      {
-        % comment %
-      }
-
-      color: white;
-
-      {
-        % endcomment %
-      }
-    }
-  #profileimage {
-    box-shadow: 0 8px 5px rgba(0,0,0,0.5);
+<style>
+  :root {
+    --surface-color: #fff;
+    --curve: 40;
   }
-  </style>
-  <div class="row row-cols-6 justify-content-evenly">
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 5vw;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  .card2 {
+    position: relative;
+    display: block;
+    width: 20rem;
+    height: auto;
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+  }
+
+  .card__image {
+    width: 100%;
+    height: 15rem;
+  }
+
+  .card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    border-radius: calc(var(--curve) * 1px);
+    background-color: var(--surface-color);
+    transform: translateY(100%);
+    transition: 0.2s ease-in-out;
+  }
+
+  .card2:hover .card__overlay {
+    transform: translateY(0);
+  }
+
+  .card__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    padding: 0.7em;
+    border-radius: calc(var(--curve) * 1px) 0 0 0;
+    background-color: var(--surface-color);
+    transform: translateY(-100%);
+    transition: 0.2s ease-in-out;
+  }
+
+  .card__arc {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    z-index: 1;
+  }
+
+  .card__arc path {
+    fill: var(--surface-color);
+    d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+  }
+
+  .card2:hover .card__header {
+    transform: translateY(0);
+  }
+
+  .card__thumb {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .card__title {
+    font-size: 1em;
+    margin: 0 0 0.3em;
+    color: #6A515E;
+  }
+
+  .card__tagline {
+    display: block;
+    margin: 1em 0;
+    font-family: "MockFlowFont";
+    font-size: 0.8em;
+    color: #6A515E;
+  }
+
+  .card__status {
+    font-size: 0.8em;
+    color: #6A515E;
+  }
+
+  .card__description {
+    padding: 0 2em 2em;
+    margin: 0;
+    color: #6A515E;
+    font-family: "MockFlowFont";
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  body {
+    background-image: url("{% static 'images/프로필배경.png' %}");
+    background-repeat: repeat;
+    background-size: cover;
+
+    {
+      % comment %
+    }
+
+    color: white;
+
+    {
+      % endcomment %
+    }
+  }
+#profileimage {
+  box-shadow: 0 8px 5px rgba(0,0,0,0.5);
+}
+</style>
+  <div class="row row-cols-6 justify-content-evenly" style='width:100%'>
     <!-- 벽난로 주인 프로필 -->
     <div class='col col-lg-3 ms-2 my-5 text-center'>
       <p class=' my-5 fs-1 text-center'>개인 프로필</p>
@@ -200,14 +200,13 @@
       </div>
     </div>
     <!-- 벽난로 -->
-    <div class='col ms-2 my-5'>
+    <div class='col-12 col-lg-3 ms-2 my-5'>
       <div class='mb-5 d-flex justify-content-center'>
         <div>
           <h1 class='my-5 text-center'>
             개인 벽난로
           </h1>
           {% if user.usercard %}
-          <div class="p-5 my-5 pt-0">
             <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
               {% if user.usercard.chimneys == 9 %}
               <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
@@ -222,32 +221,27 @@
                     <img class="card__thumb" src="{{ user.profileimage }}"/>
                   {% else %}
                     <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
-                </div>
-              </div>
-            </a>
+
                   {% endif %}
                   <div class="card__header-text">
                     <h3 class="card__title">{{ user.nickname }}</h3>
                     <span class="card__status">{{ user.usercard.title }}</span>
                   </div>
-                  <p class="card__description">{{ user.usercard.content }}</p>
-          </div>
+                </div>
+                <p class="card__description">{{ user.usercard.content }}</p>
+              </div>
+            </a>
           {% else %}
-           {% if user == request.user %}
             <div class="p-5 my-5">
               <a href="{% url 'cards:usercard_create' %}" class="btn btn-primary">
                 개인 벽난로를 생성해주세요!
               </a>
             </div>
-            {% else %}
-            <div class="p-5 my-5">
-              <h5>아직 벽난로가 없어요 😂</h5>
-            </div>
-            {% endif %}
+
           {% endif %}
         </div>
       </div>
-    </div>
+      </div>
   </div>
   
   <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
@@ -350,9 +344,9 @@
   </script>
 
 
-    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
-    <script>
-      new Snowflakes();
-    </script>
+  <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+  <script>
+    new Snowflakes();
+  </script>
 
   {% endblock content %}
