@@ -22,7 +22,14 @@ def index(request):
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
 
-    context = {"groupcards": groupcards, "user": user, "random_list": random_list}
+    context = {
+        "groupcards": groupcards,
+        "user": user,
+        "random_user": random_user,
+        "popular": popularity,
+    }
+    print(popularity)
+    print(random_user)
     return render(request, "cards/index.html", context)
 
 

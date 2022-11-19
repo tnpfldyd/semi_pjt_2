@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% block content %}
-<div class="row p-5 wrapper justify-content-center">
+<div class="row p-5 wrapper justify-content-center" style='width:100%'>
   <div class="col-3 d-flex justify-content-center align-items-center flex-column">
     {% comment %} 프로필 이미지 if 처리 {% endcomment %}
     {% if user.profileimage %}
@@ -193,10 +193,10 @@ ul {
 }
 
 .wrapper {
-  min-height: 87vh;
+  min-height: 89.9vh;
   background-image: url("/static/images/개인카드배경3.png");
   background-size: cover;
-  background-repeat : no-repeat;
+  background-repeat : repeat;
   
   .inner {
     max-width: 758px;
