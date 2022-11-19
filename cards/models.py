@@ -25,14 +25,14 @@ class Groupcard(models.Model):
 
 
 class UserComment(models.Model):
-    content = models.TextField()
+    content = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     usercard = models.ForeignKey(UserCard, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    socks = models.IntegerField()
+    socks = models.IntegerField(blank=True)
     id_text = models.TextField(blank=True)
     read = models.BooleanField(default=False)
 

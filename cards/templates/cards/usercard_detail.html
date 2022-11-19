@@ -20,6 +20,27 @@
       <a href="{% url 'cards:usercard_update' request.user.pk %}" class="btn btn-success mt-5 me-3"> 벽난로 바꾸기 </a>
       <a href="{% url 'cards:usercard_delete'%}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
     </div>
+    {% else %}
+    <div class='d-flex justify-content-end'>
+      <a href="{% url 'accounts:profile' cards.user.pk %}" class="btn btn-light mt-5 me-3"> {{ cards.user.nickname }} </a>
+      
+      {% if request.user not in cards.user.followers.all %}
+      <button class="favorite-button" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+        <div class="icon">
+          <div class="star"></div>
+        </div>
+        <span id="span">Follow</span>
+      </button>
+      {% else %}
+      <button class="favorite-button active" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+        <div class="icon">
+          <div class="star"></div>
+        </div>
+        <span id="span">UnFollow</span>
+      </button>
+      {% endif %}
+
+    </div>
     {% endif %}
     <p class=' my-5 fs-1 text-center' style='color:white'>{{ cards.user.nickname }} 님에게 <span style='color:orangered '>{{ cards.usercomment_set.count }}</span>개의 메세지가 전달됐어요!</p>
     <div>

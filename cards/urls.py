@@ -15,6 +15,11 @@ urlpatterns = [
     path(
         "<int:pk>/usercard/comments/", views.usercard_comment, name="usercard_comment"
     ),
+    path(
+        "<int:pk>/usercard/comments/2",
+        views.usercard_comment2,
+        name="usercard_comment2",
+    ),
     # 그룹카드
     path("create/group/", views.group_create, name="group_create"),
     path("detail/group/<int:pk>/", views.group_detail, name="group_detail"),
