@@ -7,14 +7,14 @@
   
   <div style='width:40rem'>
     
-  <h1 class='text-center mb-5'> 단체용 벽난로 공사 </h1>
+  <h1 class='text-center mb-5'> 그룹 벽난로 수정 </h1>
 
   <form action="" method="POST">
-    <h1 class='fs-4 mt-5 mb-4'>벽난로를 선택하세요</h1>
+    <h1 class='fs-4 mt-5 mb-4'> 벽난로를 선택하세요 </h1>
 
     <div class="cc-selector mb-5">
 
-      <input type="radio" name="choice_chim" id="chim1" value="1">
+      <input type="radio" name="choice_chim" id="chim1" value="1"  th:checked="${groupcard.choice_chim eq '1' ? 'checked' : ''}">
       <label class="drinkcard-cc chim1" for="chim1"></label>
 
 
@@ -27,32 +27,37 @@
 
     </div>
 
-    <h2 class='fs-4 mt-5 mb-4'>벽난로 장식을 선택하세요.</h2>
+    <h2 class='fs-4 mt-5 mb-4'> 벽난로 소개용 장식을 선택하세요.</h2>
 
     <div class="cc-selector mb-5">
       
-        <input type="radio" name="choice_sock" id="sock1" value="1">
-        <label class="drinkcard-cc sock1" for="sock1"></label>
+        <input type="radio" name="groupdeco" id="groupdeco1" value="1">
+        <label class="drinkcard-cc userdeco1" for="groupdeco1"></label>
       
       
-        <input type="radio" name="choice_sock" id="sock2" value="2">
-        <label class="drinkcard-cc sock2" for="sock2"> </label>
+        <input type="radio" name="groupdeco" id="groupdeco2" value="2">
+        <label class="drinkcard-cc userdeco2" for="groupdeco2"> </label>
       
       
-        <input type="radio" name="choice_sock" id="sock3" value="3">
-        <label class="drinkcard-cc sock3" for="sock3"></label>
+        <input type="radio" name="groupdeco" id="groupdeco3" value="3">
+        <label class="drinkcard-cc userdeco3" for="groupdeco3"></label>
 
-        <input type="radio" name="choice_sock" id="sock4" value="4">
-        <label class="drinkcard-cc sock4" for="sock4"></label>
+        <input type="radio" name="groupdeco" id="groupdeco4" value="4">
+        <label class="drinkcard-cc userdeco4" for="groupdeco4"></label>
       
       
-        <input type="radio" name="choice_sock" id="sock5" value="5">
-        <label class="drinkcard-cc sock5" for="sock5"> </label>
+        <input type="radio" name="groupdeco" id="groupdeco5" value="5">
+        <label class="drinkcard-cc userdeco5" for="groupdeco5"> </label>
       
       
-        <input type="radio" name="choice_sock" id="sock6" value="6">
-        <label class="drinkcard-cc sock6" for="sock6"></label>
+        <input type="radio" name="groupdeco" id="groupdeco6" value="6">
+        <label class="drinkcard-cc userdeco6" for="groupdeco6"></label>
       
+        <input type="radio" name="groupdeco" id="groupdeco7" value="7">
+        <label class="drinkcard-cc userdeco7" for="groupdeco7"></label>
+
+        <input type="radio" name="groupdeco" id="groupdeco8" value="8">
+        <label class="drinkcard-cc userdeco8" for="userdeco8"></label>
     </div>
 
     {% csrf_token %}

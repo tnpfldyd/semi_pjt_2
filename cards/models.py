@@ -5,8 +5,8 @@ from django.conf import settings
 
 # Create your tests here.
 class UserCard(models.Model):
-    title = models.CharField(max_length=20)
-    content = models.TextField()
+    title = models.CharField(max_length=20, blank=True)
+    content = models.TextField(blank=True)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -20,19 +20,19 @@ class Groupcard(models.Model):
     content = models.TextField()
     is_private = models.BooleanField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    socks = models.IntegerField()
-    chimneys = models.IntegerField()
+    groupdeco = models.IntegerField(blank=True)
+    chimneys = models.IntegerField(blank=True)
 
 
 class UserComment(models.Model):
-    content = models.TextField()
+    content = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     usercard = models.ForeignKey(UserCard, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    socks = models.IntegerField()
+    socks = models.IntegerField(blank=True)
     id_text = models.TextField(blank=True)
     read = models.BooleanField(default=False)
 

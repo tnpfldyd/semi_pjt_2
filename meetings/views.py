@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 import json
-import random
+import random, re
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -27,9 +27,15 @@ def index(request):
         "https://images.unsplash.com/photo-1615097130643-12caeab3c625?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         "https://images.unsplash.com/photo-1577042939454-8b29d442b402?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
         "https://images.unsplash.com/photo-1638277267253-543e4c57cd7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+        "https://images.unsplash.com/photo-1543258103-a62bdc069871?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjR8fGNocmlzdG1hc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1575549593677-012f18048ea1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzV8fGNocmlzdG1hc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1602678460152-719a9af1fb6c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fGNocmlzdG1hc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1512474932049-78ac69ede12c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTh8fGNocmlzdG1hc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1511970093628-4e9f59378b4d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTZ8fGNocmlzdG1hc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1482330454287-3cf6611d0bc9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjN8fGNocmlzdG1hc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1545608444-f045a6db6133?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjV8fGNocmlzdG1hc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
     ]
-    s = random.choice(img)
-
+    random.shuffle(img)
     # 총 모임 - 블락한 모임
     meetings_count = len(meetings) - len(non_block)
 
@@ -37,64 +43,41 @@ def index(request):
     meetings_local_name = "모든지역"
     meetings_local_list = ["노원구", "송파구"]
 
-    nw = "노원구"
-    sp = "송파구"
-
     at_all = "모두보기"
-    paginator = Paginator(block, 4)
+    paginator = Paginator(block, 10)
     page_number = request.GET.get("local")
     page_obj = paginator.get_page(page_number)
-
     if request.POST.get("reset"):
         return redirect("meetings:index")
-
-    if request.GET.get("local") and nw in request.GET.get("local"):
-        block = Meeting.objects.filter(location__contains=nw).filter(user__in=request.user.blocking.all()).order_by("-pk")
-        print(Meeting.objects.filter(location__contains=nw).filter(user__in=request.user.blocking.all()))
-        meetings_local_name = nw
+    if request.GET.get("local"):
+        name = re.sub(r"[0-9]", "", request.GET.get("local"))
+        block = (
+            Meeting.objects.filter(location__contains=name)
+            .exclude(user__in=request.user.blocking.all())
+            .order_by("-pk")
+        )
+        if not name:
+            meetings_local_name = "모든지역"
+        else:
+            meetings_local_name = name
         # 페이지네이션
-        print(block)
-        paginator = Paginator(block, 4)
-        page_number = request.GET.get("local")  # key 값이 local, value 값이 노원구
-        page_number = page_number.strip(nw)  # 노원구2 에서 노원구를 제거
+        paginator = Paginator(block, 10)
+        page_number = re.sub(r"[^0-9]", "", request.GET.get("local"))  # key 값이 local, value 값이 노원구
         page_obj = paginator.get_page(page_number)  # 숫자만 받음
-
         context = {
-            "s": s,
-            "nw": nw,
+            "nw": name,
+            "img": img,
             "page_obj": page_obj,
             "meetings_local_name": meetings_local_name,
-            "meetings_count": meetings_count,
+            "meetings_count": len(block),
             "meetings_local_list": meetings_local_list,
         }
-
         return render(request, "meetings/index.html", context)
-
-    elif request.GET.get("local") and sp in request.GET.get("local"):
-        block = Meeting.objects.filter(user__in=request.user.blocking.all()).filter(location__contains=sp).order_by("-pk")
-        meetings_local_name = sp
-        # 페이지네이션
-        paginator = Paginator(block, 4)
-        page_number = request.GET.get("local")
-        page_number = page_number.strip(sp)
-        page_obj = paginator.get_page(page_number)
-
-        context = {
-            "s": s,
-            "sp": sp,
-            "page_obj": page_obj,
-            "meetings_local_name": meetings_local_name,
-            "meetings_count": meetings_count,
-            "meetings_local_list": meetings_local_list,
-        }
-
-        return render(request, "meetings/index.html", context)
-
     else:
 
         context = {
-            "s": s,
             "at_all": at_all,
+            "img": img,
             "page_obj": page_obj,
             "meetings_local_name": meetings_local_name,
             "meetings_count": meetings_count,
@@ -155,6 +138,7 @@ def password(request, meeting_pk):
         messages.warning(request, "비밀번호가 일치하지 않습니다.😀")
         return redirect("meetings:index")
 
+
 @login_required
 def belong(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
@@ -170,14 +154,13 @@ def belong(request, meeting_pk):
             is_belong = True
             messages.success(request, "참여 성공😀")
             print("트루?")
-        context={
-          "is_belong": is_belong,
-          "belongCount": meeting.belong.count(),
-          "belongCount": meeting.belong.count(),
+        context = {
+            "is_belong": is_belong,
+            "belongCount": meeting.belong.count(),
+            "belongCount": meeting.belong.count(),
         }
         return JsonResponse(context)
 
-    
 
 @login_required
 def detail(request, meeting_pk):
@@ -185,7 +168,6 @@ def detail(request, meeting_pk):
     comments = meeting.comment_set.all()
     form = CommentForm()
 
-    
     user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
     user = request.user  # request.user => 현재 로그인한 유저
@@ -204,7 +186,6 @@ def detail(request, meeting_pk):
             meeting.belong.add(user)  # belong 필드에 현재 유저 삭제
             messages.success(request, "참여 성공😀")
         return redirect("meetings:index")
-    
 
     # DB에 존재하면 바로 입장.
 
@@ -294,7 +275,3 @@ def comment_delete(request, meeting_pk, comment_pk):
         comment_data.delete()
 
     return redirect("meetings:detail", meeting_pk)
-
-
-
-
