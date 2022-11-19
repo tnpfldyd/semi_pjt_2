@@ -12,7 +12,8 @@
     {% comment %} color:white; {% endcomment %}
    }
 </style>
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <div class="d-flex justify-content-center">
   <div>
     {% if cards.user == request.user %}
@@ -23,16 +24,16 @@
     {% else %}
     <div class='d-flex justify-content-end'>
       <a href="{% url 'accounts:profile' cards.user.pk %}" class="btn btn-light mt-5 me-3"> {{ cards.user.nickname }} </a>
-      
+      {% csrf_token %}
       {% if request.user not in cards.user.followers.all %}
-      <button class="favorite-button" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+      <button class="favorite-button" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)">
         <div class="icon">
           <div class="star"></div>
         </div>
         <span id="span">Follow</span>
       </button>
       {% else %}
-      <button class="favorite-button active" data-user-id="{{user.pk}}" value="{{user.pk}}" onclick="follow(event)">
+      <button class="favorite-button active" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)">
         <div class="icon">
           <div class="star"></div>
         </div>
@@ -136,5 +137,93 @@
 
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+<script>
+  function follow(e) {
+      const button = e.target
+            if(button.classList.contains('animated')) {
+                return
+            }
+            button.classList.add('animated')
 
+            gsap.to(button, {
+                keyframes: [{
+                    '--star-y': '-36px',
+                    duration: .3,
+                    ease: 'power2.out'
+                }, {
+                    '--star-y': '48px',
+                    '--star-scale': .4,
+                    duration: .325,
+                    onStart() {
+                        button.classList.add('star-round')
+                    }
+                }, {
+                    '--star-y': '-64px',
+                    '--star-scale': 1,
+                    duration: .45,
+                    ease: 'power2.out',
+                    onStart() {
+                        button.classList.toggle('active')
+                        setTimeout(() => button.classList.remove('star-round'), 100)
+                    }
+                }, {
+                    '--star-y': '0px',
+                    duration: .45,
+                    ease: 'power2.in'
+                }, {
+                    '--button-y': '3px',
+                    duration: .11
+                }, {
+                    '--button-y': '0px',
+                    '--star-face-scale': .65,
+                    duration: .125
+                }, {
+                    '--star-face-scale': 1,
+                    duration: .15
+                }],
+                clearProps: true,
+                onComplete() {
+                    button.classList.remove('animated')
+                }
+            })
+
+            gsap.to(button, {
+                keyframes: [{
+                    '--star-hole-scale': .8,
+                    duration: .5,
+                    ease: 'elastic.out(1, .75)'
+                }, {
+                    '--star-hole-scale': 0,
+                    duration: .2,
+                    delay: .2
+                }]
+            })
+
+            gsap.to(button, {
+                '--star-rotate': '360deg',
+                duration: 1.55,
+                clearProps: true
+            })
+          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+          axios({
+            method: 'post',
+            url: `/accounts/${e.target.dataset.userId}/follow/`,
+            headers: {'X-CSRFToken': csrftoken},
+            data: {'note_pk': event.target.dataset.userId},
+          })
+          .then(response => {
+            console.log(response.data.followersCount)
+            console.log(response.data.followingsCount)
+            if (response.data.isFollow === true) {
+              const span = document.querySelector('#span')
+              span.innerText = 'UnFollow'
+            }
+            else {
+              const span = document.querySelector('#span')
+              span.innerText = 'Follow'
+            }
+          })
+        }
+</script>
 {% endblock %}
