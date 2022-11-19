@@ -186,8 +186,8 @@
               나이 :
               {{ user.age_range }}</p>
               <div class='d-flex'>
-                  <h5 id='followers-cnt' class="me-1 text-primary">팔로워 : </h5><h5 class='me-3'> {{ user.followers.count }}</h5>
-                  <h5 id='followers-cnt' class="me-1 text-primary">팔로잉  : </h5><h5 class='me-3'> {{ user.followings.count }}</h5>
+                  <h5  class="me-1 text-primary">팔로워 : </h5><h5 class='me-3' id='followers-cnt'> {{ user.followers.count }}</h5>
+                  <h5  class="me-1 text-primary">팔로잉  : </h5><h5 class='me-3' id='followings-cnt'> {{ user.followings.count }}</h5>
               </div>
           </div>
         </div>
@@ -331,8 +331,8 @@
             }
             const followingsCnt = document.querySelector('#followings-cnt')
             const followersCnt = document.querySelector('#followers-cnt')
-            followingsCnt.innerText = `Followings : ${response.data.followingsCount}`
-            followersCnt.innerText = `Followers : ${response.data.followersCount}`
+            followingsCnt.innerText = `${response.data.followingsCount}`
+            followersCnt.innerText = `${response.data.followersCount}`
           })
         }
   </script>
