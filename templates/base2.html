@@ -151,103 +151,8 @@
 
 
 
-
-    {% block content %}
-    <style>
-      body {
-        background-image: url("{% static 'images/개인카드배경5.jpg' %}");
-        background-repeat: no-repeat;
-        background-size: cover;
-        color: white;
-      }
-    </style>
-    <div class='d-flex justify-content-center my-5'>
-  
-      <div style='width:40rem'>
-  
-        <h1 class='text-center mb-3' >
-          따뜻한 그룹 벽난로를 만들어 보세요.
-        </h1>
-  
-        <form action="" method="POST">
-          <h1 class='fs-2 mt-5 mb-4' style='filter: brightness(1.11);'>벽난로 선택</h1>
-  
-          <div class="cc-selector mb-5">
-  
-            <input type="radio" name="choice_chim" id="chim1" value="1">
-            <label class="drinkcard-cc chim1 me-2 mb-1 rounded-1" for="chim1"></label>
-  
-            <input type="radio" name="choice_chim" id="chim2" value="2">
-            <label class="drinkcard-cc chim2 me-2 mb-1 rounded-1" for="chim2"></label>
-  
-            <input type="radio" name="choice_chim" id="chim3" value="3">
-            <label class="drinkcard-cc chim3 me-2 mb-1 rounded-1" for="chim3"></label>
-  
-            <input type="radio" name="choice_chim" id="chim4" value="4">
-            <label class="drinkcard-cc chim4 me-2 mb-1 rounded-1" for="chim4"></label>
-  
-            <input type="radio" name="choice_chim" id="chim5" value="5">
-            <label class="drinkcard-cc chim5 me-2 mb-1 rounded-1" for="chim5"></label>
-  
-            <input type="radio" name="choice_chim" id="chim6" value="6">
-            <label class="drinkcard-cc chim6 me-2 mb-1 rounded-1" for="chim6"></label>
-  
-            <input type="radio" name="choice_chim" id="chim7" value="7">
-            <label class="drinkcard-cc chim7 me-2 mb-1 rounded-1" for="chim7"></label>
-  
-            <input type="radio" name="choice_chim" id="chim8" value="8">
-            <label class="drinkcard-cc chim8 me-2 mb-1 rounded-1" for="chim8"></label>
-  
-            <input type="radio" name="choice_chim" id="chim9" value="9">
-            <label class="drinkcard-cc chim9 me-2 mb-1 rounded-1" for="chim9"></label>
-  
-            <input type="radio" name="choice_chim" id="chim11" value="11">
-            <label class="drinkcard-cc chim11 me-2 mb-1 rounded-1" for="chim11"></label>
-  
-          </div>
-  
-          <h2 class='fs-2 mt-5 mb-4' style='filter: brightness(1.5);'>유일한 장식 선택</h2>
-  
-          <div class="cc-selector mb-5">
-  
-            <input type="radio" name="userdeco" id="userdeco1" value="1">
-            <label class="drinkcard-cc userdeco1 me-2 mb-1" for="userdeco1"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco2" value="2">
-            <label class="drinkcard-cc userdeco2 me-2 mb-1" for="userdeco2"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco3" value="3">
-            <label class="drinkcard-cc userdeco3 me-2 mb-1" for="userdeco3"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco4" value="4">
-            <label class="drinkcard-cc userdeco4 me-2 mb-1" for="userdeco4"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco5" value="5">
-            <label class="drinkcard-cc userdeco5 me-2 mb-1" for="userdeco5"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco6" value="6">
-            <label class="drinkcard-cc userdeco6 me-2 mb-1" for="userdeco6"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco7" value="7">
-            <label class="drinkcard-cc userdeco7 me-2 mb-1" for="userdeco7"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco8" value="8">
-            <label class="drinkcard-cc userdeco8 me-2 mb-1" for="userdeco8"></label>
-  
-            <input type="radio" name="userdeco" id="userdeco9" value="9">
-            <label class="drinkcard-cc userdeco9 me-2 mb-1" for="userdeco9"></label>
-          </div>
-  
-          {% csrf_token %}
-          <div class="d-grid">
-            <input type="submit" value="메세지 남기기" class="btn" style='background-color:orangered;color:white' >
-          </div>
-        </form>
-  
-      </div>
-  
-    </div>
-  {% endblock %}
+    {% block content %} 
+    {% endblock %}
     
     
     
@@ -332,6 +237,10 @@
             indicator.style.left = `${index * 95 + 48}px`;
           })
         })
+    </script>
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+    <script>
+      new Snowflakes();
     </script>
   </body>
 
@@ -446,6 +355,7 @@
   </style>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </html>
+
 
 
 

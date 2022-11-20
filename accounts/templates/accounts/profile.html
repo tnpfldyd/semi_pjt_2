@@ -202,11 +202,17 @@
           </h1>
           {% if user.usercard %}
             <a href="{% url 'cards:usercard_detail' user.usercard.pk %}" class="card2">
-              {% if user.usercard.chimneys == 9 %}
-              <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
-              {% else %}
-              <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
-              {% endif %}
+              <div style='position:relative'>
+
+                {% if user.usercard.chimneys == 9 %}
+                <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
+                {% else %}
+                <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
+                {% endif %}
+                <div style='position: absolute; top:1rem; left:7.8rem;z-index: 20'>
+                  <img src='/static/images/유저장식{{ user.usercard.userdeco }}.png' style='width:5rem; height:5rem;'>
+                </div>
+              </div>
               <div class="card__overlay">
                 <div class="card__header">
                   <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">
