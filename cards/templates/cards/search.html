@@ -179,7 +179,7 @@
         <!-- 이전페이지 -->
         {% if question_list.has_previous %}
         <li class="page-item">
-            <a class="page-link text-danger" href="?search={{search}}{{ question_list.previous_page_number }}">이전</a>
+            <a class="page-link text-danger" href="?search={{search}}&page={{ question_list.previous_page_number }}">이전</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -191,11 +191,11 @@
           {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
             {% if page_number == question_list.number %}
               <li class="page-item active" aria-current="page">
-                <a class="page-link text-bg-danger border-danger" href="?search={{search}}{{ page_number }}">{{ page_number }}</a>
+                <a class="page-link text-bg-danger border-danger" href="?search={{search}}&page={{ page_number }}">{{ page_number }}</a>
               </li>
             {% else %}
               <li class="page-item">
-                  <a class="page-link text-danger" href="?search={{search}}{{ page_number }}">{{ page_number }}</a>
+                  <a class="page-link text-danger" href="?search={{search}}&page={{ page_number }}">{{ page_number }}</a>
               </li>
             {% endif %}
           {% endif %}
@@ -203,7 +203,7 @@
         <!-- 다음페이지 -->
         {% if question_list.has_next %}
         <li class="page-item">
-            <a class="page-link text-danger" href="?search={{search}}{{ question_list.next_page_number }}">다음</a>
+            <a class="page-link text-danger" href="?search={{search}}&page={{ question_list.next_page_number }}">다음</a>
         </li>
         {% else %}
         <li class="page-item disabled">
