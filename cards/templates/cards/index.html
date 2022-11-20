@@ -1,159 +1,199 @@
+{% extends 'base2.html' %}
 {% load mathfilters %}
 {% load django_bootstrap5 %}
 {% load static %}
-<!DOCTYPE html>
-<!-- Coding by CodingLab | www.codinglabweb.com-->
-<html lang="ko">
-
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% comment %} 폰트 {% endcomment %}
-    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap"
-    rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'style.css' %}?{% now 'U'%}" />
-    {% comment %} 폰트 {% endcomment %}
-    <title>이름 정하기</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-    <script src="{% static 'js/chat.js' %}"></script>
-    {% bootstrap_css %}
-    <title></title>
-    <!-- Boxicons CSS -->
-    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-  </head>
-
-  <body>
-    <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header d-flex flex-column">
-            <h1 class='text-center my-5'>카카오 로그인</h1>
-            <div class="d-grid">
-              <a href="{% url 'accounts:kakao' %}">
-                <img src="{% static 'images/kakao_login.jpg' %}" alt="카카오 간편로그인" style='width:30rem' class='rounded-3'>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <nav class="nav justify-content-between">
-      <ul class="nav-content">
-        <li class="nav-list">
-          <a href="{% url 'home' %}" class="link-item active">
-            <i class='bx bxs-home link-icon'></i>
-            <span class="link-text">대표이사 문경욱</span>
-          </a>
-        </li>
-      </ul>
-      <ul class="nav-content">
-        {% if request.user.is_authenticated %}
-        <li class="nav-list btn2" style="height: 80px;">
-          <a class="link-item active" href="{% url 'cards:index' %}" style="height: 80px;">
-              <i class='bx bxs-paper-plane link-icon'></i>
-              <span class="link-text">벽난로</span>
-          </a>
-          </li>
-
-        <li class="nav-list btn2" style="height: 80px;">
-          <a href="{% url 'meetings:index' %}" class="link-item active" style="height: 80px;">
-            <i class='bx bxs-conversation link-icon'></i>
-            <span class="link-text">모임</span>
-          </a>
-        </li>
-        <li class="nav-list btn2" style="height: 80px;">
-          <a href="{% url 'notes:index' %}" class="link-item active" style="height: 80px;">
-            <i class='bx bxs-message-rounded link-icon'></i>
-            <span class="link-text">쪽지</span>
-          </a>
-        </li>
-        <li class="nav-list btn2" style="height: 80px;">
-          <a href="{% url 'shoppings:index' %}" class="link-item active" style="height: 80px;">
-            <i class='bx bxs-shopping-bag link-icon'></i>
-            <span class="link-text">쇼핑</span>
-          </a>
-        </li>
-        <li class="nav-list btn2" style="height: 80px;">
-          <a href="{% url 'accounts:profile' request.user.pk %}" class="link-item active" style="height: 80px;">
-            <i class='bx bxs-user link-icon'></i>
-            <span class="link-text">프로필</span>
-          </a>
-        </li>
-        <li class="nav-list btn2" style="height: 80px;">
-          <a href="{% url 'accounts:logout' %}" class="link-item active" style="height: 80px;">
-            <i class='bx bxs-log-out-circle link-icon'></i>
-            <span class="link-text">로그아웃</span>
-          </a>
-        </li>
-        <li class="nav-list btn2" style="height: 80px;">
-          <a href="{% url 'vocies:index' %}" class="link-item active" style="height: 80px;">
-            <i class='bx bxs-user link-icon'></i>
-            <span class="link-text">문의</span>
-          </a>
-        </li>
-        <li class="nav-item dropdown d-flex align-items-center">
-          {% if request.user.tree_notice or request.user.note_notice %}
-            {% if request.user.notice_tree and request.user.notice_note %}
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <!-- <i class="bi bi-bell fw-bold text-danger "></i> -->
-            </a>
-            <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
-              <li class="p-3 dropdown-item">새로운 알림이 <br> 없어요😊</li>
-            </ul>
-            {% else %}
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
-              <!-- <i class="bi bi-bell-fill fw-bold text-danger"></i> -->
-            </a>
-            {% csrf_token %}
-            <ul class="dropdown-menu p-0" id="dropul" style="background: rgba(0, 0, 0, 0.0); border: none;">
-            </ul>
-            {% endif %}
-          {% else %}
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-bell-slash-fill fw-bold text-danger"></i>
-          </a>
-          <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
-            <li class="p-3 dropdown-item">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
-          </ul>
-          {% endif %}
-        </li>
-        {% else %}
-        <li class="nav-list">
-          <a type="button" class="link-item active btn2" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 80px;">
-            <i class='bx bxs-log-in-circle link-icon'></i>
-            <span class="link-text">로그인</span>
-          </a>
-        </li>
-        <li class="nav-list">
-          <a href="{% url 'vocies:index' %}" class="link-item active btn2" style="height: 80px;">
-            <i class='bx bxs-user link-icon'></i>
-            <span class="link-text">문의</span>
-          </a>
-        </li>
-        {% endif %} 
-        {% comment %} <audio controls>
-          <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
-        </audio>
-    <li class="navbar-brand">
-        {% for message in messages %}
-        <div class="nav-link alert {{ message.tags }} alert-auto-dismissible text-center d-flex align-items-center m-0" role="alert" style="height: 40px; font-size: 16px;">
-      {{ message }}
-        </div>
-        {% endfor %}
-      </li> {% endcomment %}
-        <!-- <div class="indicator"></div> -->
-      </ul>
-    </nav>
-
-
-
 
 
     {% block content %} 
+  <style>
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+{% comment %} body{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #8c52ff;
+} {% endcomment %}
+
+section{
+  position: relative;  
+  height: 450px;
+  width: 1075px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper{
+  width: 1020px;
+}
+
+.card10{
+  position: relative;
+  background: #fff;
+  border-radius: 200px;
+  height: 400px;
+  margin: 20px 0;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card10::before{
+  content: "";
+  position: absolute;
+  height: 40%;
+  width: 100%;
+  background: white;
+  border-radius: 300px;
+}
+
+.card10 .card-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  position: relative;
+  z-index: 100;
+}
+
+section .card10 .image{
+  height: 140px;
+  width: 140px;
+  border-radius: 20%;
+  padding: 3px;
+  background: #7d2ae8;
+  margin-top: 30px;
+}
+
+section .card10 .image img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 20%;
+  border: 3px solid #fff;
+}
+
+.card10 .media-icons{
+  position: absolute;
+  top: 12px;
+  right: 95px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.card10 .media-icons i{
+  color: #7d2ae8;
+  opacity: 0.6;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.card10 .media-icons i:hover{
+  opacity: 1;
+}
+
+.card10 .name-profession{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  color: black;
+} 
+
+.name-profession .name{
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.name-profession .profession{
+  font-size:15px;
+  font-weight: 500;
+}
+
+.card10 .rating{
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.card10 .rating i{
+  font-size: 18px;
+  margin: 0 2px;
+  color: #7d2ae8;
+}
+
+.card10 .button{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.card10 .button button{
+  background: #7d2ae8;
+  outline: none;
+  border: none;
+  color: #fff;
+  padding: 8px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.button button:hover{
+  background: #6616d0;
+}
+
+.swiper-pagination{
+  position: absolute;
+  top: 450px;
+}
+
+.swiper-pagination-bullet{
+  height: 7px;
+  width: 26px;
+  border-radius: 25px;
+  background: white;
+}
+
+.swiper-button-next, .swiper-button-prev{
+  opacity: 0.7;
+  color: white;
+  transition: all 0.3s ease;
+}
+.swiper-button-next:hover, .swiper-button-prev:hover{
+  opacity: 1;
+  color: white;
+}
+
+.swiper-button-next, .swiper-button-prev{
+  opacity: 0.7;
+  color: white;
+  transition: all 0.3s ease;
+}
+.swiper-button-next:hover, .swiper-button-prev:hover{
+  opacity: 1;
+  color: white;
+}
+
+.swiper-button-next, .swiper-button-prev{
+  opacity: 0.7;
+  color: white;
+  transition: all 0.3s ease;
+}
+.swiper-button-next:hover, .swiper-button-prev:hover{
+  opacity: 1;
+  color: white;
+}
+  </style>
     <style>
       :root {
         --surface-color: #fff;
@@ -186,6 +226,7 @@
       .card__image {      
         width: 100%;
         height: 20rem;
+        border-radius: 40px
       }
       
       .card__overlay {
@@ -250,7 +291,6 @@
       .card__tagline {
         display: block;
         margin: 1em 0;
-        font-family: "MockFlowFont";  
         font-size: .8em; 
         color: #6A515E;  
       }
@@ -264,7 +304,6 @@
         padding: 0 2em 2em;
         margin: 0;
         color: #6A515E;
-        font-family: "MockFlowFont";   
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 3;
@@ -282,11 +321,19 @@
       <img src="{% static 'images/벽난로배너2.png' %}" style='width:100%;' alt="">
     </div>
     
+    
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+
+    <!-- Fontawesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+    
     <div class="background">
     <div class="container">
-      <div class="banner d-flex p-3 w-100 align-items-center justify-content-center">
+      <div class="banner d-flex p-3 w-100 align-items-center justify-content-center gap-4">
         <form action="{% url 'cards:search' %}" role='search' class='mb-0 w-100'>
-          <div class="d-flex w-100 justify-content-center mt-5" style='position:relative'>
+          <div class="d-flex w-100 justify-content-center gap-4 mt-5" style='position:relative'>
             <input type="search" id="mySearch" onkeyup="myFunction()" placeholder="벽난로 검색" title="Type in a category" class='px-3 py-3 rounded-3' style="width: 500px; height:70px" name='search'>
             <button class="btn btn-link" type="submit" style='position:absolute;top:-7px;right:290px'>
               <script src="https://cdn.lordicon.com/qjzruarw.js"></script>
@@ -302,39 +349,58 @@
       </div>
     </div>
     
-    
-    
-    
-    
     <div class='my-2'>
-      <div class='text-end mx-4'>
+      <div class='text-end mx-4 my-3'>
         <a href="{% url 'cards:group_create' %}" class="btn fs-4" style='background-color:orangered;color:white'> 그룹 벽난로 만들기</a>
       </div>
 
-      <div class="row" style='width:100%'>  
-        <h1 class='text-center'>그룹 벽난로</h1>
+      <div class="row justify-content-center gap-4 mx-0" style='width:100%'>  
+        <h1 class='text-center my-3'>그룹 벽난로</h1>
         {% if groupcards %}
+        <section class='px-0'>
+      
+          <div class="swiper mySwiper container">
+            <div class="swiper-wrapper content">
           {% for card in groupcards %}
-          <div class="col-12 col-lg-3 ms-2 my-3 d-flex justify-content-center">
-            <a href="{% url 'cards:group_detail' card.pk %}" class="card2">
+        
+            <div class="swiper-slide card10">
+
+   
+  
+            <div style='position: absolute; top:0.77rem; left:7.5rem;z-index: 20'>
+              <img src='/static/images/유저장식{{ card.groupdeco }}.png' style='width:5rem; height:5rem;'>
+            </div>
+            <a href="{% url 'cards:group_detail' card.pk %}" class="card2 rounded-5" >
+              {% if card.chimneys == 9 %}
+                <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt="" />
+
+              {% else %}
               <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt="" />
+              {% endif %}
               <div class="card__overlay">
                 <div class="card__header">
                   <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
-                  {% if user.profileimage %}
-                    <img class="card__thumb" src="{{ user.profileimage }}"  />
+                  {% if card.user.profileimage %}
+                    <img class="card__thumb" src="{{ card.user.profileimage }}"  />
                   {% else %}
                     <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
                   {% endif %}                     
                   <div class="card__header-text">
+                    <h3 class="card__title">{{ card.user.nickname }}</h3>            
                     <h3 class="card__title">{{ card.title }}</h3>            
                   </div>
                 </div>
                 <p class="card__description">{{ card.content }}</p>
               </div>
             </a>
-          </div>
-          {% endfor %}      
+
+        </div>
+          {% endfor %} 
+        </div>
+      </div>
+      <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </section>     
         {% else %}
         <h1 class='my-5 fs-4 text-center'> 그룹 벽난로를 만들어보세요. </h1> 
       {% endif %}
@@ -343,40 +409,40 @@
     
     
       <h1 class='my-4 text-center'> 인기 벽난로 </h1> 
-      <div class="row" style='width:100%'>  
+      <div class="row justify-content-center gap-4 mx-0 g-4" style='width:100%'>  
         {% if popular != '' %}
+
           {% for card in popular %}
-          <div class='col-12 col-lg-3 ms-2 my-3'>
-            <div class='mb-5 d-flex justify-content-center'>
-              <div>
-                  <a href="{% url 'cards:usercard_detail' card.pk %}" class="card2">
-                    {% if card.chimneys == 9 %}
-                    <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt=""/>
-                    {% else %}
-                    <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt=""/>
-                    {% endif %}
-                    <div class="card__overlay">
-                      <div class="card__header">
-                        <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">
-                          <path/></svg>
-                        {% if card.user.profileimage %}
-                          <img class="card__thumb" src="{{ card.user.profileimage }}"/>
-                        {% else %}
-                          <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
-      
-                        {% endif %}
-                        <div class="card__header-text">
-                          <h3 class="card__title">{{ card.user.nickname }}</h3>
-                          <span class="card__status">{{ card.title }}</span>
-                        </div>
-                      </div>
-                      <p class="card__description">{{ card.content }}</p>
-                    </div>
-                  </a>
-              </div>
+
+
+  
+          <a href="{% url 'cards:group_detail' card.pk %}" class="card2 rounded-5 px-0 col-12 col-md-5 col-xl-3 my-5" style='position:relative'>
+            {% if card.chimneys == 9 %}
+              <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt="" />
+
+            {% else %}
+            <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt="" />
+            {% endif %}
+            <div style='position: absolute; top:0.77rem; left:7.5rem;z-index: 20'>
+              <img src='/static/images/유저장식{{ card.userdeco }}.png' style='width:5rem; height:5rem;'>
             </div>
-        </div>
-          {% endfor %}      
+            <div class="card__overlay">
+              <div class="card__header">
+                <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                {% if card.user.profileimage %}
+                  <img class="card__thumb" src="{{ card.user.profileimage }}"  />
+                {% else %}
+                  <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
+                {% endif %}                     
+                <div class="card__header-text">
+                  <h3 class="card__title">{{ card.user.nickname }}</h3>            
+                  <h3 class="card__title">{{ card.title }}</h3>            
+                </div>
+              </div>
+              <p class="card__description">{{ card.content }}</p>
+            </div>
+          </a>
+          {% endfor %}        
         {% else %}
         <div>
           <h1 class='my-5 fs-4'> 인기 벽난로가 없습니다.  </h1> 
@@ -387,40 +453,45 @@
     
     
       <h1 class='my-4 text-center'> 랜덤 벽난로 </h1> 
-      <div class="row" style='width:100%'>
+      <div class="row  justify-content-center gap-4 gap-4 mx-0 g-4" style='width:100%'>
         {% if random_user != '' %}
+ 
           {% for card in random_user %}
-          <div class='col-12 col-lg-3 ms-2 my-5'>
-            <div class='mb-5 d-flex justify-content-center'>
-              <div>
-                  <a href="{% url 'cards:usercard_detail' card.pk %}" class="card2">
-                    {% if card.chimneys == 9 %}
-                    <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt=""/>
-                    {% else %}
-                    <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt=""/>
-                    {% endif %}
-                    <div class="card__overlay">
-                      <div class="card__header">
-                        <svg class="card__arc" xmlns="http://www.w3.org/2000/svg">
-                          <path/></svg>
-                        {% if card.user.profileimage %}
-                          <img class="card__thumb" src="{{ card.user.profileimage }}"/>
-                        {% else %}
-                          <img class="card__thumb" src="{% static 'images/게스트.png' %}"/>
-      
-                        {% endif %}
-                        <div class="card__header-text">
-                          <h3 class="card__title">{{ card.user.nickname }}</h3>
-                          <span class="card__status">{{ card.title }}</span>
-                        </div>
-                      </div>
-                      <p class="card__description">{{ card.content }}</p>
-                    </div>
-                  </a>
+        
+
+
+   
+  
+
+            <a href="{% url 'cards:group_detail' card.pk %}" class="card2 rounded-5 px-0 col-12 col-md-5 col-xl-3 my-5" style='position:relative'>
+              {% if card.chimneys == 9 %}
+                <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt="" />
+
+              {% else %}
+              <img src="/static/images/벽난로{{ card.chimneys }}.jpg" class="card__image" alt="" />
+              {% endif %}
+              <div style='position: absolute; top:0.77rem; left:7.5rem;z-index: 20'>
+                <img src='/static/images/유저장식{{ card.userdeco }}.png' style='width:5rem; height:5rem;'>
               </div>
-            </div>
-        </div>
+              <div class="card__overlay">
+                <div class="card__header">
+                  <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                  {% if card.user.profileimage %}
+                    <img class="card__thumb" src="{{ card.user.profileimage }}"  />
+                  {% else %}
+                    <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
+                  {% endif %}                     
+                  <div class="card__header-text">
+                    <h3 class="card__title">{{ card.user.nickname }}</h3>            
+                    <h3 class="card__title">{{ card.title }}</h3>            
+                  </div>
+                </div>
+                <p class="card__description">{{ card.content }}</p>
+              </div>
+            </a>
+
           {% endfor %} 
+ 
         {% else %}    
         <div>
           <h1 class='my-5 fs-4'> 랜덤 벽난로가 없습니다. </h1> 
@@ -430,6 +501,56 @@
     
       
     </div>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    </script>
     <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
     <script>
       new Snowflakes();
@@ -438,205 +559,6 @@
     
     {% endblock %}
     
-    
-    
-    
-    
-    
-    {% bootstrap_javascript %}
-
-    <!-- JavaScript -->
-    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script>
-        window.setTimeout(function() {
-            $(".alert-auto-dismissible").fadeTo(500, 0).slideUp(500, function() {
-                $(this).remove();
-            });
-        }, 2000);
-        function apen(event) {
-          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-          axios({
-            method: 'post',
-            url: '/accounts/notice/',
-            headers: {'X-CSRFToken': csrftoken},
-          })
-          .then(response => {
-            const items = response.data.items
-            const dropul= document.querySelector("#dropul")
-            removeAllchild(dropul)
-            function removeAllchild(div) {
-              while (div.hasChildNodes()) {
-                div.removeChild(div.firstChild);
-              }
-            };
-            for (let i=0; i<items.length; i++) {
-              let time = moment(items[i][0]).add(9, 'hours').format('YYYY년 MM월 D일, a h:mm:ss');
-              console.log(time)
-              if (items[i][1][2] === 'card') {
-                const li = document.createElement('li')
-                const a = document.createElement('a')
-                a.classList='dropdown-item mt-3'
-                a.href = `{% url 'cards:usercard_detail' 1 %}`
-                a.href = a.href.replace('1', items[i][1][3])
-                const p = document.createElement('p')
-                const h6 = document.createElement('h6')
-                h6.innerText = time
-                p.innerText = `${items[i][1][1]} 님이 벽난로 ${items[i][1][0]} 을 남겼어요.`
-                p.className = 'mb-0'
-                a.appendChild(h6)
-                a.appendChild(p)
-                li.appendChild(a)
-                dropul.appendChild(li)
-              }
-              else {
-                const li = document.createElement('li')
-                const a = document.createElement('a')
-                a.classList='dropdown-item mt-3'
-                a.href = `{% url 'notes:detail' 1 %}`
-                a.href = a.href.replace('1', items[i][1][3])
-                const p = document.createElement('p')
-                const h6 = document.createElement('h6')
-                h6.innerText = time
-                p.innerText = `${items[i][1][1]} 님이 ${items[i][1][0]} 쪽지를 보냈어요.`
-                p.className = 'mb-0'
-                a.appendChild(h6)
-                a.appendChild(p)
-                li.appendChild(a)
-                dropul.appendChild(li)
-              }
-            }
-          })
-        }
-        const linkItems = document.querySelectorAll(".link-item");
-
-        linkItems.forEach((linkItem, index) => {
-          linkItem.addEventListener("click", () => {
-            document.querySelector(".active").classList.remove("active");
-            linkItem.classList.add("active");
-    
-            const indicator = document.querySelector(".indicator");
-    
-            indicator.style.left = `${index * 95 + 48}px`;
-          })
-        })
-    </script>
-  </body>
-
-  <style>
-    /* Google Fonts - Poppins */
-
-    body {
-      align-items: center;
-      justify-content: center;
-    }
-
-    nav {
-      background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
-      padding: 0 25px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-content {
-      display: flex;
-      top: 6px;
-      height: 70px;
-      align-items: center;
-      list-style: none;
-      position: relative;
-    }
-
-    .link-item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 120px;
-      width: 95px;
-      text-decoration: none;
-      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    .link-item.active {
-      transform: translateY(-10px);
-    }
-
-    .link-icon {
-      font-size: 38px;
-      color: #999;
-      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    .link-item.active .link-icon {
-      color: #ffffff;
-    }
-
-    .link-text {
-      position: absolute;
-      font-size: 12px;
-      font-weight: 500;
-      color: #FFF;
-      opacity: 0;
-      transform: translateY(32px);
-      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    .link-item.active .link-text {
-      opacity: 1;
-    }
-
-    /* .btn2:hover {
-      margin: auto;
-      height: -60px;
-      width: -20px;
-      border-radius: 50%;
-      background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
-      background-position: right center;
-    } */
-
-    .btn2:hover {
-    
-    border-radius: 50%;
-    background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 51%, #ffecd2 100%);
-}
-
-    /* .indicator{
-    position:absolute;
-    top: 2px;
-    left: 48px;
-    height: 30px;
-    width: 30px;
-    background-color: #ffffff;
-    border: 6px solid #4070F4;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-.indicator::before,
-.indicator::after{
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    height: 24px;
-    width: 19px;
-}
-.indicator::before{
-    left: -20px;
-    background-color: #4070F4;
-    border-top-right-radius: 25px;
-}
-.indicator::after{
-    right: -20px;
-    background-color: #4070F4;
-    border-top-left-radius: 25px;
-} */
-
-  </style>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
-</html>
-
-
 
 
 

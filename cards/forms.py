@@ -6,7 +6,7 @@ class GroupCardForm(forms.ModelForm):
     class Meta:
         model = Groupcard
         fields = ["title", "content", "is_private"]
-        labels = {"title": "", "content": "", "is_private": "공개 여부 체크"}
+        labels = {"title": "", "content": "", "is_private": "비공개"}
         widgets = {
             "title": forms.TextInput(
                 attrs={
@@ -72,3 +72,13 @@ class GroupCommentForm(forms.ModelForm):
         fields = [
             "content",
         ]
+        labels = {
+            "content": "",
+        }
+        widgets = {
+            "content": forms.Textarea(
+                attrs={
+                    "placeholder": "메세지 내용을 입력해주세요.",
+                }
+            ),
+        }

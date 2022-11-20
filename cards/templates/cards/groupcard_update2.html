@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load mathfilters %}
+{% load static %}
+
+
+
+    {% block content %}
+    <style>
+      body {
+        background-image: url("{% static 'images/개인카드배경3.png' %}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: white;
+      }
+    </style>
+    <div class='d-flex justify-content-center my-5'>
+    
+      <div style='width:40rem'>
+    
+        <div class='d-flex justify-content-between mb-5'>
+            <img src="/static/images/유저장식{{cards.groupdeco}}.png" alt="" style='width:7rem'>
+            <h1 class='text-center' style='padding-top:2.2rem'>
+                메세지를 남겨주세요
+              </h1>
+            <img src="/static/images/유저장식{{cards.groupdeco}}.png" alt="" style='width:7rem'>
+        </div>
+    
+        <form action="" method="POST">
+    
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <div class="d-grid">
+            <input type="submit" value="메세지 남기기" class="btn btn-primary border border-4"  >
+          </div>
+        </form>
+    
+      </div>
+    
+    </div>
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+    <script>
+      new Snowflakes();
+    </script>
+    {% endblock %}
+    

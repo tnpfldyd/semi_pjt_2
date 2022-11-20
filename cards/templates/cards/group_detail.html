@@ -3,7 +3,7 @@
 {% load mathfilters %}
 {% load static %}
 {% block content %} 
-
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <style>
   body {
     background-image : url('{% static 'images/개인카드배경2.jpg' %}');
@@ -20,8 +20,29 @@
       <a href="{% url 'cards:groupcard_update' cards.pk %}" class="btn btn-success mt-5 me-3"> 벽난로 바꾸기 </a>
       <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
     </div>
+    {% else %}
+    <div class='d-flex justify-content-end mt-4'>
+      <a href="{% url 'accounts:profile' cards.user.pk %}" class="btn btn-light m-0 me-3"> {{ cards.user.nickname }} </a>
+      {% csrf_token %}
+      {% if request.user not in cards.user.followers.all %}
+      <button class="favorite-button" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)" style='background-color:blue !important;'>
+        <div class="icon">
+          <div class="star"></div>
+        </div>
+        <span id="span">Follow</span>
+      </button>
+      {% else %}
+      <button class="favorite-button active" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)">
+        <div class="icon">
+          <div class="star"></div>
+        </div>
+        <span id="span">UnFollow</span>
+      </button>
+      {% endif %}
+
+    </div>
     {% endif %}
-    <p class=' my-5 fs-1 text-center' style='color:white'>{{ cards.user.nickname }} 님에게 <span style='color:orangered '>{{ cards.usercomment_set.count }}</span>개의 메세지가 전달됐어요!</p>
+    <p class=' my-5 fs-1 text-center' style='color:white'>{{ cards.user.nickname }} 님에게 <span style='color:orangered '>{{ cards.groupcomment_set.count }}</span>개의 메세지가 전달됐어요!</p>
     <div>
       <!-- 벽난로 주인의 장식 모달 창 -->
       <div class="modal fade" id="owner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -46,7 +67,11 @@
       {% comment %} 댓글 메세지 띄우기 {% endcomment %}
       <div>
       <div style='position:relative' class='my-4 text-center'>
+        {% if cards.chimneys == 9 %}
+        <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+        {% else %}
         <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+        {% endif %}
         <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
           <div style='position: absolute; top:-3rem; left:18rem;'>
             <img src='/static/images/유저장식{{ cards.groupdeco }}.png' style='width:5rem; height:5rem;'>
@@ -91,7 +116,7 @@
     </div>
     {% if cards.user != request.user %}
     <div class='d-grid'>
-      <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn btn-primary mb-5 fs-4 rounded-3 border border-5"> 벽난로 꾸며주기 </a>
+      <a href="{% url 'cards:gcomment_create' cards.pk %}" class="btn btn-primary mb-5 fs-4 rounded-3 border border-3"> 벽난로 꾸며주기 </a>
     </div>
     {% endif %}
 
@@ -99,5 +124,97 @@
 
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+<script>
+  function follow(e) {
+      const button = e.target
+            if(button.classList.contains('animated')) {
+                return
+            }
+            button.classList.add('animated')
 
+            gsap.to(button, {
+                keyframes: [{
+                    '--star-y': '-36px',
+                    duration: .3,
+                    ease: 'power2.out'
+                }, {
+                    '--star-y': '48px',
+                    '--star-scale': .4,
+                    duration: .325,
+                    onStart() {
+                        button.classList.add('star-round')
+                    }
+                }, {
+                    '--star-y': '-64px',
+                    '--star-scale': 1,
+                    duration: .45,
+                    ease: 'power2.out',
+                    onStart() {
+                        button.classList.toggle('active')
+                        setTimeout(() => button.classList.remove('star-round'), 100)
+                    }
+                }, {
+                    '--star-y': '0px',
+                    duration: .45,
+                    ease: 'power2.in'
+                }, {
+                    '--button-y': '3px',
+                    duration: .11
+                }, {
+                    '--button-y': '0px',
+                    '--star-face-scale': .65,
+                    duration: .125
+                }, {
+                    '--star-face-scale': 1,
+                    duration: .15
+                }],
+                clearProps: true,
+                onComplete() {
+                    button.classList.remove('animated')
+                }
+            })
+
+            gsap.to(button, {
+                keyframes: [{
+                    '--star-hole-scale': .8,
+                    duration: .5,
+                    ease: 'elastic.out(1, .75)'
+                }, {
+                    '--star-hole-scale': 0,
+                    duration: .2,
+                    delay: .2
+                }]
+            })
+
+            gsap.to(button, {
+                '--star-rotate': '360deg',
+                duration: 1.55,
+                clearProps: true
+            })
+          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+          axios({
+            method: 'post',
+            url: `/accounts/${e.target.dataset.userId}/follow/`,
+            headers: {'X-CSRFToken': csrftoken},
+            data: {'note_pk': event.target.dataset.userId},
+          })
+          .then(response => {
+            console.log(response.data.followersCount)
+            console.log(response.data.followingsCount)
+            if (response.data.isFollow === true) {
+              const span = document.querySelector('#span')
+              span.innerText = 'UnFollow'
+            }
+            else {
+              const span = document.querySelector('#span')
+              span.innerText = 'Follow'
+            }
+          })
+        }
+</script>
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
 {% endblock %}

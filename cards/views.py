@@ -17,8 +17,12 @@ from django.db.models import Q
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
-    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by("-follow")[:5]
-    random_user = UserCard.objects.order_by("?")[:5]
+
+    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by(
+        "-follow"
+    )[:3]
+    random_user = UserCard.objects.order_by("?")[:3]
+
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
     print(popularity, random_user)
@@ -49,14 +53,17 @@ def usercard_create(request):
                 temp.save()
                 return redirect("cards:usercard_create2")
             except:
-                cards = UserCard.objects.get(user=request.user)
-                form = UserCardForm(request.POST, instance=cards)
-                if cards.userdeco and cards.chimneys:
-                    cards.user = request.user
-                    cards.userdeco = request.POST["userdeco"]
-                    cards.chimneys = request.POST["choice_chim"]
-                    cards.save()
-                    return redirect("cards:usercard_create2")
+                try:
+                    cards = UserCard.objects.get(user=request.user)
+                    form = UserCardForm(request.POST, instance=cards)
+                    if cards.userdeco and cards.chimneys:
+                        cards.user = request.user
+                        cards.userdeco = request.POST["userdeco"]
+                        cards.chimneys = request.POST["choice_chim"]
+                        cards.save()
+                        return redirect("cards:usercard_create2")
+                except:
+                    return redirect("cards:usercard_create")
     else:
         form = UserCardForm()
     context = {
@@ -291,14 +298,17 @@ def group_create(request):
     if request.method == "POST":
         form = GroupCardForm(request.POST)
         if form.is_valid():
-            temp = form.save(commit=False)
-            temp.user = request.user
-            # 라디오 버튼 'name'='id'로 들어옴
-            # name==choice, id=1,2,3으로 설정
-            temp.groupdeco = request.POST["userdeco"]
-            temp.chimneys = request.POST["choice_chim"]
-            temp.save()
-            return redirect("cards:group_create2", temp.pk)
+            try:
+                temp = form.save(commit=False)
+                temp.user = request.user
+                # 라디오 버튼 'name'='id'로 들어옴
+                # name==choice, id=1,2,3으로 설정
+                temp.groupdeco = request.POST["userdeco"]
+                temp.chimneys = request.POST["choice_chim"]
+                temp.save()
+                return redirect("cards:group_create2", temp.pk)
+            except:
+                return redirect("cards:group_create")
     else:
         form = GroupCardForm()
     context = {
@@ -325,6 +335,7 @@ def group_create2(request, pk):
         form = GroupCardForm(instance=card)
     context = {
         "form": form,
+        "card": card,
     }
     return render(request, "cards/group_create2.html", context)
 
@@ -344,18 +355,43 @@ def groupcard_update(request, pk):
     if request.method == "POST":
         form = GroupCardForm(request.POST, instance=cards)
         if form.is_valid():
-            temp = form.save(commit=False)
-            temp.user = request.user
-            # 라디오 버튼 'name'='id'로 들어옴
-            # name==choice, id=1,2,3으로 설정
-            temp.groupdeco = request.POST["groupdeco"]
-            temp.chimneys = request.POST["choice_chim"]
-            temp.save()
-            return redirect("cards:group_detail", cards.pk)
+            try:
+                temp = form.save(commit=False)
+                temp.user = request.user
+                # 라디오 버튼 'name'='id'로 들어옴
+                # name==choice, id=1,2,3으로 설정
+                temp.groupdeco = request.POST["userdeco"]
+                temp.chimneys = request.POST["choice_chim"]
+                temp.save()
+                return redirect("cards:groupcard_update2", cards.pk)
+            except:
+                return redirect("cards:groupcard_update", cards.pk)
     else:
         form = GroupCardForm(instance=cards)
     context = {"form": form}
     return render(request, "cards/groupcard_update.html", context=context)
+
+
+def groupcard_update2(request, pk):
+    cards = Groupcard.objects.get(pk=pk)
+    if request.method == "POST":
+        form = GroupCardForm(request.POST, instance=cards)
+        if form.is_valid():
+            temp = form.save(commit=False)
+            temp.user = request.user
+            # 라디오 버튼 'name'='id'로 들어옴
+            # name==choice, id=1,2,3으로 설정
+            temp.groupdeco = cards.groupdeco
+            temp.chimneys = cards.chimneys
+            temp.save()
+            return redirect("cards:group_detail", cards.pk)
+    else:
+        form = GroupCardForm(instance=cards)
+    context = {
+        "form": form,
+        "cards": cards,
+    }
+    return render(request, "cards/groupcard_update2.html", context=context)
 
 
 def groupcard_delete(request, pk):
@@ -379,11 +415,37 @@ def gcomment_create(request, pk):
         card = Groupcard.objects.get(pk=pk)
         comment_form = GroupCommentForm(request.POST)
         if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.user = request.user
-            comment.groupcard = card
-            comment.ribbons = request.POST["choice_ribbon"]
-            comment.save()
+            try:
+                comment = comment_form.save(commit=False)
+                comment.user = request.user
+                comment.groupcard = card
+                comment.socks = request.POST["socks"]
+                comment.save()
+                temp = ""
+                for i in str(comment.pk):
+                    temp += dic[i]
+                comment.id_text = temp
+                comment.save()
+                return redirect("cards:gcomment_create2", comment.pk)
+            except:
+                return redirect("cards:gcomment_create", pk)
+    else:
+        comment_form = GroupCommentForm()
+    context = {"comment_form": comment_form}
+
+    return render(request, "cards/gcomment_create.html", context)
+
+
+def gcomment_create2(request, pk):
+    comment = Groupcomment.objects.get(pk=pk)
+    if request.method == "POST":
+        comment_form = GroupCommentForm(request.POST, instance=comment)
+        if comment_form.is_valid():
+            comments = comment_form.save(commit=False)
+            comments.user = comment.user
+            comments.groupcard = comment.groupcard
+            comments.socks = comment.socks
+            comments.save()
             temp = ""
             for i in str(comment.pk):
                 temp += dic[i]
@@ -393,7 +455,7 @@ def gcomment_create(request, pk):
             data = {
                 "grant_type": "refresh_token",
                 "client_id": os.getenv("KAKAO_ID"),
-                "refresh_token": card.user.refresh_token,
+                "refresh_token": comment.groupcard.user.refresh_token,
                 "client_secret": os.getenv("KAKAO_SECRET"),
             }
             response = requests.post(url, data=data).json()
@@ -410,12 +472,12 @@ def gcomment_create(request, pk):
                 )
             }
             response = requests.post(url, headers=headers, data=data)
-            return redirect("cards:group_detail", card.pk)
+            return redirect("cards:group_detail", comment.groupcard.pk)
     else:
-        comment_form = GroupCommentForm()
-    context = {"comment_form": comment_form}
+        comment_form = GroupCommentForm(instance=comment)
+    context = {"comment_form": comment_form, "comment": comment}
 
-    return render(request, "cards/gcomment_create.html", context)
+    return render(request, "cards/gcomment_create2.html", context)
 
 
 def search(request):
