@@ -94,6 +94,9 @@
 
     {% csrf_token %}
     <div class="d-grid">
+      <div hidden>
+        {% bootstrap_form form %}
+      </div>
       <input type="submit" value="메세지 변경하기" class="btn btn-primary" >
     </div>
     </form>

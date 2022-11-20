@@ -52,12 +52,12 @@
               <div class='d-flex justify-content-center'>
                 <img src='/static/images/유저장식{{ cards.groupdeco }}.png' style='width:4rem;'>
               </div>
-              <div class='mb-2 rounded-2 p-1'>
-                <p class='text-center fs-5 my-5'>{{ cards.title }} </p>
-                <p class='my-1 text-center'>{{ cards.content }} </p>
+              <div class='mb-2 rounded-2 p-1' style="white-space: pre-line;">
+                <p class='text-center fs-5 my-3 mb-5'>{{ cards.title }} </p>
+                <p class='my-1 ' style="white-space: pre-line;">{{ cards.content }} </p>
               </div>
               <div class='d-grid mt-5'>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
               </div>
             </div>
           </div>
@@ -102,7 +102,7 @@
                 </div>
                 <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
                 <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
-                <p class='my-1 text-start px-2'> {{ comment.content }} </p>
+                <p class='my-1 text-start px-2'style="white-space: pre-line;"> {{ comment.content }} </p>
                 <div class='d-grid mt-5'>
                   <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
                 </div>

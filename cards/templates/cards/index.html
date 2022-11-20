@@ -349,13 +349,13 @@ section .card10 .image img{
       </div>
     </div>
     
-    <div class='my-2'>
+    <div class='my-4'>
       <div class='text-end mx-4 my-3'>
         <a href="{% url 'cards:group_create' %}" class="btn fs-4" style='background-color:orangered;color:white'> 그룹 벽난로 만들기</a>
       </div>
 
       <div class="row justify-content-center gap-4 mx-0" style='width:100%'>  
-        <h1 class='text-center my-3'>그룹 벽난로</h1>
+        <h1 class='text-center my-2'>그룹 벽난로</h1>
         {% if groupcards %}
         <section class='px-0'>
       
@@ -416,7 +416,7 @@ section .card10 .image img{
 
 
   
-          <a href="{% url 'cards:group_detail' card.pk %}" class="card2 rounded-5 px-0 col-12 col-md-5 col-xl-3 my-5" style='position:relative'>
+          <a href="{% url 'cards:usercard_detail' card.pk %}" class="card2 rounded-5 px-0 col-12 col-md-5 col-xl-3 my-5" style='position:relative'>
             {% if card.chimneys == 9 %}
               <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt="" />
 
@@ -463,7 +463,7 @@ section .card10 .image img{
    
   
 
-            <a href="{% url 'cards:group_detail' card.pk %}" class="card2 rounded-5 px-0 col-12 col-md-5 col-xl-3 my-5" style='position:relative'>
+            <a href="{% url 'cards:usercard_detail' card.pk %}" class="card2 rounded-5 px-0 col-12 col-md-5 col-xl-3 my-5" style='position:relative'>
               {% if card.chimneys == 9 %}
                 <img src="/static/images/벽난로{{ card.chimneys }}.png" class="card__image" alt="" />
 
