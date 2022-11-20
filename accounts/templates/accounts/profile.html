@@ -220,9 +220,9 @@
               <div style='position:relative'>
 
                 {% if user.usercard.chimneys == 9 %}
-                <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
+                  <img src="/static/images/벽난로{{ user.usercard.chimneys }}.png" class="card__image" alt=""/>
                 {% else %}
-                <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
+                  <img src="/static/images/벽난로{{ user.usercard.chimneys }}.jpg" class="card__image" alt=""/>
                 {% endif %}
                 <div style='position: absolute; top:1rem; left:7.8rem;z-index: 20'>
                   <img src='/static/images/유저장식{{ user.usercard.userdeco }}.png' style='width:5rem; height:5rem;'>
@@ -260,8 +260,8 @@
     </div>
   </div>
 
-  <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+  <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
   <script>
     new Snowflakes();
   </script>

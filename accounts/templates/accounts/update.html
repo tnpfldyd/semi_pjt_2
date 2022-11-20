@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% block content %}
-<div class='d-flex justify-content-center'>
+<div class='d-flex justify-content-center wrapper'>
   <div style='width:30rem' class='my-5'>
     <h1 class='text-center my-5'>업데이트 페이지</h1>
       <form action="{% url 'accounts:update' %}" method='POST', enctype='multipart/form-data'>
@@ -32,4 +32,19 @@
     </form>
   </div>
 </div>  
+
+<style>
+  .wrapper {
+
+    min-height: 89.9vh;
+    background-image: url("/static/images/개인카드배경3.png");
+    background-size: cover;
+    background-repeat : repeat;
+    
+</style>
+
+<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+<script>
+  new Snowflakes();
+</script>
 {% endblock %}
