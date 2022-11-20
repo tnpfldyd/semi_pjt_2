@@ -33,11 +33,11 @@
                 </a>
               {% endif %}
             </div>
-            <div class="text-black mt-5" style="width:330px;">
+            <div class="text-black mt-5" style="width:335px;">
               <h4 class="fw-bold mb-3">댓글 <span class="text-success">{{comments.count}}</span></h4>
               {% if request.user.is_authenticated %}
               <div id="meeting-comments">
-                <form id="meeintg-comment-form" data-meeting-id="{{ meeting.pk }}" method="POST">
+                <form class="d-flex" id="meeintg-comment-form" data-meeting-id="{{ meeting.pk }}" method="POST">
                   {% csrf_token %}
                     <input type="text" name="content" class="form-control" placeholder="댓글을 달아주세요">
                     <input type="submit" style="width: 60px;" class="btn btn-primary mx-1">
@@ -55,16 +55,6 @@
                 <div class="col-10 d-flex align-items-center">
                   {{ comment.content }}
                 </div>
-                <div class="col-2" id="{{comment.pk}}">
-                  {% if request.user == comment.user %}
-
-                  <form id="comment-delete-form" method="POST">
-                    {% csrf_token %}
-                    <input class="btn btn-danger" data-meeting-id="{{ meeting.pk }}" data-comment-id="{{ comment.pk }}" type="submit" name="{{ comment.pk }}"  value="삭제" onclick="remove(event)">
-                    
-                  </form>
-                </div>
-              {% endif %}
               </div>
               <div style="font-size:12px;" class="text-muted">{{ comment.created_at|date:"o-m-d"}} {{comment.created_at|time:"H:i"}}</div>
               <hr>
