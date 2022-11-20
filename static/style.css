@@ -262,7 +262,7 @@ a {
 .custom-form {
   color: black;
   border: none;
-  background-color: none;
+  background-color: #fff;
 }
 
 .custom-link:hover {
