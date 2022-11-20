@@ -22,7 +22,7 @@ urlpatterns = [
     ),
     # 그룹카드
     path("create/group/", views.group_create, name="group_create"),
-    path("create/group/2", views.group_create2, name="group_create2"),
+    path("<int:pk>/create/group/2", views.group_create2, name="group_create2"),
     path("detail/group/<int:pk>/", views.group_detail, name="group_detail"),
     path("<int:pk>/group/update/", views.groupcard_update, name="groupcard_update"),
     path("<int:pk>/group/delete/", views.groupcard_delete, name="groupcard_delete"),

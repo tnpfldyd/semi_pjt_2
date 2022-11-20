@@ -300,7 +300,7 @@ def group_create(request):
             temp.groupdeco = request.POST["userdeco"]
             temp.chimneys = request.POST["choice_chim"]
             temp.save()
-            return redirect("cards:group_create2")
+            return redirect("cards:group_create2", temp.pk)
     else:
         form = GroupCardForm()
     context = {
@@ -310,8 +310,8 @@ def group_create(request):
 
 
 @login_required
-def group_create2(request):
-    card = Groupcard.objects.get(user=request.user)
+def group_create2(request, pk):
+    card = Groupcard.objects.get(pk=pk)
     if request.method == "POST":
         form = GroupCardForm(request.POST, instance=card)
         if form.is_valid():
@@ -324,7 +324,7 @@ def group_create2(request):
             temp.save()
             return redirect("cards:index")
     else:
-        form = GroupCardForm(instnace=card)
+        form = GroupCardForm(instance=card)
     context = {
         "form": form,
     }
