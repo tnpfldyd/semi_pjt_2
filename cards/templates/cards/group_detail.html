@@ -6,6 +6,7 @@
 
 <style>
   body {
+    background-image : url('{% static 'images/개인카드배경2.jpg' %}');
     background-repeat : repeat;
     background-size : cover;
     {% comment %} color:white; {% endcomment %}
@@ -90,7 +91,7 @@
     </div>
     {% if cards.user != request.user %}
     <div class='d-grid'>
-      <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn mb-5 fs-4 mx-3" style='background-color:orangered;color:white;'> 벽난로 꾸며주기 </a>
+      <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn btn-primary mb-5 fs-4 rounded-3 border border-5"> 벽난로 꾸며주기 </a>
     </div>
     {% endif %}
 

@@ -48,6 +48,13 @@
           </a>
         </li>
       </ul>
+      <li class="nav-content">
+        {% for message in messages %}
+        <div class="nav-link alert {{ message.tags }} alert-auto-dismissible text-center d-flex align-items-center m-0" role="alert" style="height: 48px; font-size: 21px;">
+      {{ message }}
+        </div>
+        {% endfor %}
+      </li>
       <ul class="nav-content">
         {% if request.user.is_authenticated %}
         <li class="nav-list btn2" style="height: 80px;">

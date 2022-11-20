@@ -17,7 +17,9 @@ from django.db.models import Q
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
-    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by("-follow")[:5]
+    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by(
+        "-follow"
+    )[:5]
     random_user = UserCard.objects.order_by("?")[:5]
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
@@ -295,16 +297,38 @@ def group_create(request):
             temp.user = request.user
             # 라디오 버튼 'name'='id'로 들어옴
             # name==choice, id=1,2,3으로 설정
-            temp.groupdeco = request.POST["groupdeco"]
+            temp.groupdeco = request.POST["userdeco"]
             temp.chimneys = request.POST["choice_chim"]
             temp.save()
-            return redirect("cards:index")
+            return redirect("cards:group_create2", temp.pk)
     else:
         form = GroupCardForm()
     context = {
         "form": form,
     }
     return render(request, "cards/group_create.html", context)
+
+
+@login_required
+def group_create2(request, pk):
+    card = Groupcard.objects.get(pk=pk)
+    if request.method == "POST":
+        form = GroupCardForm(request.POST, instance=card)
+        if form.is_valid():
+            temp = form.save(commit=False)
+            temp.user = request.user
+            # 라디오 버튼 'name'='id'로 들어옴
+            # name==choice, id=1,2,3으로 설정
+            temp.groupdeco = card.groupdeco
+            temp.chimneys = card.chimneys
+            temp.save()
+            return redirect("cards:index")
+    else:
+        form = GroupCardForm(instance=card)
+    context = {
+        "form": form,
+    }
+    return render(request, "cards/group_create2.html", context)
 
 
 def group_detail(request, pk):
@@ -398,14 +422,14 @@ def gcomment_create(request, pk):
 
 def search(request):
     all_data = Groupcard.objects.filter(is_private=0).order_by("-pk")
-    search = re.sub(r"[0-9]", "", request.GET.get("search"))
-    page = request.GET.get("page", "1")
+    search = request.GET.get("search")
     paginator = Paginator(all_data, 6)
-    page_obj = paginator.get_page(page)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    print(request.GET)
     if search:
         search_list = all_data.filter(Q(title__icontains=search))
         paginator = Paginator(search_list, 6)
-        page_obj = paginator.get_page(re.sub(r"[^0-9]", "", request.GET.get("search")))
+        page_obj = paginator.get_page(request.GET.get("page"))
         context = {
             "search": search,
             "search_list": search_list,
