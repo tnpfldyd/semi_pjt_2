@@ -111,8 +111,8 @@
                     <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:5rem;'>
                   </div>
                   <div class='mb-2 rounded-2 p-1'>
-                    <p class='text-center fs-5 my-5'>{{ cards.title }} </p>
-                    <p class='my-1 text-center'>{{ cards.content }} </p>
+                    <p class='text-center fs-5 my-3 mb-5'>{{ cards.title }} </p>
+                    <p class='my-1' style="white-space: pre-line;">{{ cards.content }} </p>
                   </div>
                   <div class='d-grid mt-5'>
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
@@ -123,7 +123,8 @@
           </div>
         
           {% comment %} 댓글 메세지 띄우기 {% endcomment %}
-          <div>
+      
+      {% if cl == 1 %}
           <div style='position:relative' class='my-4 text-center'>
             {% if cards.chimneys == 9 %}
             <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
@@ -136,60 +137,188 @@
               </div>
             </a>
             {% for comment in comments %}
-     
-            {% comment %} 댓글 모달 {% endcomment %}
-            {% csrf_token %}
-            {% if forloop.counter|mod:8 == 0 %}
-            <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
-              <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
-                {% if comment.user.nickname %}
-                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+
+              {% comment %} 댓글 모달 {% endcomment %}
+              {% csrf_token %}
+              {% if forloop.counter|mod:8 == 0 %}
+              <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                  {% if comment.user.nickname %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                  {% else %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                  {% endif %}
+                  <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                </a>
+              </div>
                 {% else %}
-                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
-                {% endif %}
-                <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
-              </a>
-            </div>
-              {% else %}
-            <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
-              <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
-                {% if comment.user.nickname %}
-                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
-                {% else %}
-                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
-                {% endif %}
-                <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
-              </a>
-            </div>
-    
-            {% endif %}
-    
-            <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-body pt-1">
-                    <div class='d-flex justify-content-center'>
-                      <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
-                    </div>
-                    {% if comment.user.nickname %}
-                    <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
-                    {% else %}
-                    <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
-                    {% endif %}
-                    <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
-                    <p class='my-1 text-start px-2'> {{ comment.content }} </p>
-                    <div class='d-grid mt-5'>
-                      <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+              <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                  {% if comment.user.nickname %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                  {% else %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                  {% endif %}
+                  <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                </a>
+              </div>
+      
+              {% endif %}
+      
+              <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body pt-1">
+                      <div class='d-flex justify-content-center'>
+                        <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
+                      </div>
+                      {% if comment.user.nickname %}
+                      <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
+                      {% else %}
+                      <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
+                      {% endif %}
+                      <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
+                      <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
+                      <div class='d-grid mt-5'>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+
             {% endfor %}
-    
+
           </div>
+      {% else %}
+        {% for c in cl %}
+
+
+        <div style='position:relative' class='my-4 text-center'>
+          {% if cards.chimneys == 9 %}
+          <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+          {% else %}
+          <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+          {% endif %}
+          <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
+            <div style='position: absolute; top:-3.3rem; left:17.4rem;'>
+              <img src='/static/images/유저장식{{ cards.userdeco }}.png' style='width:6rem;'>
+            </div>
+          </a>
+
+          {% for comment in comments %}
+            {% comment %} 댓글 모달 {% endcomment %}
+            {% csrf_token %}
+              {% if forloop.counter|div:40 == c or forloop.counter|intdiv:40|add:1 == c  %}
+                  {% if forloop.counter > 40 %}
+                        
+
+                        {% if forloop.counter|mod:8 == 0 %}
+                        <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ c|sub:1|mul:40|sub:forloop.counter|abs|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                            {% if comment.user.nickname %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                            {% else %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                            {% endif %}
+                            <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          </a>
+                        </div>
+                          {% else %}
+                        <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ c|sub:1|mul:40|sub:forloop.counter|abs|intdiv:8|mul:5|add:1 }}rem; left:{{c|sub:1|mul:40|sub:forloop.counter|abs|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                            {% if comment.user.nickname %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                            {% else %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                            {% endif %}
+                            <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          </a>
+                        </div>
+                
+                        {% endif %}
+                
+                        <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body pt-1">
+                                <div class='d-flex justify-content-center'>
+                                  <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
+                                </div>
+                                {% if comment.user.nickname %}
+                                <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
+                                {% else %}
+                                <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
+                                {% endif %}
+                                <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
+                                <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
+                                <div class='d-grid mt-5'>
+                                  <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                  {% else %}
+                      {% if forloop.counter|mod:8 == 0 %}
+                      <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          {% if comment.user.nickname %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                          {% else %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                          {% endif %}
+                          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        </a>
+                      </div>
+                        {% else %}
+                      <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          {% if comment.user.nickname %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                          {% else %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                          {% endif %}
+                          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        </a>
+                      </div>
+              
+                      {% endif %}
+              
+                      <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-body pt-1">
+                              <div class='d-flex justify-content-center'>
+                                <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
+                              </div>
+                              {% if comment.user.nickname %}
+                              <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
+                              {% else %}
+                              <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
+                              {% endif %}
+                              <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
+                              <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
+                              <div class='d-grid mt-5'>
+                                <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  {% endif %}
+
+            {% endif %}
+          {% endfor %}
+  
         </div>
-        {% if cards.user != request.user %}
+
+        {% endfor %}
+
+      {% endif %}
+      {% if cards.user != request.user %}
         <div class='d-grid'>
           <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn mb-5 fs-4 mx-3" style='background-color:orangered;color:white;'> 벽난로 꾸며주기 </a>
         </div>

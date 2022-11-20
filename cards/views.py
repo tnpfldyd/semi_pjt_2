@@ -23,7 +23,6 @@ def index(request):
     random_user = UserCard.objects.order_by("?")[:3]
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
-    print(popularity, random_user)
     context = {
         "groupcards": groupcards,
         "user": user,
@@ -104,11 +103,19 @@ def usercard_detail(request, pk):
             comment.save()
         request.user.notice_tree = True
         request.user.save()
+    if comments:
+        if comments.count() % 40 == 0:
+            cl = list(range(1, ((comments.count() // 40) + 1)))
+        else:
+            cl = list(range(1, ((comments.count() // 40) + 2)))
+    else:
+        cl = 1
     context = {
         "cards": cards,
         "comments": comments,
-        "cl": list(range(1, comments.count() // 40 + 2)),
+        "cl": cl,
     }
+    print(cl)
     return render(request, "cards/usercard_detail.html", context)
 
 
@@ -122,6 +129,8 @@ def usercard_update(request, pk):
                 temp.user = request.user
                 # 라디오 버튼 'name'='id'로 들어옴
                 # name==choice, id=1,2,3으로 설정
+                temp.title = cards.title
+                temp.content = cards.content
                 temp.userdeco = request.POST["userdeco"]
                 temp.chimneys = request.POST["choice_chim"]
                 temp.save()
@@ -136,7 +145,7 @@ def usercard_update(request, pk):
 
 
 def usercard_update2(request, pk):
-    cards = UserCard.objects.get(user=request.user)
+    cards = UserCard.objects.get(pk=pk)
     if request.method == "POST":
         form = UserCardForm(request.POST, instance=cards)
         if form.is_valid():
@@ -483,7 +492,6 @@ def search(request):
     search = request.GET.get("search")
     paginator = Paginator(all_data, 6)
     page_obj = paginator.get_page(request.GET.get("page"))
-    print(request.GET)
     if search:
         search_list = all_data.filter(Q(title__icontains=search))
         paginator = Paginator(search_list, 6)
