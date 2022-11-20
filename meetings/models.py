@@ -23,8 +23,17 @@ class Meeting(models.Model):
     is_closed = models.BooleanField(default=True)
     password = models.CharField(max_length=4, blank=True, null=True)
     location_choices = [
+        ("강남구", "강남구" ), 
+        ("광진구", "광진구"),
         ("노원구", "노원구"),
+        ("동작구", "동작구"),
+        ("마포구", "마포구"),
+        ("성동구", "성동구"),
         ("송파구", "송파구"),
+        ("서초구", "서초구"),
+        ("용산구", "용산구"),
+        ("영등포구", "영등포구"),
+        ("용산구", "용산구"),
     ]
     location = models.CharField(
         max_length=20,
