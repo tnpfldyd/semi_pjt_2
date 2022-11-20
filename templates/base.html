@@ -89,7 +89,7 @@
         </li>
         <li class="nav-list btn2" style="height: 80px;">
           <a href="{% url 'vocies:index' %}" class="link-item active" style="height: 80px;">
-            <i class='bx bxs-user link-icon'></i>
+            <i class='bx bx-support link-icon'></i>
             <span class="link-text">문의</span>
           </a>
         </li>
@@ -98,6 +98,7 @@
             {% if request.user.notice_tree and request.user.notice_note %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <!-- <i class="bi bi-bell fw-bold text-danger "></i> -->
+              <img src="{% static "images/종.png" %}" alt="" style="width: 20px; height:20px;">
             </a>
             <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
               <li class="p-3 dropdown-item">새로운 알림이 <br> 없어요😊</li>
@@ -105,6 +106,7 @@
             {% else %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
               <!-- <i class="bi bi-bell-fill fw-bold text-danger"></i> -->
+              <img class="bell" src="{% static "images/종2.png" %}" alt="" style="width: 20px; height:20px;">
             </a>
             {% csrf_token %}
             <ul class="dropdown-menu p-0" id="dropul" style="background: rgba(0, 0, 0, 0.0); border: none;">
@@ -112,7 +114,7 @@
             {% endif %}
           {% else %}
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-bell-slash-fill fw-bold text-danger"></i>
+            🔕
           </a>
           <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
             <li class="p-3 dropdown-item">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
@@ -182,13 +184,14 @@
               if (items[i][1][2] === 'card') {
                 const li = document.createElement('li')
                 const a = document.createElement('a')
-                a.className='dropdown-item'
+                a.classList='dropdown-item mt-3'
                 a.href = `{% url 'cards:usercard_detail' 1 %}`
                 a.href = a.href.replace('1', items[i][1][3])
                 const p = document.createElement('p')
                 const h6 = document.createElement('h6')
                 h6.innerText = time
-                p.innerText = `${items[i][1][1]} 님이 트리에 ${items[i][1][0]} 을 남겼어요.`
+                p.innerText = `${items[i][1][1]} 님이 벽난로 ${items[i][1][0]} 을 남겼어요.`
+                p.className = 'mb-0'
                 a.appendChild(h6)
                 a.appendChild(p)
                 li.appendChild(a)
@@ -197,13 +200,14 @@
               else {
                 const li = document.createElement('li')
                 const a = document.createElement('a')
-                a.className='dropdown-item'
+                a.classList='dropdown-item mt-3'
                 a.href = `{% url 'notes:detail' 1 %}`
                 a.href = a.href.replace('1', items[i][1][3])
                 const p = document.createElement('p')
                 const h6 = document.createElement('h6')
                 h6.innerText = time
                 p.innerText = `${items[i][1][1]} 님이 ${items[i][1][0]} 쪽지를 보냈어요.`
+                p.className = 'mb-0'
                 a.appendChild(h6)
                 a.appendChild(p)
                 li.appendChild(a)
@@ -212,23 +216,12 @@
             }
           })
         }
-        const linkItems = document.querySelectorAll(".link-item");
-
-        linkItems.forEach((linkItem, index) => {
-          linkItem.addEventListener("click", () => {
-            document.querySelector(".active").classList.remove("active");
-            linkItem.classList.add("active");
-    
-            const indicator = document.querySelector(".indicator");
-    
-            indicator.style.left = `${index * 95 + 48}px`;
-          })
-        })
     </script>
   </body>
 
   <style>
     /* Google Fonts - Poppins */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
     body {
       align-items: center;
@@ -236,7 +229,7 @@
     }
 
     nav {
-      background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
+      background-image: linear-gradient(to right, #b4cef7 0%, #8fc9e4 51%, #83b0f7 100%);
       padding: 0 25px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
@@ -289,53 +282,49 @@
       opacity: 1;
     }
 
-    /* .btn2:hover {
-      margin: auto;
-      height: -60px;
-      width: -20px;
-      border-radius: 50%;
-      background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
-      background-position: right center;
-    } */
-
     .btn2:hover {
     
     border-radius: 50%;
-    background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 51%, #ffecd2 100%);
-}
+    background-image: linear-gradient(to right, #b9bde9 0%, #9fd0e7 51%, #a1c4fd 100%);
+  }
 
-    /* .indicator{
-    position:absolute;
-    top: 2px;
-    left: 48px;
-    height: 30px;
-    width: 30px;
-    background-color: #ffffff;
-    border: 6px solid #4070F4;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-.indicator::before,
-.indicator::after{
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    height: 24px;
-    width: 19px;
-}
-.indicator::before{
-    left: -20px;
-    background-color: #4070F4;
-    border-top-right-radius: 25px;
-
-}
-.indicator::after{
-    right: -20px;
-    background-color: #4070F4;
-    border-top-left-radius: 25px;
-} */
-
+  .bell{
+      transform-origin: 50% 0%;
+      animation-name: shake;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+      animation-delay: 2s;
+    }
+    
+    @keyframes shake{
+    	0%{
+        	transform: rotate(0deg);
+        }
+        10%{
+        	transform: rotate(20deg);
+        }
+        20%{
+        	transform: rotate(-20deg);
+        }
+        30%{
+        	transform: rotate(10deg);
+        }
+        40%{
+        	transform: rotate(-10deg);
+        }
+        50%{
+        	transform: rotate(5deg);
+        }
+        60%{
+        	transform: rotate(-5deg);
+        }
+        70%{
+        	transform: rotate(0deg);
+        }
+        100%{
+        	transform: rotate(0deg);
+        }
+    }
   </style>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </html>
