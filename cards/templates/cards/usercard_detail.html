@@ -136,24 +136,29 @@
             {% for comment in comments %}
      
             {% comment %} 댓글 모달 {% endcomment %}
+            {% csrf_token %}
             {% if forloop.counter|mod:8 == 0 %}
-            <a type="button" class="btn p-0 m-0 cargando" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'>
-              {% if comment.user.nickname %}
-              <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user.nickname }} </p>   
+            <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+              <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                {% if comment.user.nickname %}
+                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                {% else %}
+                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                {% endif %}
+                <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+              </a>
+            </div>
               {% else %}
-              <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
-              {% endif %}
-              <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem'>
-            </a>
-              {% else %}
-            <a type="button" class="btn p-0 ms-2 cargando" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;'>
-              {% if comment.user.nickname %}
-              <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user.nickname }} </p>   
-              {% else %}
-              <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
-              {% endif %}
-              <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem'>
-            </a>
+            <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+              <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                {% if comment.user.nickname %}
+                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                {% else %}
+                <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                {% endif %}
+                <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+              </a>
+            </div>
     
             {% endif %}
     
@@ -279,6 +284,18 @@
                 }
               })
             }
+      function modal2(e) {
+        console.log(e.target.dataset.commentId)
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        axios({
+                method: 'post',
+                url: `/cards/${e.target.dataset.commentId}/modal_open/`,
+                headers: {'X-CSRFToken': csrftoken},
+                params: {'comment_pk': e.target.dataset.commentId},
+              })
+              .then(response => {
+              })
+      }
     </script>
     {% endblock %}
     {% bootstrap_javascript %}
