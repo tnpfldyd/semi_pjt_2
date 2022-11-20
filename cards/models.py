@@ -16,9 +16,9 @@ class UserCard(models.Model):
 
 
 class Groupcard(models.Model):
-    title = models.CharField(max_length=20)
-    content = models.TextField()
-    is_private = models.BooleanField()
+    title = models.CharField(max_length=20, blank=True)
+    content = models.TextField(blank=True)
+    is_private = models.BooleanField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     groupdeco = models.IntegerField(blank=True)
     chimneys = models.IntegerField(blank=True)
@@ -35,6 +35,7 @@ class UserComment(models.Model):
     socks = models.IntegerField(blank=True)
     id_text = models.TextField(blank=True)
     read = models.BooleanField(default=False)
+    is_opened = models.BooleanField(default=False)
 
 
 class Groupcomment(models.Model):

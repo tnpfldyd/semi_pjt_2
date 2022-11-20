@@ -129,29 +129,30 @@
           {% endif %}
         </li>
         {% else %}
-        <li class="nav-list btn2" style="height: 80px;">
-          <a type="button" class="link-item active" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 80px;">
+        <li class="nav-list">
+          <a type="button" class="link-item active btn2" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 80px;">
             <i class='bx bxs-log-in-circle link-icon'></i>
             <span class="link-text">로그인</span>
           </a>
         </li>
-        <li class="nav-list btn2" style="height: 80px;">
-          <a href="{% url 'vocies:index' %}" class="link-item active" style="height: 80px;">
-            <i class='bx bx-support link-icon'></i>
+        <li class="nav-list">
+          <a href="{% url 'vocies:index' %}" class="link-item active btn2" style="height: 80px;">
+            <i class='bx bxs-user link-icon'></i>
             <span class="link-text">문의</span>
           </a>
         </li>
         {% endif %} 
-     {% comment %} <audio controls>
+        {% comment %} <audio controls>
           <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
-        </audio> {% endcomment %}
+        </audio>
     <li class="navbar-brand">
         {% for message in messages %}
         <div class="nav-link alert {{ message.tags }} alert-auto-dismissible text-center d-flex align-items-center m-0" role="alert" style="height: 40px; font-size: 16px;">
       {{ message }}
         </div>
         {% endfor %}
-      </li>
+      </li> {% endcomment %}
+        <!-- <div class="indicator"></div> -->
       </ul>
     </nav>
     {% block content %}
@@ -235,7 +236,7 @@
     }
 
     nav {
-      background-image: linear-gradient(to right, #b4cef7 0%, #8fc9e4 51%, #83b0f7 100%);
+      background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
       padding: 0 25px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
