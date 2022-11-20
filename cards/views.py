@@ -17,12 +17,10 @@ from django.db.models import Q
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
-
     popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by(
         "-follow"
     )[:3]
     random_user = UserCard.objects.order_by("?")[:3]
-
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
     print(popularity, random_user)
@@ -512,10 +510,12 @@ from django.http import JsonResponse
 def modal_open(request, pk):
     if request.method == "POST":
         comment = UserComment.objects.get(pk=request.GET.get("comment_pk"))
-        if not comment.is_opened:
-            comment.is_opened = True
-            comment.save()
-        return JsonResponse({"1": 1})
+        # request user랑 card 유저가 일치하면
+        if comment.usercard.user == request.user:
+            if not comment.is_opened:
+                comment.is_opened = True
+                comment.save()
+            return JsonResponse({"1": 1})
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
         return redirect("cards:index")
