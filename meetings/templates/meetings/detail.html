@@ -33,15 +33,18 @@
                 </a>
               {% endif %}
             </div>
-            <div class="text-black mt-5" style="width:335px;">
+            <div class="text-black mt-5">
               <h4 class="fw-bold mb-3">댓글 <span class="text-success">{{comments.count}}</span></h4>
               {% if request.user.is_authenticated %}
-              <div id="meeting-comments">
-                <form class="d-flex" id="meeintg-comment-form" data-meeting-id="{{ meeting.pk }}" method="POST">
+              <div id="meeting-comments" >
+                <form id="meeintg-comment-form" class="d-flex" data-meeting-id="{{ meeting.pk }}" method="POST">
                   {% csrf_token %}
-                    <input type="text" name="content" class="form-control" placeholder="댓글을 달아주세요">
+                    <input type="text" name="content" class="form-control" placeholder="댓글을 달아주세요" style="width:270px;">
                     <input type="submit" style="width: 60px;" class="btn btn-primary mx-1">
                 </form>
+              </div>
+              <div id="meeting-commentss">
+
               </div>
               {% endif %}
             </div>
@@ -150,7 +153,7 @@
           data: new FormData(commentForm)
         })
         .then(response => {
-          const comments = document.getElementById("meeintg-comment-form")
+          const comments = document.getElementById("meeting-commentss")
           const div = document.createElement('div')
           const p = document.createElement('p')
           const small = document.createElement('small')
