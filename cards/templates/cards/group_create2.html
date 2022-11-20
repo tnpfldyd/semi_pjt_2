@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+  <style>
+    body {
+      background-image: url("{% static 'images/개인카드배경5.jpg' %}");
+      background-repeat: no-repeat;
+      background-size: cover;
+      color: white;
+    }
+  </style>
+  <div class='d-flex justify-content-center my-5'>
+
+    <div style='width:40rem'>
+
+      <h1 class='text-center mb-3' >
+        따뜻한 메세지를 남겨주세요.
+      </h1>
+
+      <form action="" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="d-grid">
+          <input type="submit" value="메세지 남기기" class="btn" style='background-color:orangered;color:white' >
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+{% endblock %}
