@@ -62,11 +62,11 @@
       
     .btn-1:hover {
       background: linear-gradient(0deg, rgba(157, 156, 156, 0.2) 0%, rgba(255, 255, 255, 0.8) 100%);
-   }
-
+  }
+  
   </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="{% static 'js/shoppings.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
     <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
     <script>
     new Snowflakes();
@@ -88,5 +88,5 @@
         zIndex: 100 // Default: 9999
     });
     </script> -->
-    
+    <p id='keyword' style="display: none;">{{keyword}}</p>
   {% endblock %}

@@ -275,6 +275,6 @@ def comment_delete(request, meeting_pk, comment_pk):
     
     if request.user == comment_data.user:
         comment_data.delete()
-
-    return JsonResponse()
+    print("여기와?")
+    return JsonResponse({"meeting_pk": meeting_pk, "comment_pk": comment_pk,})
     

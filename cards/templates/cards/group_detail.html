@@ -11,6 +11,7 @@
     background-size : cover;
     {% comment %} color:white; {% endcomment %}
    }
+
 </style>
 
 <div class="d-flex justify-content-center">
@@ -102,7 +103,9 @@
                 </div>
                 <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
                 <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
+
                 <p class='my-1 text-start px-2'style="white-space: pre-line;"> {{ comment.content }} </p>
+
                 <div class='d-grid mt-5'>
                   <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
                 </div>

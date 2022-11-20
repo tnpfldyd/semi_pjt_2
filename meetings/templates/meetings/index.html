@@ -65,9 +65,20 @@
             </div>
             <div class="cus-contentBx">
               <h2>{{ meeting.title }}</h2>
+
+            {% if request.user in meeting.belong.all %}
               <div class="cus-size">
                 <div class="fs-6 mt-2">{{ meeting.content|truncatewords:14 }}</div>
               </div>
+            {% elif meeting.password %}
+            <div class="cus-size">
+              
+            </div>
+            {% else %}
+            <div class="cus-size">
+              <div class="fs-6 mt-2">{{ meeting.content|truncatewords:14 }}</div>
+            </div>
+            {% endif %}
             </div>
             <div class="cus-contentBx2">
               <div class="cus-color">
