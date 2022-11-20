@@ -11,6 +11,61 @@
     background-size : cover;
     {% comment %} color:white; {% endcomment %}
    }
+{% comment %} 숨쉬기 효과 {% endcomment %}
+   .cargando {
+    -webkit-animation: breathing 5s ease-out infinite normal;
+    animation: breathing 5s ease-out infinite normal;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;    
+  }
+
+  @-webkit-keyframes breathing {
+    0% {
+      -webkit-transform: scale(0.9);
+      transform: scale(0.9);
+    }
+
+    25% {
+      -webkit-transform: scale(1.2);
+      transform: scale(1.2);
+    }
+
+    60% {
+      -webkit-transform: scale(0.9);
+      transform: scale(0.9);
+    }
+
+    100% {
+      -webkit-transform: scale(0.9);
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes breathing {
+    0% {
+      -webkit-transform: scale(0.9);
+      -ms-transform: scale(0.9);
+      transform: scale(0.9);
+    }
+
+    25% {
+      -webkit-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      transform: scale(1.2);
+    }
+
+    60% {
+      -webkit-transform: scale(0.9);
+      -ms-transform: scale(0.9);
+      transform: scale(0.9);
+    }
+
+    100% {
+      -webkit-transform: scale(0.9);
+      -ms-transform: scale(0.9);
+      transform: scale(0.9);
+    }
+  }
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
@@ -91,7 +146,8 @@
           <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem'>
         </a>
           {% else %}
-        <a type="button" class="btn p-0 ms-2" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;'>
+
+        <a type="button" class="btn p-0 ms-2 {% if comment.is_opened == 0 %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;'>
           {% if comment.user.nickname %}
           <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user.nickname }} </p>   
           {% else %}
@@ -226,4 +282,8 @@
           })
         }
 </script>
+
+
+
+
 {% endblock %}

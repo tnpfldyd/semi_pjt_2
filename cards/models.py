@@ -35,6 +35,7 @@ class UserComment(models.Model):
     socks = models.IntegerField(blank=True)
     id_text = models.TextField(blank=True)
     read = models.BooleanField(default=False)
+    is_opened = models.BooleanField(default=False)
 
 
 class Groupcomment(models.Model):
