@@ -294,6 +294,10 @@ def notice(request):
                             )
                         ] = (i.title, i.from_user.nickname, "note", i.pk)
         dic = sorted(dic.items(), reverse=True)
+        if not dic:
+            request.user.notice_tree = True
+            request.user.notice_note = True
+            request.user.save()
         return JsonResponse({"items": dic})
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
