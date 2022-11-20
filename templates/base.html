@@ -129,30 +129,29 @@
           {% endif %}
         </li>
         {% else %}
-        <li class="nav-list">
-          <a type="button" class="link-item active btn2" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 80px;">
+        <li class="nav-list btn2" style="height: 80px;">
+          <a type="button" class="link-item active" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 80px;">
             <i class='bx bxs-log-in-circle link-icon'></i>
             <span class="link-text">로그인</span>
           </a>
         </li>
-        <li class="nav-list">
-          <a href="{% url 'vocies:index' %}" class="link-item active btn2" style="height: 80px;">
-            <i class='bx bxs-user link-icon'></i>
+        <li class="nav-list btn2" style="height: 80px;">
+          <a href="{% url 'vocies:index' %}" class="link-item active" style="height: 80px;">
+            <i class='bx bx-support link-icon'></i>
             <span class="link-text">문의</span>
           </a>
         </li>
         {% endif %} 
-        {% comment %} <audio controls>
+     {% comment %} <audio controls>
           <source src="{%static 'sounds/jinglebell.mp3' %}" type="audio/mp3">
-        </audio>
+        </audio> {% endcomment %}
     <li class="navbar-brand">
         {% for message in messages %}
         <div class="nav-link alert {{ message.tags }} alert-auto-dismissible text-center d-flex align-items-center m-0" role="alert" style="height: 40px; font-size: 16px;">
       {{ message }}
         </div>
         {% endfor %}
-      </li> {% endcomment %}
-        <!-- <div class="indicator"></div> -->
+      </li>
       </ul>
     </nav>
     {% block content %}
