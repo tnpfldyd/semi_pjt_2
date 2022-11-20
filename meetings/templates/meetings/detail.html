@@ -55,16 +55,16 @@
                 <div class="col-10 d-flex align-items-center">
                   {{ comment.content }}
                 </div>
-                {% comment %} <div class="col-2">
+                <div class="col-2" id="{{comment.pk}}">
                   {% if request.user == comment.user %}
 
-                  <form id="comment-delete-form" data-meeting-id="{{ meeting.pk }}" data-comment-id="{{ comment.pk }}" method="POST">
+                  <form id="comment-delete-form" method="POST">
                     {% csrf_token %}
-                    <input class="btn btn-danger" type="submit" name="{{ comment.pk }}"  value="삭제">
+                    <input class="btn btn-danger" data-meeting-id="{{ meeting.pk }}" data-comment-id="{{ comment.pk }}" type="submit" name="{{ comment.pk }}"  value="삭제" onclick="remove(event)">
                     
                   </form>
                 </div>
-              {% endif %} {% endcomment %}
+              {% endif %}
               </div>
               <div style="font-size:12px;" class="text-muted">{{ comment.created_at|date:"o-m-d"}} {{comment.created_at|time:"H:i"}}</div>
               <hr>
@@ -177,22 +177,24 @@
       })
     </script>
     <script>
-      const commentDelete = document.getElementById('comment-delete-form')
-      commentDelete.addEventListener('submit', function(event) {
-        axios({
-          method: 'post',
-          url: `meetings/${event.target.dataset.meetingId}/comment/${event.target.dataset.commentId}/delete/`,
-          headers: {'X-CSRFToken': csrftoken},
-          data: {'comment_pk': event.target.dataset.commentId},
-        })
-        .then((response => {
-          const resdata = response.data.pk
-          console.log(resdata)
-          const div = document.getElementById(resdata)
-          console.log(div)
-          div.remove()
-        }))
-      })
+      function remove(event) {
+        var delete_warning = confirm('댓글을 삭제하시겠습니까?')
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        if (delete_warning == true) {
+          axios({
+            method: 'post',
+            url: `comment/${event.target.dataset.commentId}/delete/`,
+            headers: {'X-CSRFToken': csrftoken},
+            ata: {'comment_pk': event.target.dataset.commentId},
+          })
+          .then(response => {
+            const resdata = response.data.pk
+            const div = document.getElementById(resdata)
+            console.log(div)
+            div.remove()
+          })
+        }
+      }
       
     </script>
     <style>
