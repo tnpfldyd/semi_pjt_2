@@ -37,12 +37,10 @@
               <h4 class="fw-bold mb-3">댓글 <span class="text-success">{{comments.count}}</span></h4>
               {% if request.user.is_authenticated %}
               <div id="meeting-comments">
-                <form id="meeintg-comment-form" data-comment-id="{{ meeting.pk }}" method="POST">
+                <form id="meeintg-comment-form" data-meeting-id="{{ meeting.pk }}" method="POST">
                   {% csrf_token %}
-                  <div class="d-flex" style="height:40px;">
-                    <input type="text" class="form-control" placeholder="댓글을 달아주세요">
-                    <button style="width: 60px;" class="btn btn-primary mx-1">작성</button>
-                  </div>
+                    <input type="text" name="content" class="form-control" placeholder="댓글을 달아주세요">
+                    <input type="submit" style="width: 60px;" class="btn btn-primary mx-1">
                 </form>
               </div>
               {% endif %}
@@ -57,18 +55,16 @@
                 <div class="col-10 d-flex align-items-center">
                   {{ comment.content }}
                 </div>
-                <div class="col-2">
+                {% comment %} <div class="col-2">
                   {% if request.user == comment.user %}
-                  <form class="" action="{% url 'meetings:comment_delete' meeting.pk comment.pk %}" method="POST">
+
+                  <form id="comment-delete-form" data-meeting-id="{{ meeting.pk }}" data-comment-id="{{ comment.pk }}" method="POST">
                     {% csrf_token %}
-                    <button class="btn btn-danger" type="submit">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
-                      </svg>
-                    </button>
+                    <input class="btn btn-danger" type="submit" name="{{ comment.pk }}"  value="삭제">
+                    
                   </form>
                 </div>
-              {% endif %}
+              {% endif %} {% endcomment %}
               </div>
               <div style="font-size:12px;" class="text-muted">{{ comment.created_at|date:"o-m-d"}} {{comment.created_at|time:"H:i"}}</div>
               <hr>
@@ -136,8 +132,7 @@
             e.appendChild(span)
             const nickName = document.getElementById("nickname")
             nickName.innerText = `${event.target.dataset.userNickname}`
-            nickName.className = 'text-center'
-            
+            nickName.className = 'text-center'            
           }
           else {
             const e = event.target
@@ -153,28 +148,53 @@
       }
     </script>
     <script>
-      const commentForm = document.querySelector('#meeintg-comment-form')
-
-      commentForm.addEventListner('submit', function(event) {
+      
+      const commentForm = document.getElementById('meeintg-comment-form')
+      commentForm.addEventListener('submit', function(event) {
         event.preventDefault();
+
         axios({
           method: 'post',
-          url: `/comment/create/`,
+          url: `/meetings/${event.target.dataset.meetingId}/comment/create/`,
           headers: {'X-CSRFToken': csrftoken},
           data: new FormData(commentForm)
-          console.log(response.data)
         })
         .then(response => {
-          const comments = document.querySelector("#meeintg-comment-form")
+          const comments = document.getElementById("meeintg-comment-form")
+          const div = document.createElement('div')
           const p = document.createElement('p')
-          p.innerText = `${response.data.userName} | ${response.data.content}`
+          const small = document.createElement('small')
+          div.innerText = `${response.data.userName}`
+          div.className = "fw-bold mt-2"
+          p.innerText = `${response.data.content}`
+          p.className = "text-muted"
+          small.innerText = "0분전"
+          small.className = "text-muted fs-7"
           const hr = document.createElement('hr')
-          comments.append(p, hr)
+          comments.append(div, p, small, hr)
+
         })
       })
     </script>
-    
-
+    <script>
+      const commentDelete = document.getElementById('comment-delete-form')
+      commentDelete.addEventListener('submit', function(event) {
+        axios({
+          method: 'post',
+          url: `meetings/${event.target.dataset.meetingId}/comment/${event.target.dataset.commentId}/delete/`,
+          headers: {'X-CSRFToken': csrftoken},
+          data: {'comment_pk': event.target.dataset.commentId},
+        })
+        .then((response => {
+          const resdata = response.data.pk
+          console.log(resdata)
+          const div = document.getElementById(resdata)
+          console.log(div)
+          div.remove()
+        }))
+      })
+      
+    </script>
     <style>
       .wrapper {
         min-height: 100vh;

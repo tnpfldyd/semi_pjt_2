@@ -88,7 +88,7 @@
                 <div class="col text-center">
                   <a href="{% url 'accounts:profile' block_user.pk %}" class="fs-3 custom-link">{{ block_user.nickname }}</a>
                   <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{block_user.pk}}" value="{{block_user.pk}}" onclick="block(event)">
-                    해제<span class="fs-4">⭕</span>
+                    취소<span class="fs-4">⭕</span>
                   </button>
                 </div>
                 {% else %}

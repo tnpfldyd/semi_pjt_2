@@ -42,10 +42,10 @@
   </div>
   <hr/>
   <div class="d-flex justify-content-between mx-0">
-    <div class="row row-cols-5">
+    <div class="row row-cols-4">
       {% for meeting in page_obj %}
         {% comment %}  {% endcomment %}
-        <div class="container cus-container mt-5">
+        <div class="d-flex cus-container mt-2 mb-3" style="width:325px;">
           {% if request.user in meeting.belong.all %}
             <div class="JJim fs-3" >
               <span class="cus-shadow">❤️</span>
@@ -170,13 +170,13 @@
                         {% if request.user in meeting.user.blockers.all %}
                           <div class="col text-center">
                             <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
-                              취소<span class="fs-4">⭕</span>
+                              취소⭕
                             </button>
                           </div>
                         {% else %}
                           <div class="col text-center">
                             <button class="custom-link text-decoration-none text-dark fs-3 custom-form" data-user-id="{{meeting.user.pk}}" value="{{meeting.user.pk}}" onclick="block(event)">
-                              차단<span class="fs-4">❌</span>
+                              차단❌
                             </button>
                           </div>
                         {% endif %}
@@ -222,10 +222,43 @@
 <div class="d-flex justify-content-center mt-3">
   <div class="paginagtion">
     <span class="step-links">
-    {% comment %} {% for local in meetings_local_list %} {% endcomment %}
-
-      {% comment %} 노원구라면 {% endcomment %}
+    <ul class="pagination justify-content-center">
+      <!-- 이전페이지 -->
       {% if page_obj.has_previous %}
+      <li class="page-item">
+          <a class="page-link text-danger" href="?local={{nw}}{{ page_obj.previous_page_number }}">이전</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+          <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+      </li>
+      {% endif %}
+
+      {% for page_number in page_obj.paginator.page_range %}
+          {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
+            {% if page_number == page_obj.number %}
+              <li class="page-item active" aria-current="page">
+                <a class="page-link text-bg-danger border-danger" href="?local={{nw}}{{ page_number }}">{{ page_number }}</a>
+              </li>
+            {% else %}
+              <li class="page-item">
+                  <a class="page-link text-danger" href="?local={{nw}}{{ page_number }}">{{ page_number }}</a>
+              </li>
+            {% endif %}
+          {% endif %}
+      {% endfor %}
+      
+      {% if page_obj.has_next %}
+      <li class="page-item">
+          <a class="page-link text-danger" href="?local={{nw}}{{ page_obj.next_page_number }}">다음</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+          <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+      </li>
+      {% endif %}
+    </ul>
+      {% comment %} {% if page_obj.has_previous %}
       <a href="?local={{nw}}1">&laquo; 처음</a>
       <a href="?local={{nw}}{{ page_obj.previous_page_number }}">이전</a>
       {% endif %}
@@ -239,10 +272,8 @@
       <a href="?local={{nw}}{{ page_obj.next_page_number }}">다음</a>
       <a href="?local={{nw}}{{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
 
-      {% endif %}
+      {% endif %} {% endcomment %}
 
-
-      
     </span>
   </div>
 </div>

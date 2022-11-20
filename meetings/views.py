@@ -41,10 +41,10 @@ def index(request):
 
     # 지역별
     meetings_local_name = "모든지역"
-    meetings_local_list = ["노원구", "송파구"]
+    meetings_local_list = ["강남구", "강서구", "광진구", "관악구", "노원구", "동작구", "마포구", "성동구" ,"송파구", "서초구", "용산구", "영등포구", "용산구"]
 
     at_all = "모두보기"
-    paginator = Paginator(block, 10)
+    paginator = Paginator(block, 8)
     page_number = request.GET.get("local")
     page_obj = paginator.get_page(page_number)
     if request.POST.get("reset"):
@@ -61,7 +61,7 @@ def index(request):
         else:
             meetings_local_name = name
         # 페이지네이션
-        paginator = Paginator(block, 10)
+        paginator = Paginator(block, 8)
         page_number = re.sub(r"[^0-9]", "", request.GET.get("local"))  # key 값이 local, value 값이 노원구
         page_obj = paginator.get_page(page_number)  # 숫자만 받음
         context = {
@@ -148,16 +148,12 @@ def belong(request, meeting_pk):
             meeting.belong.remove(user)
             is_belong = False
             messages.error(request, "참여 취소😀")
-            print("펄스?")
         else:  # 참여를 누르지 않은 유저일 때
             meeting.belong.add(user)  # belong 필드에 현재 유저 삭제
             is_belong = True
             messages.success(request, "참여 성공😀")
-            print("트루?")
         context = {
             "is_belong": is_belong,
-            "belongCount": meeting.belong.count(),
-            "belongCount": meeting.belong.count(),
         }
         return JsonResponse(context)
 
@@ -167,7 +163,7 @@ def detail(request, meeting_pk):
     meeting = Meeting.objects.get(pk=meeting_pk)
     comments = meeting.comment_set.all().order_by('-pk')
     form = CommentForm()
-
+    print(request.POST)
     user_list = meeting.belong.all()  # 유저리스트를 보여줄 코드
 
     user = request.user  # request.user => 현재 로그인한 유저
@@ -252,8 +248,10 @@ def delete(request, meeting_pk):
 @login_required
 def comment_create(request, meeting_pk):
     meeting_data = get_object_or_404(Meeting, pk=meeting_pk)
+    
     if request.user.is_authenticated:
         commentForm = CommentForm(request.POST)
+        print(request.POST)
         if commentForm.is_valid():
             comment = commentForm.save(commit=False)
             comment.meeting = meeting_data
@@ -261,7 +259,8 @@ def comment_create(request, meeting_pk):
             comment.save()
             context = {
               'content': comment.content,
-              'userName': comment.user.nickname
+              'userName': comment.user.nickname,
+              'created_at': comment.created_at
             }
 
         return JsonResponse(context)
@@ -273,8 +272,9 @@ def comment_create(request, meeting_pk):
 def comment_delete(request, meeting_pk, comment_pk):
     meeting_data = Meeting.objects.get(pk=meeting_pk)
     comment_data = meeting_data.comment_set.get(pk=comment_pk)
-
+    
     if request.user == comment_data.user:
         comment_data.delete()
 
-    return redirect("meetings:detail", meeting_pk)
+    return JsonResponse()
+    
