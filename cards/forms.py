@@ -6,9 +6,6 @@ class GroupCardForm(forms.ModelForm):
     class Meta:
         model = Groupcard
         fields = ["title", "content", "is_private"]
-        labels = {
-            "is_private": "Private",
-        }
 
 
 class UserCardForm(forms.ModelForm):
