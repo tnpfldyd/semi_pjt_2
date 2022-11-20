@@ -24,8 +24,10 @@ urlpatterns = [
     path("<int:pk>/create/group/2", views.group_create2, name="group_create2"),
     path("detail/group/<int:pk>/", views.group_detail, name="group_detail"),
     path("<int:pk>/group/update/", views.groupcard_update, name="groupcard_update"),
+    path("<int:pk>/group/update/2", views.groupcard_update2, name="groupcard_update2"),
     path("<int:pk>/group/delete/", views.groupcard_delete, name="groupcard_delete"),
     path("<int:pk>/gcomments/", views.gcomment_create, name="gcomment_create"),
+    path("<int:pk>/gcomments/2", views.gcomment_create2, name="gcomment_create2"),
     path("search/", views.search, name="search"),
     # path(
     #     "<int:cards_pk>/group/<int:comment_pk>/delete/",

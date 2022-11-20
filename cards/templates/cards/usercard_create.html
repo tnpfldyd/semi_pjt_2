@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+
+{% extends 'base_card.html' %}
+{% load mathfilters %}
 {% load django_bootstrap5 %}
 {% load static %}
 
 {% block content %}
+
   <style>
     body {
-      background-image: url("{% static 'images/개인카드배경3.png' %}");
+      background-image: url("{% static 'images/개인카드배경5.jpg' %}");
       background-repeat: no-repeat;
       background-size: cover;
       color: white;
@@ -90,7 +93,7 @@
 
         {% csrf_token %}
         <div class="d-grid">
-          <input type="submit" value="메세지 남기기" class="btn btn-primary" >
+          <input type="submit" value="메세지 남기기" class="btn" style='background-color:orangered;color:white;'>
         </div>
       </form>
 

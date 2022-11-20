@@ -1,7 +1,9 @@
+
 {% extends 'base_card.html' %}
 {% load mathfilters %}
 {% load django_bootstrap5 %}
 {% load static %}
+
     {% block content %} 
 
     <style>
@@ -77,8 +79,8 @@
           <a href="{% url 'cards:usercard_delete'%}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
         </div>
         {% else %}
-        <div class='d-flex justify-content-end'>
-          <a href="{% url 'accounts:profile' cards.user.pk %}" class="btn btn-light mt-5 me-3"> {{ cards.user.nickname }} </a>
+        <div class='d-flex justify-content-end mt-4'>
+          <a href="{% url 'accounts:profile' cards.user.pk %}" class="btn btn-light m-0 me-3"> {{ cards.user.nickname }} </a>
           {% csrf_token %}
           {% if request.user not in cards.user.followers.all %}
           <button class="favorite-button" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)">
@@ -298,10 +300,4 @@
       }
     </script>
     {% endblock %}
-    {% bootstrap_javascript %}
-
-
-
-
-
 

@@ -39,13 +39,12 @@ class UserComment(models.Model):
 
 
 class Groupcomment(models.Model):
-    content = models.TextField()
+    content = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     groupcard = models.ForeignKey(Groupcard, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="groupcard_comment",
     )
-    ribbons = models.IntegerField()
+    socks = models.IntegerField(blank=True)
     id_text = models.TextField(blank=True)
