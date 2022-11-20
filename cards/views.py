@@ -422,14 +422,14 @@ def gcomment_create(request, pk):
 
 def search(request):
     all_data = Groupcard.objects.filter(is_private=0).order_by("-pk")
-    search = re.sub(r"[0-9]", "", request.GET.get("search"))
-    page = request.GET.get("page", "1")
+    search = request.GET.get("search")
     paginator = Paginator(all_data, 6)
-    page_obj = paginator.get_page(page)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    print(request.GET)
     if search:
         search_list = all_data.filter(Q(title__icontains=search))
         paginator = Paginator(search_list, 6)
-        page_obj = paginator.get_page(re.sub(r"[^0-9]", "", request.GET.get("search")))
+        page_obj = paginator.get_page(request.GET.get("page"))
         context = {
             "search": search,
             "search_list": search_list,
