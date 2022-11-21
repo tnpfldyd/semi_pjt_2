@@ -34,7 +34,7 @@ DEBUG = os.getenv("DEBUG") == "True"
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "http://bornfirebean-env.eba-87fn4uun.ap-northeast-2.elasticbeanstalk.com",
+    "http://Bornfirebean-env.eba-87fn4uun.ap-northeast-2.elasticbeanstalk.com",
 ]
 
 
