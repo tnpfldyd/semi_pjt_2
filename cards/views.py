@@ -278,7 +278,7 @@ def usercard_comment2(request, pk):
                             "object_type": "text",
                             "text": request.user.nickname + "님이 벽난로에 글을 남겨주셨어요.",
                             "link": {
-                                "web_url": "http://localhost:8000/cards/detail/usercard/"
+                                "web_url": "http://kdt6team-env.eba-rmvmzut2.ap-northeast-2.elasticbeanstalk.com/cards/detail/usercard/"
                                 + str(pk)
                                 + "/"
                             },
