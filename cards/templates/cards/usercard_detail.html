@@ -326,7 +326,7 @@
 
     <div class="swiper mySwiper container">
       <div class="swiper-wrapper content">
-        <div class="swiper-slide card10">
+        <div class="swiper-slide d-flex justify-content-center mt-5">
 
 
           <div style='position:relative' class='my-4 text-center' style='width:40rem !important; height:30rem !important;'>
@@ -368,28 +368,6 @@
               </div>
       
               {% endif %}
-      
-              <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-body pt-1">
-                      <div class='d-flex justify-content-center'>
-                        <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
-                      </div>
-                      {% if comment.user.nickname %}
-                      <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
-                      {% else %}
-                      <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
-                      {% endif %}
-                      <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
-                      <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
-                      <div class='d-grid mt-5'>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
             {% endfor %}
           </div>
@@ -405,7 +383,7 @@
         <div class="swiper-wrapper content" style='width:600px !important'>
 
         {% for c in cl %}
-        <div class="swiper-slide card10">
+        <div class="swiper-slide d-flex justify-content-center mt-5">
 
         <div style='position:relative' class='my-4 text-center'>
           {% if cards.chimneys == 9 %}
@@ -422,7 +400,7 @@
           {% for comment in comments %}
             {% comment %} 댓글 모달 {% endcomment %}
             {% csrf_token %}
-              {% if forloop.counter|div:40 == c or forloop.counter|intdiv:40|add:1 == c  %}
+              {% if forloop.counter0|intdiv:40|add:1 == c  %}
                   {% if forloop.counter > 40 %}
                         
 
@@ -450,28 +428,7 @@
                         </div>
                 
                         {% endif %}
-                
-                        <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-body pt-1">
-                                <div class='d-flex justify-content-center'>
-                                  <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
-                                </div>
-                                {% if comment.user.nickname %}
-                                <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
-                                {% else %}
-                                <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
-                                {% endif %}
-                                <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
-                                <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
-                                <div class='d-grid mt-5'>
-                                  <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+              
 
 
                   {% else %}
@@ -500,27 +457,7 @@
               
                       {% endif %}
               
-                      <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-body pt-1">
-                              <div class='d-flex justify-content-center'>
-                                <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
-                              </div>
-                              {% if comment.user.nickname %}
-                              <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
-                              {% else %}
-                              <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
-                              {% endif %}
-                              <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
-                              <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
-                              <div class='d-grid mt-5'>
-                                <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      
                   {% endif %}
 
             {% endif %}
@@ -543,8 +480,33 @@
     
       </div>
     </div>
+  </div>
 
-
+{% for comment in comments %}
+<div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body pt-1">
+        <div class='d-flex justify-content-center'>
+          <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
+        </div>
+        <div class='mb-2 rounded-2 p-1'>
+          {% if comment.user.nickname %}
+          <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
+          {% else %}
+          <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
+          {% endif %}
+          <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
+          <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
+        </div>
+        <div class='d-grid mt-5'>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
       var swiper = new Swiper(".mySwiper", {
@@ -665,6 +627,7 @@
                 params: {'comment_pk': e.target.dataset.commentId},
               })
               .then(response => {
+                console.log(response)
               })
       }
     </script>
