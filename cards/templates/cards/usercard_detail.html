@@ -472,9 +472,11 @@
 <div class="swiper-button-prev"></div>
       {% endif %}
       {% if cards.user != request.user %}
-        <div class='d-grid'>
-          <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn mb-5 fs-4 mx-3" style='background-color:orangered;color:white;'> 벽난로 꾸며주기 </a>
+      <div class="row justify-content-center">
+        <div class='d-grid' style='width:44rem'>
+          <a href="{% url 'cards:usercard_comment' cards.pk %}" class="btn mb-5 fs-4 mx-3" style='background-color:rgba(255, 68, 0, 0.712);color:white;'> 벽난로 꾸며주기 </a>
         </div>
+      </div>
         {% endif %}
     
     
