@@ -521,7 +521,8 @@ def modal_open(request, pk):
             if not comment.is_opened:
                 comment.is_opened = True
                 comment.save()
-            return JsonResponse({"1": 1})
+        context = {"yes": "1"}
+        return JsonResponse(context)
     else:
         messages.error(request, "그렇게는 접근할 수 없어요.😥")
         return redirect("cards:index")
