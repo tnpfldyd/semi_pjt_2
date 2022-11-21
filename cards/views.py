@@ -17,9 +17,7 @@ from django.db.models import Q
 @login_required
 def index(request):
     groupcards = Groupcard.objects.order_by("-pk")
-    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by(
-        "-follow"
-    )[:3]
+    popularity = UserCard.objects.annotate(follow=Count("user__followers")).order_by("-follow")[:3]
     random_user = UserCard.objects.order_by("?")[:3]
     user = get_user_model().objects.get(pk=request.user.pk)
     # pop_user = UserCard.
@@ -262,7 +260,7 @@ def usercard_comment2(request, pk):
                 temp += dic[i]
             comments.id_text = temp
             comments.save()
-            if card.user.refresh_token:
+            if card.user.refresh_token and card.user.tree_notice:
                 url = "https://kauth.kakao.com/oauth/token"
                 data = {
                     "grant_type": "refresh_token",
