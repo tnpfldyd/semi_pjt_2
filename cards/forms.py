@@ -61,6 +61,7 @@ class UserCommentForm(forms.ModelForm):
             "content": forms.Textarea(
                 attrs={
                     "placeholder": "메세지 내용을 입력해주세요.",
+                    "style": "opacity: 0.8",
                 }
             ),
         }
@@ -79,6 +80,7 @@ class GroupCommentForm(forms.ModelForm):
             "content": forms.Textarea(
                 attrs={
                     "placeholder": "메세지 내용을 입력해주세요.",
+                    "style": "opacity: 0.8",
                 }
             ),
         }

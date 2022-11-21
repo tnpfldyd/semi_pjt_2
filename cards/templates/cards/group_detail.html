@@ -1,223 +1,634 @@
 {% extends 'base.html' %}
-{% load django_bootstrap5 %}
 {% load mathfilters %}
+{% load django_bootstrap5 %}
 {% load static %}
-{% block content %} 
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
-<style>
-  body {
-    background-image : url('{% static 'images/개인카드배경2.jpg' %}');
-    background-repeat : repeat;
-    background-size : cover;
-    {% comment %} color:white; {% endcomment %}
-   }
 
-</style>
+    {% block content %} 
 
-<div class="d-flex justify-content-center">
-  <div>
-    {% if cards.user == request.user %}
-    <div class='d-flex justify-content-end'>
-      <a href="{% url 'cards:groupcard_update' cards.pk %}" class="btn btn-success mt-5 me-3"> 벽난로 바꾸기 </a>
-      <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
-    </div>
-    {% else %}
-    <div class='d-flex justify-content-end mt-4'>
-      <a href="{% url 'accounts:profile' cards.user.pk %}" class="btn btn-light m-0 me-3"> {{ cards.user.nickname }} </a>
-      {% csrf_token %}
-      {% if request.user not in cards.user.followers.all %}
-      <button class="favorite-button" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)" style='background-color:blue !important;'>
-        <div class="icon">
-          <div class="star"></div>
-        </div>
-        <span id="span">Follow</span>
-      </button>
-      {% else %}
-      <button class="favorite-button active" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)">
-        <div class="icon">
-          <div class="star"></div>
-        </div>
-        <span id="span">UnFollow</span>
-      </button>
-      {% endif %}
+    <style>
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      {% comment %} body{
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #8c52ff;
+      } {% endcomment %}
+      
+      section{
+        position: relative;  
+        height: 450px;
+        width: 1075px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .swiper{
+        width: 1020px;
+      }
+      
+      .card10{
+        position: relative;
+        background: #fff;
+        border-radius: 200px;
+        height: 400px;
+        margin: 20px 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .card10::before{
+        content: "";
+        position: absolute;
+        height: 40%;
+        width: 100%;
+        background: white;
+        border-radius: 300px;
+      }
+      
+      .card10 .card-content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px;
+        position: relative;
+        z-index: 100;
+      }
+      
+      section .card10 .image{
+        height: 140px;
+        width: 140px;
+        border-radius: 20%;
+        padding: 3px;
+        background: #7d2ae8;
+        margin-top: 30px;
+      }
+      
+      section .card10 .image img{
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 20%;
+        border: 3px solid #fff;
+      }
+      
+      .card10 .media-icons{
+        position: absolute;
+        top: 12px;
+        right: 95px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      
+      .card10 .media-icons i{
+        color: #7d2ae8;
+        opacity: 0.6;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin: 10px;
+      }
+      
+      .card10 .media-icons i:hover{
+        opacity: 1;
+      }
+      
+      .card10 .name-profession{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        color: black;
+      } 
+      
+      .name-profession .name{
+        font-size: 20px;
+        font-weight: 600;
+      }
+      
+      .name-profession .profession{
+        font-size:15px;
+        font-weight: 500;
+      }
+      
+      .card10 .rating{
+        display: flex;
+        align-items: center;
+        margin-top: 18px;
+      }
+      
+      .card10 .rating i{
+        font-size: 18px;
+        margin: 0 2px;
+        color: #7d2ae8;
+      }
+      
+      .card10 .button{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      
+      .card10 .button button{
+        background: #7d2ae8;
+        outline: none;
+        border: none;
+        color: #fff;
+        padding: 8px 22px;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .button button:hover{
+        background: #6616d0;
+      }
+      
+      .swiper-pagination{
+        position: absolute;
+        top: 450px;
+      }
+      
+      .swiper-pagination-bullet{
+        height: 7px;
+        width: 26px;
+        border-radius: 25px;
+        background: white;
+      }
+      
+      .swiper-button-next, .swiper-button-prev{
+        opacity: 0.7;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .swiper-button-next:hover, .swiper-button-prev:hover{
+        opacity: 1;
+        color: white;
+      }
+      
+      .swiper-button-next, .swiper-button-prev{
+        opacity: 0.7;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .swiper-button-next:hover, .swiper-button-prev:hover{
+        opacity: 1;
+        color: white;
+      }
+      
+      .swiper-button-next, .swiper-button-prev{
+        opacity: 0.7;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .swiper-button-next:hover, .swiper-button-prev:hover{
+        opacity: 1;
+        color: white;
+      }
+        </style>
 
-    </div>
-    {% endif %}
-    <p class=' my-5 fs-1 text-center' style='color:white'>{{ cards.user.nickname }} 님에게 <span style='color:orangered '>{{ cards.groupcomment_set.count }}</span>개의 메세지가 전달됐어요!</p>
-    <div>
-      <!-- 벽난로 주인의 장식 모달 창 -->
-      <div class="modal fade" id="owner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div class='d-flex justify-content-center'>
-                <img src='/static/images/유저장식{{ cards.groupdeco }}.png' style='width:4rem;'>
-              </div>
-              <div class='mb-2 rounded-2 p-1' style="white-space: pre-line;">
-                <p class='text-center fs-5 my-3 mb-5'>{{ cards.title }} </p>
-                <p class='my-1 ' style="white-space: pre-line;">{{ cards.content }} </p>
-              </div>
-              <div class='d-grid mt-5'>
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+
+    <style>
+      body {
+        background-image : url('{% static 'images/개인카드배경2.jpg' %}');
+        background-repeat : repeat;
+        background-size : cover;
+      }
+        {% comment %} color:white; {% endcomment %}
+        {% comment %} 숨쉬기 효과 {% endcomment %}
+      .cargando {
+        -webkit-animation: breathing 3s ease-out infinite normal;
+        animation: breathing 3s ease-out infinite normal;
+        -webkit-font-smoothing: antialiased;
+        text-align: center;    
+      }
     
-      {% comment %} 댓글 메세지 띄우기 {% endcomment %}
+      @-webkit-keyframes breathing {
+        0% {
+          -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+    
+        25% {
+          -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+        }
+    
+        60% {
+          -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+    
+        100% {
+          -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+      }
+    
+      @keyframes breathing {
+        0% {
+          -webkit-transform: scale(0.9);
+          -ms-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+    
+        25% {
+          -webkit-transform: scale(1.2);
+          -ms-transform: scale(1.2);
+          transform: scale(1.2);
+        }
+    
+        60% {
+          -webkit-transform: scale(0.9);
+          -ms-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+    
+        100% {
+          -webkit-transform: scale(0.9);
+          -ms-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+    
+    <div class="d-flex justify-content-center">
       <div>
-      <div style='position:relative' class='my-4 text-center'>
-        {% if cards.chimneys == 9 %}
-        <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+        {% if cards.user == request.user %}
+        <div class='d-flex justify-content-end'>
+          <a href="{% url 'cards:groupcard_update' request.user.pk %}" class="btn btn-success mt-5 me-3"> 벽난로 바꾸기 </a>
+          <a href="{% url 'cards:groupcard_delete'%}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
+        </div>
         {% else %}
-        <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
-        {% endif %}
-        <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
-          <div style='position: absolute; top:-3rem; left:18rem;'>
-            <img src='/static/images/유저장식{{ cards.groupdeco }}.png' style='width:5rem; height:5rem;'>
-          </div>
-        </a>
-        {% for comment in comments %}
- 
-        {% comment %} 댓글 모달 {% endcomment %}
-        {% if forloop.counter|mod:8 == 0 %}
-        <a type="button" class="btn p-0 m-0" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'>
-          <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
-          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem'>
-        </a>
+        <div class='d-flex justify-content-end mt-4'>
+          <a href="{% url 'accounts:profile' cards.user.pk %}" class="btn btn-light m-0 me-3"> {{ cards.user.nickname }} </a>
+          {% csrf_token %}
+          {% if request.user not in cards.user.followers.all %}
+          <button class="favorite-button" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)">
+            <div class="icon">
+              <div class="star"></div>
+            </div>
+            <span id="span">Follow</span>
+          </button>
           {% else %}
-        <a type="button" class="btn p-0 ms-2" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;'>
-          <p class='fs-5 text-center m-0 p-0' style='color:white'>{{ comment.user }} </p>   
-          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem'>
-        </a>
-
+          <button class="favorite-button active" data-user-id="{{cards.user.pk}}" value="{{cards.user.pk}}" onclick="follow(event)">
+            <div class="icon">
+              <div class="star"></div>
+            </div>
+            <span id="span">UnFollow</span>
+          </button>
           {% endif %}
-
-        <div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-body pt-1">
-                <div class='d-flex justify-content-center'>
-                  <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
-                </div>
-                <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
-                <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
-
-                <p class='my-1 text-start px-2'style="white-space: pre-line;"> {{ comment.content }} </p>
-
-                <div class='d-grid mt-5'>
-                  <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+    
+        </div>
+        {% endif %}
+        <p class=' my-5 fs-1 text-center' style='color:white'>{{ cards.user.nickname }} 님에게 <span style='color:orangered '>{{ comments.count }}</span>개의 메세지가 전달됐어요!</p>
+        <div>
+          <!-- 벽난로 주인의 장식 모달 창 -->
+          <div class="modal fade" id="owner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class='d-flex justify-content-center'>
+                    <img src='/static/images/유저장식{{ cards.groupdeco }}.png' style='width:5rem;'>
+                  </div>
+                  <div class='mb-2 rounded-2 p-1'>
+                    <p class='text-center fs-5 my-3 mb-5'>{{ cards.title }} </p>
+                    <p class='my-1' style="white-space: pre-line;">{{ cards.content }} </p>
+                  </div>
+                  <div class='d-grid mt-5'>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        {% endfor %}
+        
+          {% comment %} 댓글 메세지 띄우기 {% endcomment %}
+      
+      {% if cl == 1 %}
 
+
+    <div class="swiper mySwiper container">
+      <div class="swiper-wrapper content">
+        <div class="swiper-slide d-flex justify-content-center mt-5">
+
+
+          <div style='position:relative' class='my-4 text-center' style='width:40rem !important; height:30rem !important;'>
+            {% if cards.chimneys == 9 %}
+            <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+            {% else %}
+            <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+            {% endif %}
+            <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
+              <div style='position: absolute; top:-3.3rem; left:17.4rem;'>
+                <img src='/static/images/유저장식{{ cards.groupdeco }}.png' style='width:6rem;'>
+              </div>
+            </a>
+            {% for comment in comments %}
+
+              {% comment %} 댓글 모달 {% endcomment %}
+              {% csrf_token %}
+              {% if forloop.counter|mod:8 == 0 %}
+              <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                  {% if comment.user.nickname %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                  {% else %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                  {% endif %}
+                  <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                </a>
+              </div>
+                {% else %}
+              <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                  {% if comment.user.nickname %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                  {% else %}
+                  <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                  {% endif %}
+                  <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                </a>
+              </div>
+      
+              {% endif %}
+
+            {% endfor %}
+          </div>
+          </div>
+        </div>
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+
+      {% else %}
+
+      <div class="swiper mySwiper container">
+        <div class="swiper-wrapper content" style='width:600px !important'>
+
+        {% for c in cl %}
+        <div class="swiper-slide d-flex justify-content-center mt-5">
+
+        <div style='position:relative' class='my-4 text-center'>
+          {% if cards.chimneys == 9 %}
+          <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+          {% else %}
+          <img src="/static/images/벽난로{{ cards.chimneys }}.jpg" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
+          {% endif %}
+          <a data-bs-toggle="modal" data-bs-target="#owner" style='cursor:pointer'>
+            <div style='position: absolute; top:-3.3rem; left:17.4rem;'>
+              <img src='/static/images/유저장식{{ cards.groupdeco }}.png' style='width:6rem;'>
+            </div>
+          </a>
+
+          {% for comment in comments %}
+            {% comment %} 댓글 모달 {% endcomment %}
+            {% csrf_token %}
+              {% if forloop.counter0|intdiv:40|add:1 == c  %}
+                  {% if forloop.counter > 40 %}
+                        
+
+                        {% if forloop.counter|mod:8 == 0 %}
+                        <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ c|sub:1|mul:40|sub:forloop.counter|abs|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                            {% if comment.user.nickname %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                            {% else %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                            {% endif %}
+                            <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          </a>
+                        </div>
+                          {% else %}
+                        <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ c|sub:1|mul:40|sub:forloop.counter|abs|intdiv:8|mul:5|add:1 }}rem; left:{{c|sub:1|mul:40|sub:forloop.counter|abs|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                            {% if comment.user.nickname %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                            {% else %}
+                            <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                            {% endif %}
+                            <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          </a>
+                        </div>
+                
+                        {% endif %}
+              
+
+
+                  {% else %}
+                      {% if forloop.counter|mod:8 == 0 %}
+                      <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        <a type="button" class="btn p-0 m-0 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|sub:1|mul:5|add:1 }}rem; left:36rem;'data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          {% if comment.user.nickname %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                          {% else %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                          {% endif %}
+                          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.5rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        </a>
+                      </div>
+                        {% else %}
+                      <div onclick="modal2(event);" data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        <a type="button" class="btn p-0 ms-2 {% if not comment.is_opened %} cargando {% endif %}" data-bs-toggle="modal" data-bs-target="#{{comment.id_text}}" style='position: absolute; top:{{ forloop.counter|intdiv:8|mul:5|add:1 }}rem; left:{{forloop.counter|sub:1|mod:8|mul:5|add:1}}rem;' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                          {% if comment.user.nickname %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user.nickname }} </p>   
+                          {% else %}
+                          <p class='fs-5 text-center m-0 p-0' style='color:white' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">{{ comment.user }} </p>   
+                          {% endif %}
+                          <img src="/static/images/양말{{comment.socks}}.png" style='width:3.7rem; height:3.7rem' data-comment-id="{{comment.pk}}" value="{{comment.pk}}">
+                        </a>
+                      </div>
+              
+                      {% endif %}
+              
+                      
+                  {% endif %}
+
+            {% endif %}
+          {% endfor %}
+  
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+<div class="swiper-button-next"></div>
+<div class="swiper-button-prev"></div>
+      {% endif %}
+      {% if cards.user != request.user %}
+      <div class="row justify-content-center">
+        <div class='d-grid' style='width:44rem'>
+          <a href="{% url 'cards:gcomment_create' cards.pk %}" class="btn mb-5 fs-4 mx-3" style='background-color:rgba(32, 143, 248, 0.712);color:white;'> 벽난로 꾸며주기 </a>
+        </div>
+      </div>
+        {% endif %}
       </div>
     </div>
-    {% if cards.user != request.user %}
-    <div class='d-grid'>
-      <a href="{% url 'cards:gcomment_create' cards.pk %}" class="btn btn-primary mb-5 fs-4 rounded-3 border border-3"> 벽난로 꾸며주기 </a>
+  </div>
+
+{% for comment in comments %}
+<div class="modal fade" id="{{comment.id_text}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body pt-1">
+        <div class='d-flex justify-content-center'>
+          <img src='/static/images/양말{{ comment.socks }}.png' style='width:4rem;'>
+        </div>
+        <div class='mb-2 rounded-2 p-1'>
+          {% if comment.user.nickname %}
+          <p class='fs-5 text-center m-0 p-0'>{{ comment.user.nickname }} </p>
+          {% else %}
+          <p class='fs-5 text-center m-0 p-0'>{{ comment.user }} </p>
+          {% endif %}
+          <p class='small pt-1 text-end'>{{ comment.created_at }}</p>
+          <p class='my-1 px-2 text-start' style="white-space: pre-line;"> {{ comment.content }} </p>
+        </div>
+        <div class='d-grid mt-5'>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+        </div>
+      </div>
     </div>
-    {% endif %}
-
-
-
   </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
-<script>
-  function follow(e) {
-      const button = e.target
-            if(button.classList.contains('animated')) {
-                return
-            }
-            button.classList.add('animated')
+{% endfor %}
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        slidesPerGroup: 1,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    </script>
 
-            gsap.to(button, {
-                keyframes: [{
-                    '--star-y': '-36px',
-                    duration: .3,
-                    ease: 'power2.out'
-                }, {
-                    '--star-y': '48px',
-                    '--star-scale': .4,
-                    duration: .325,
-                    onStart() {
-                        button.classList.add('star-round')
-                    }
-                }, {
-                    '--star-y': '-64px',
-                    '--star-scale': 1,
-                    duration: .45,
-                    ease: 'power2.out',
-                    onStart() {
-                        button.classList.toggle('active')
-                        setTimeout(() => button.classList.remove('star-round'), 100)
-                    }
-                }, {
-                    '--star-y': '0px',
-                    duration: .45,
-                    ease: 'power2.in'
-                }, {
-                    '--button-y': '3px',
-                    duration: .11
-                }, {
-                    '--button-y': '0px',
-                    '--star-face-scale': .65,
-                    duration: .125
-                }, {
-                    '--star-face-scale': 1,
-                    duration: .15
-                }],
-                clearProps: true,
-                onComplete() {
-                    button.classList.remove('animated')
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+    <script>
+      function follow(e) {
+          const button = e.target
+                if(button.classList.contains('animated')) {
+                    return
                 }
-            })
-
-            gsap.to(button, {
-                keyframes: [{
-                    '--star-hole-scale': .8,
-                    duration: .5,
-                    ease: 'elastic.out(1, .75)'
-                }, {
-                    '--star-hole-scale': 0,
-                    duration: .2,
-                    delay: .2
-                }]
-            })
-
-            gsap.to(button, {
-                '--star-rotate': '360deg',
-                duration: 1.55,
-                clearProps: true
-            })
-          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-          axios({
-            method: 'post',
-            url: `/accounts/${e.target.dataset.userId}/follow/`,
-            headers: {'X-CSRFToken': csrftoken},
-            data: {'note_pk': event.target.dataset.userId},
-          })
-          .then(response => {
-            console.log(response.data.followersCount)
-            console.log(response.data.followingsCount)
-            if (response.data.isFollow === true) {
-              const span = document.querySelector('#span')
-              span.innerText = 'UnFollow'
+                button.classList.add('animated')
+    
+                gsap.to(button, {
+                    keyframes: [{
+                        '--star-y': '-36px',
+                        duration: .3,
+                        ease: 'power2.out'
+                    }, {
+                        '--star-y': '48px',
+                        '--star-scale': .4,
+                        duration: .325,
+                        onStart() {
+                            button.classList.add('star-round')
+                        }
+                    }, {
+                        '--star-y': '-64px',
+                        '--star-scale': 1,
+                        duration: .45,
+                        ease: 'power2.out',
+                        onStart() {
+                            button.classList.toggle('active')
+                            setTimeout(() => button.classList.remove('star-round'), 100)
+                        }
+                    }, {
+                        '--star-y': '0px',
+                        duration: .45,
+                        ease: 'power2.in'
+                    }, {
+                        '--button-y': '3px',
+                        duration: .11
+                    }, {
+                        '--button-y': '0px',
+                        '--star-face-scale': .65,
+                        duration: .125
+                    }, {
+                        '--star-face-scale': 1,
+                        duration: .15
+                    }],
+                    clearProps: true,
+                    onComplete() {
+                        button.classList.remove('animated')
+                    }
+                })
+    
+                gsap.to(button, {
+                    keyframes: [{
+                        '--star-hole-scale': .8,
+                        duration: .5,
+                        ease: 'elastic.out(1, .75)'
+                    }, {
+                        '--star-hole-scale': 0,
+                        duration: .2,
+                        delay: .2
+                    }]
+                })
+    
+                gsap.to(button, {
+                    '--star-rotate': '360deg',
+                    duration: 1.55,
+                    clearProps: true
+                })
+              const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+              axios({
+                method: 'post',
+                url: `/accounts/${e.target.dataset.userId}/follow/`,
+                headers: {'X-CSRFToken': csrftoken},
+                data: {'note_pk': event.target.dataset.userId},
+              })
+              .then(response => {
+                console.log(response.data.followersCount)
+                console.log(response.data.followingsCount)
+                if (response.data.isFollow === true) {
+                  const span = document.querySelector('#span')
+                  span.innerText = 'UnFollow'
+                }
+                else {
+                  const span = document.querySelector('#span')
+                  span.innerText = 'Follow'
+                }
+              })
             }
-            else {
-              const span = document.querySelector('#span')
-              span.innerText = 'Follow'
-            }
-          })
-        }
-</script>
-<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
-<script>
-  new Snowflakes();
-</script>
-{% endblock %}
+      function modal2(e) {
+        console.log(e.target.dataset.commentId)
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        axios({
+                method: 'post',
+                url: `/cards/${e.target.dataset.commentId}/modal_open/`,
+                headers: {'X-CSRFToken': csrftoken},
+                params: {'comment_pk': e.target.dataset.commentId},
+              })
+              .then(response => {
+                console.log(response)
+              })
+      }
+    </script>
+    {% endblock %}
+
