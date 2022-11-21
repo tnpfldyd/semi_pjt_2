@@ -38,7 +38,7 @@
                 {% endif %}
                 <td class="tc">
                   {% csrf_token %}
-                  <button id="custom-btn">
+                  <button id="custom-btn" style="background-color:transparent;">
                     <i xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" data-note-id="{{note.pk}}" value="{{note.pk}}" onclick="remove(event)"></i>
                   </button>
                 </td> <!---삭제 -->
@@ -61,7 +61,7 @@
                 {% endif %}
                 <td class="tc">
                     {% csrf_token %}
-                    <button id="custom-btn">
+                    <button id="custom-btn" style="background-color:transparent;">
                       <i xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" data-note-id="{{note.pk}}" value="{{note.pk}}" onclick="remove(event)"></i>
                     </button>
                 </td> <!---삭제 -->

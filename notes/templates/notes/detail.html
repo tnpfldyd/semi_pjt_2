@@ -121,8 +121,9 @@
             <p>{{ note.content }}</p>
           </div>
         </div>
-        <div class="d-flex justify-content-end mx-3">
-          
+        <hr>
+          <a style="text-decoration:none;" href="{% url 'notes:send' note.from_user.pk %}" class="fs-6 d-flex justify-content-end me-3 text-black custom-link">답장하기</a>
+        <div class="d-flex justify-content-end mx-3">          
           <a class="custom-link fs-4" id="btn-modal">
             <span class="fs-6">from. </span>
             {% if note.from_user.nickname %}
@@ -132,6 +133,7 @@
             {% endif %}
           </a>
         </div>
+        
         <div class="d-flex justify-content-end">
           <small class="mx-3 mb-2">
             {{ note.created_at|date:'o.m.d' }} {{ note.created_at|time:"H:i" }}

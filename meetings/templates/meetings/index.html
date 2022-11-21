@@ -26,9 +26,9 @@
   </div>
   
   <div class="d-flex align-items-center">
-    <form custom-form action="{% url 'meetings:index'%}" method="POST" class="m-1">
+    <form action="{% url 'meetings:index'%}" method="POST" class="m-1">
       {% csrf_token %}
-      <button id="custom-btn" name="reset" value="reset">
+      <button id="custom-btn" name="reset" value="reset" style="background-color:transparent;">
         모두보기
       </button>
     </form>

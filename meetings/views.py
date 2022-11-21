@@ -41,7 +41,7 @@ def index(request):
 
     # 지역별
     meetings_local_name = "모든지역"
-    meetings_local_list = ["강남구", "강서구", "광진구", "관악구", "노원구", "동작구", "마포구", "성동구" ,"송파구", "서초구", "용산구", "영등포구", "용산구"]
+    meetings_local_list = ["강남", "건대" ,"노원", "대학로", "부평", "신촌", "수원", "일산", "종로", "잠실", "홍대", "하남"]
 
     at_all = "모두보기"
     paginator = Paginator(block, 8)
@@ -110,13 +110,13 @@ def create(request):
             meeting = meeting_form.save(commit=False)
             meeting.user = request.user
             meeting.save()
-
+            
             temp = ""
-
             for i in str(meeting.pk):
                 temp += dic[i]
             meeting.text = temp
             meeting.save()
+            meeting.belong.add(request.user)
             return redirect("meetings:index")
     else:
         meeting_form = MeetingForm()
