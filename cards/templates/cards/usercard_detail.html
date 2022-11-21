@@ -7,6 +7,198 @@
     {% block content %} 
 
     <style>
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      {% comment %} body{
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #8c52ff;
+      } {% endcomment %}
+      
+      section{
+        position: relative;  
+        height: 450px;
+        width: 1075px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .swiper{
+        width: 1020px;
+      }
+      
+      .card10{
+        position: relative;
+        background: #fff;
+        border-radius: 200px;
+        height: 400px;
+        margin: 20px 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .card10::before{
+        content: "";
+        position: absolute;
+        height: 40%;
+        width: 100%;
+        background: white;
+        border-radius: 300px;
+      }
+      
+      .card10 .card-content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px;
+        position: relative;
+        z-index: 100;
+      }
+      
+      section .card10 .image{
+        height: 140px;
+        width: 140px;
+        border-radius: 20%;
+        padding: 3px;
+        background: #7d2ae8;
+        margin-top: 30px;
+      }
+      
+      section .card10 .image img{
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 20%;
+        border: 3px solid #fff;
+      }
+      
+      .card10 .media-icons{
+        position: absolute;
+        top: 12px;
+        right: 95px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      
+      .card10 .media-icons i{
+        color: #7d2ae8;
+        opacity: 0.6;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin: 10px;
+      }
+      
+      .card10 .media-icons i:hover{
+        opacity: 1;
+      }
+      
+      .card10 .name-profession{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        color: black;
+      } 
+      
+      .name-profession .name{
+        font-size: 20px;
+        font-weight: 600;
+      }
+      
+      .name-profession .profession{
+        font-size:15px;
+        font-weight: 500;
+      }
+      
+      .card10 .rating{
+        display: flex;
+        align-items: center;
+        margin-top: 18px;
+      }
+      
+      .card10 .rating i{
+        font-size: 18px;
+        margin: 0 2px;
+        color: #7d2ae8;
+      }
+      
+      .card10 .button{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      
+      .card10 .button button{
+        background: #7d2ae8;
+        outline: none;
+        border: none;
+        color: #fff;
+        padding: 8px 22px;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .button button:hover{
+        background: #6616d0;
+      }
+      
+      .swiper-pagination{
+        position: absolute;
+        top: 450px;
+      }
+      
+      .swiper-pagination-bullet{
+        height: 7px;
+        width: 26px;
+        border-radius: 25px;
+        background: white;
+      }
+      
+      .swiper-button-next, .swiper-button-prev{
+        opacity: 0.7;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .swiper-button-next:hover, .swiper-button-prev:hover{
+        opacity: 1;
+        color: white;
+      }
+      
+      .swiper-button-next, .swiper-button-prev{
+        opacity: 0.7;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .swiper-button-next:hover, .swiper-button-prev:hover{
+        opacity: 1;
+        color: white;
+      }
+      
+      .swiper-button-next, .swiper-button-prev{
+        opacity: 0.7;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .swiper-button-next:hover, .swiper-button-prev:hover{
+        opacity: 1;
+        color: white;
+      }
+        </style>
+
+
+
+    <style>
       body {
         background-image : url('{% static 'images/개인카드배경6.jpg' %}');
         background-repeat : repeat;
@@ -69,8 +261,13 @@
         }
       }
     </style>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&amp;display=swap">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+    
     <div class="d-flex justify-content-center">
       <div>
         {% if cards.user == request.user %}
@@ -125,7 +322,14 @@
           {% comment %} 댓글 메세지 띄우기 {% endcomment %}
       
       {% if cl == 1 %}
-          <div style='position:relative' class='my-4 text-center'>
+
+
+    <div class="swiper mySwiper container">
+      <div class="swiper-wrapper content">
+        <div class="swiper-slide card10">
+
+
+          <div style='position:relative' class='my-4 text-center' style='width:40rem !important; height:30rem !important;'>
             {% if cards.chimneys == 9 %}
             <img src="/static/images/벽난로{{ cards.chimneys }}.png" class='rounded-4' style='border:10px solid white; width:40rem; height:30rem'>
             {% else %}
@@ -188,11 +392,20 @@
               </div>
 
             {% endfor %}
-
           </div>
-      {% else %}
-        {% for c in cl %}
+          </div>
+        </div>
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
 
+      {% else %}
+
+      <div class="swiper mySwiper container">
+        <div class="swiper-wrapper content" style='width:600px !important'>
+
+        {% for c in cl %}
+        <div class="swiper-slide card10">
 
         <div style='position:relative' class='my-4 text-center'>
           {% if cards.chimneys == 9 %}
@@ -314,9 +527,12 @@
           {% endfor %}
   
         </div>
-
-        {% endfor %}
-
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+<div class="swiper-button-next"></div>
+<div class="swiper-button-prev"></div>
       {% endif %}
       {% if cards.user != request.user %}
         <div class='d-grid'>
@@ -327,6 +543,30 @@
     
       </div>
     </div>
+
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        slidesPerGroup: 1,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    </script>
+
+
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
     <script>
       function follow(e) {
