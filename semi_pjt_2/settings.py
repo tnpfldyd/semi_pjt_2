@@ -32,11 +32,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = [
-    # "Elastic Beanstalk URL",
-    "Bornfirebean-env.eba-87fn4uun.ap-northeast-2.elasticbeanstalk.com",  # 예시입니다. 본인 URL로 해주세요.
     "127.0.0.1",
     "localhost",
+    "http://bornfirebean-env.eba-87fn4uun.ap-northeast-2.elasticbeanstalk.com/",
 ]
+
 
 # Application definition
 
@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     "accounts",
     "meetings",
     "widget_tweaks",
-    "storages",
     "imagekit",
+    "storages",
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -93,9 +93,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "semi_pjt_2.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -134,6 +131,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+STATIC_ROOT = "staticfiles"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -152,8 +151,8 @@ if DEBUG:
     }
 
 else:
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
+    # DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    DEFAULT_FILE_STORAGE = "semi_pjt_2.storages.MediaStorage"
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
@@ -163,7 +162,6 @@ else:
         AWS_STORAGE_BUCKET_NAME,
         AWS_REGION,
     )
-    STATIC_ROOT = BASE_DIR / "static"
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -174,6 +172,8 @@ else:
             "PORT": "5432",
         }
     }
+
+
 AUTH_USER_MODEL = "accounts.User"
 
 from django.contrib import messages
@@ -186,10 +186,22 @@ MESSAGE_TAGS = {
     messages.ERROR: "alert-danger",
 }
 
+
 """
 기존 DATABASES 코드 아래에 아래 세 줄을 추가합니다.
 """
+
 import dj_database_url
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES["default"].update(db_from_env)
+
+ASGI_APPLICATION = "semi_pjt_2.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
