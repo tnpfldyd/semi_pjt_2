@@ -407,9 +407,18 @@ def groupcard_delete(request, pk):
 
 def group_detail(request, pk):
     groupcards = Groupcard.objects.get(pk=pk)
+    comments = groupcards.groupcomment_set.all()
+    if comments:
+        if comments.count() % 40 == 0:
+            cl = list(range(1, ((comments.count() // 40) + 1)))
+        else:
+            cl = list(range(1, ((comments.count() // 40) + 2)))
+    else:
+        cl = 1
     context = {
         "cards": groupcards,
-        "comments": groupcards.groupcomment_set.all(),
+        "comments": comments,
+        "cl": cl,
     }
 
     return render(request, "cards/group_detail.html", context)
@@ -456,27 +465,6 @@ def gcomment_create2(request, pk):
                 temp += dic[i]
             comment.id_text = temp
             comment.save()
-            url = "https://kauth.kakao.com/oauth/token"
-            data = {
-                "grant_type": "refresh_token",
-                "client_id": os.getenv("KAKAO_ID"),
-                "refresh_token": comment.groupcard.user.refresh_token,
-                "client_secret": os.getenv("KAKAO_SECRET"),
-            }
-            response = requests.post(url, data=data).json()
-            url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-            access_token = response["access_token"]
-            headers = {"Authorization": "Bearer " + access_token}
-            data = {
-                "template_object": json.dumps(
-                    {
-                        "object_type": "text",
-                        "text": request.user.nickname + "님이 벽난로에 글을 남겨주셨어요.",
-                        "link": {"web_url": "http://localhost:8000/cards/" + str(pk)},
-                    }
-                )
-            }
-            response = requests.post(url, headers=headers, data=data)
             return redirect("cards:group_detail", comment.groupcard.pk)
     else:
         comment_form = GroupCommentForm(instance=comment)
