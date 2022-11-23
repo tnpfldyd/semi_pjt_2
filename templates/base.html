@@ -104,7 +104,6 @@
           {% if request.user.tree_notice or request.user.note_notice %}
             {% if request.user.notice_tree and request.user.notice_note %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <!-- <i class="bi bi-bell fw-bold text-danger "></i> -->
               <img src="{% static "images/종.png" %}" alt="" style="width: 20px; height:20px;">
             </a>
             <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
@@ -112,21 +111,20 @@
             </ul>
             {% else %}
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
-              <!-- <i class="bi bi-bell-fill fw-bold text-danger"></i> -->
               <img class="bell" src="{% static "images/종2.png" %}" alt="" style="width: 20px; height:20px;">
             </a>
             {% csrf_token %}
             <ul class="dropdown-menu p-0" id="dropul" style="background: rgba(0, 0, 0, 0.0); border: none;">
             </ul>
             {% endif %}
-          {% else %}
+        {% else %}
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             🔕
           </a>
           <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
             <li class="p-3 dropdown-item">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
           </ul>
-          {% endif %}
+        {% endif %}
         </li>
         {% else %}
         <li class="nav-list btn2" style="height: 80px;">
