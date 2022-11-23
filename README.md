@@ -354,7 +354,7 @@
 
 
   ```html
-  <!-- 가독성을 위해 중간 코드 중략 -->
+  <!-- 가독성을 위해 html 생략 -->
   <tr id="{{note.pk}}">
     <!-- 모든 삭제 버튼에 이벤트가 들어가야하므로 onclick 사용 -->
     <i xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" data-note-id="{{note.pk}}" value="{{note.pk}}" onclick="remove(event)"></i>
