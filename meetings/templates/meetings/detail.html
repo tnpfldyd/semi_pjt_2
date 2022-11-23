@@ -86,21 +86,6 @@
         </div>
       </div>
     </div>
-    <div class="col-12 col-lg-5 my-5" style='width:650px'>
-      {% if meeting.password %}
-        {% if meeting.user.username == '' %}
-        <iframe id="inlineFrameExample" title="Inline Frame Example" width="100%" height="790" src="{% url 'chat:room' meeting.pk|add:meeting.password|mul:meeting.user.username|mul:meeting.password|mul:meeting.password %}" style='border-radius:50px;border:10px solid #0d99d2;overflow-y:hidden' scrolling='no'></iframe>
-        {% else %}
-        <iframe id="inlineFrameExample" title="Inline Frame Example" width="100%" height="790" src="{% url 'chat:room' meeting.pk|add:meeting.password|mul:meeting.password|mul:meeting.password %}" style='border-radius:50px;border:10px solid #0d99d2;overflow-y:hidden' scrolling='no'></iframe>
-        {% endif %}
-      {% else %}
-        {% if meeting.user.username == '' %}
-        <iframe id="inlineFrameExample" title="Inline Frame Example" width="100%" height="790" src="{% url 'chat:room' meeting.pk|mul:meeting.user.username|add:meeting.user.username|sub:meeting.user.username|mul:meeting.user.username %}" style='border-radius:50px;border:10px solid #0d99d2;overflow-y:hidden'  scrolling='no'></iframe>
-        {% else %}
-        <iframe id="inlineFrameExample" title="Inline Frame Example" width="100%" height="790" src="{% url 'chat:room' meeting.pk|mul:meeting.pk|add:meeting.pk|sub:meeting.pk|mul:meeting.pk %}" style='border-radius:50px;border:10px solid #0d99d2;overflow-y:hidden'  scrolling='no'></iframe>
-        {% endif %}
-      {% endif %}
-    </div>
   </div>
 </body>
   {% comment %} js {% endcomment %}

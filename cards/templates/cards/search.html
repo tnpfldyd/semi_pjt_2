@@ -154,8 +154,8 @@
               <div class="card__overlay">
                 <div class="card__header">
                   <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
-                  {% if user.profileimage %}
-                    <img class="card__thumb" src="{{ user.profileimage }}"  />
+                  {% if cards.user.profileimage %}
+                    <img class="card__thumb" src="{{ cards.user.profileimage }}"  />
                   {% else %}
                     <img class="card__thumb" src="{% static 'images/게스트.png' %}"  />
                   {% endif %}                     

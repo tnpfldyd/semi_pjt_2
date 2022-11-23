@@ -272,7 +272,7 @@
         {% if cards.user == request.user %}
         <div class='d-flex justify-content-end'>
           <a href="{% url 'cards:groupcard_update' request.user.pk %}" class="btn btn-success mt-5 me-3"> 벽난로 바꾸기 </a>
-          <a href="{% url 'cards:groupcard_delete'%}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
+          <a href="{% url 'cards:groupcard_delete' cards.pk %}" class="btn btn-danger mt-5"> 벽난로 없애기 </a>
         </div>
         {% else %}
         <div class='d-flex justify-content-end mt-4'>

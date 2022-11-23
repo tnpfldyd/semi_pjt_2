@@ -6,10 +6,7 @@ from django.http import JsonResponse
 
 
 def index(request):
-    if request.GET.get("keyword"):
-        keyword = request.GET.get("keyword")
-    else:
-        keyword = "크리스마스 트리"
+    keyword = "크리스마스 트리"
     client_id = os.getenv("NAVER_ID")
     client_secret = os.getenv("NAVER_SECRET")
     encText = urllib.parse.quote(keyword)

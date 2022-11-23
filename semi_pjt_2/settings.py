@@ -131,7 +131,6 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATIC_ROOT = "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -162,6 +161,7 @@ else:
         AWS_STORAGE_BUCKET_NAME,
         AWS_REGION,
     )
+    STATIC_ROOT = BASE_DIR / "static"
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
