@@ -186,7 +186,7 @@
   2. JavaScript 설정
 
   ```javascript
-  // 1. dropdown change 이벤트 발생시 실행
+  // 1. id값 select change 이벤트 발생시 실행
   const select = document.querySelector('#select')
     select.addEventListener('change', function(event) {
       const target = event.target.value
