@@ -44,28 +44,28 @@
                 </td> <!---삭제 -->
               </tr>
             {% else %}
-              <tr id="{{note.pk}}">
-                <td>
-                  {% if note.from_user.nickname %}
-                  {{note.from_user.nickname}}
-                  {% else %}
-                  {{note.from_user.username}}
-                  {% endif %}
-                </td> <!---보낸이 -->
-                <td><a class="custom-link" style="text-decoration:none; color:black;" href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a></td> <!---제목 -->
-                <td class="tc">{{ note.created_at|date:'o.m.d' }} {{ note.created_at|time:"H:i" }}</td> <!---보낸시간 -->
-                {% if note.read == 1 %}
-                <td>읽음</td> <!---읽음 -->
+            <tr id="{{note.pk}}">
+              <td>
+                {% if note.from_user.nickname %}
+                {{note.from_user.nickname}}
                 {% else %}
-                <td>안읽음</td> <!---읽음 -->
+                {{note.from_user.username}}
                 {% endif %}
-                <td class="tc">
-                    {% csrf_token %}
-                    <button id="custom-btn" style="background-color:transparent;">
-                      <i xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" data-note-id="{{note.pk}}" value="{{note.pk}}" onclick="remove(event)"></i>
-                    </button>
-                </td> <!---삭제 -->
-              </tr>
+              </td> <!---보낸이 -->
+              <td><a class="custom-link" style="text-decoration:none; color:black;" href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a></td> <!---제목 -->
+              <td class="tc">{{ note.created_at|date:'o.m.d' }} {{ note.created_at|time:"H:i" }}</td> <!---보낸시간 -->
+              {% if note.read == 1 %}
+              <td>읽음</td> <!---읽음 -->
+              {% else %}
+              <td>안읽음</td> <!---읽음 -->
+              {% endif %}
+              <td class="tc">
+                  {% csrf_token %}
+                  <button id="custom-btn" style="background-color:transparent;">
+                    <i xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" data-note-id="{{note.pk}}" value="{{note.pk}}" onclick="remove(event)"></i>
+                  </button>
+              </td> <!---삭제 -->
+            </tr>
             {% endif %}
           {% endfor %}
           </tbody>

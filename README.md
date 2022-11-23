@@ -50,11 +50,15 @@
 
 ## 기능 소개
 
+
+
 - shoppings app
 
   - 화면 예시
 
   ![Animation2](README.assets/Animation2.webp)
+
+  
 
   - urls.py
 
@@ -253,11 +257,15 @@
 
   3. 사용자가 html 에서 검색 및 정렬 선택 > JavaScript 는 이벤트 발생시 axios로 django 에게 검색어, 정렬 방식 전송 > django 는 검색, 정렬 방식을 네이버 쇼핑 API 에게 전송 및 데이터 수신 후 JavaScript 에게 전송 > JavaScript 는 받은 데이터를 보여줄 div의 기존 내용 삭제 후 받은 데이터 출력 > 사용자 화면
 
+  
+
 - notes app
 
   - 화면 예시
 
   ![Animation3](README.assets/Animation3.webp)
+
+  
 
   - urls.py
 
@@ -275,6 +283,8 @@
   ]
   
   ```
+
+  
 
   - views.py
 
@@ -352,12 +362,29 @@
   - 삭제 작동 방식
     - 삭제 버튼 클릭시 사용자에게 쪽지를 삭제할지 confirm 창 출력 > 사용자가 확인을 누를 시 axios 로 삭제 할 쪽지의 pk 값과 csrf 토큰 전송 > django는 POST 와 삭제 본인이 쪽지를 받은 당사자인지 확인 후 삭제 및 javascrtipt 쪽으로 지워야 할 div의 id 값 전송 > javascript는 div 삭제
 
-
   ```html
-  <!-- 가독성을 위해 중간 코드 중략 -->
   <tr id="{{note.pk}}">
-    <!-- 모든 삭제 버튼에 이벤트가 들어가야하므로 onclick 사용 -->
-    <i xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" data-note-id="{{note.pk}}" value="{{note.pk}}" onclick="remove(event)"></i>
+    <td>
+      {% if note.from_user.nickname %}
+      {{note.from_user.nickname}}
+      {% else %}
+      {{note.from_user.username}}
+      {% endif %}
+    </td> <!---보낸이 -->
+    <td><a class="custom-link" style="text-decoration:none; color:black;" href="{% url 'notes:detail' note.pk %}">{{ note.title }}</a></td> <!---제목 -->
+    <td class="tc">{{ note.created_at|date:'o.m.d' }} {{ note.created_at|time:"H:i" }}</td> <!---보낸시간 -->
+    {% if note.read == 1 %}
+    <td>읽음</td> <!---읽음 -->
+    {% else %}
+    <td>안읽음</td> <!---읽음 -->
+    {% endif %}
+    <td class="tc">
+        {% csrf_token %}
+        <button id="custom-btn" style="background-color:transparent;">
+            <!-- 모든 삭제 버튼에 이벤트 추가를 위해 onclick 사용 -->
+          <i xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" data-note-id="{{note.pk}}" value="{{note.pk}}" onclick="remove(event)"></i>
+        </button>
+    </td> <!---삭제 -->
   </tr>
   <script>
     function remove(event) {
@@ -384,13 +411,20 @@
 
   
 
+  
+
 - vocies app
+  
+  
+  
   - 화면 예시
-
+  
   ![Animation2](README.assets/Animation2-16691723256094.webp)
-
+  
+  
+  
   - urls.py
-
+  
   ```python
   from django.urls import path
   from . import views
@@ -408,9 +442,11 @@
       path("<int:pk>/<int:super_pk>/delete_comment/", views.delete_comment, name="delete_comment"), #답변 삭제
   ]
   ```
-
+  
+  
+  
   - views.py
-
+  
   ```python
   from django.shortcuts import render, redirect, get_object_or_404
   from django.contrib.auth.decorators import login_required, permission_required
@@ -497,8 +533,10 @@
       return render(request, "vocies/manage_page.html", {"vocies": Vocie.objects.order_by("-pk")})
   
   ```
-
-- 카카오톡 회원가입, 로그인, 탈퇴
+  
+  
+  
+- 카카오톡 회원가입, 로그인, 탈퇴 views.py
 
   ```python
   def kakao_request(request):
@@ -580,10 +618,341 @@
       return redirect("accounts:index")
   ```
 
+
+
+
+- follow, block
+
   
+
+  - 화면 예시
+
+  ![follow](README.assets/follow.webp)
+
+  ![follow2](README.assets/follow2.webp)
+
+  
+
+  - views.py
+
+  ```python
+  @login_required
+  def follow(request, pk):
+      person = get_object_or_404(get_user_model(), pk=pk)
+      if person != request.user and request.method == "POST":
+          if person.followers.filter(pk=request.user.pk).exists():
+              person.followers.remove(request.user)
+              is_follow = False
+          else:
+              person.followers.add(request.user)
+              is_follow = True
+          context = {
+              "isFollow": is_follow,
+              "followersCount": person.followers.all().count(),
+              "followingsCount": person.followings.all().count(),
+          }
+          return JsonResponse(context)
+      else:
+          messages.warning(request, "그건 안됨.")
+          return redirect("meetings:index")
+      
+  @login_required
+  def block(request, pk):
+      person = get_object_or_404(get_user_model(), pk=pk)
+      if person != request.user and request.method == "POST":
+          if person.blockers.filter(pk=request.user.pk).exists():
+              person.blockers.remove(request.user)
+              is_follow = False
+              messages.success(request, "차단이 해제되었습니다.")
+          else:
+              person.blockers.add(request.user)
+              is_follow = True
+              messages.success(request, "차단 되었습니다.")
+          context = {
+              "isFollow": is_follow,
+          }
+          return JsonResponse(context)
+      else:
+          messages.warning(request, "그건 안됨.")
+          return redirect("meetings:index")
+  
+  ```
+
+  
+
+  - JavaScript
+
+  ```javascript
+    // onclick 함수 사용
+    function follow(event) {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+      axios({
+        method: 'post',
+        url: `/accounts/${event.target.dataset.userId}/follow/`,
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'note_pk': event.target.dataset.userId},
+      })
+      .then(response => {
+        if (response.data.isFollow === true) {
+          const e = event.target
+          const span = document.createElement('span')
+          e.innerText = '취소'
+          span.innerText = '💔'
+          span.className = 'fs-4'
+          e.appendChild(span)
+        }
+        else {
+          const e = event.target
+          const span = document.createElement('span')
+          e.innerText = '팔로우'
+          span.innerText = '❤️'
+          span.className = 'fs-4'
+          e.appendChild(span)
+        }
+      })
+    }
+    function block(event) {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+      axios({
+        method: 'post',
+        url: `/accounts/${event.target.dataset.userId}/block/`,
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'note_pk': event.target.dataset.userId},
+      })
+      .then(response => {
+        if (response.data.isFollow === true) {
+          const e = event.target
+          const span = document.createElement('span')
+          e.innerText = '취소'
+          span.innerText = '⭕'
+          span.className = 'fs-4'
+          e.appendChild(span)
+        }
+        else {
+          const e = event.target
+          const span = document.createElement('span')
+          e.innerText = '차단'
+          span.innerText = '❌'
+          span.className = 'fs-4'
+          e.appendChild(span)
+        }
+      })
+    }
+  ```
+
+  
+
+- 벽난로(쪽지), 알림 기능
+
+
+  - 화면 예시
+  - 작동 방식
+    1. 모델 설정 (사용자가 on/off 가 가능하도록)
+    2. 쪽지나 벽난로(댓글)이 달렸을 경우 받는 사람의 알림에 표시
+    3. 사용자가 알림을 둘 중의 하나라도 켜뒀을 때, 알림을 모두 꺼두었을 때 템플릿에서 어떻게 보일지 조절
+    4. 사용자가 알림을 알림을 켜 두었을 때 새로운 알림이 있으면 종의 모양을 바꿔주고 사용자가 클릭하는 순간 JavaScript 실행
+    5. axios 가 django 에게 데이터를 달라고 요청
+    6. django는 [시간, 내용, 보낸사람, 어디서 온건지, 알림을 클릭하면 보낼 곳의 데이터] 를 시간순으로 정렬하여 전송 
+    7. Javascript는 받은 데이터를 벽난로와 쪽지로 구분하여 알림 div에 출력
+
+  ![notice1](README.assets/notice1.webp)
+
+  ![notice2](README.assets/notice2.webp)
+
+
+  - models.py
+
+  ```python
+  # 기능 소개에 불필요한 내용은 삭제했습니다.
+  class User(AbstractUser):
+      tree_notice = models.BooleanField(default=True) # 벽난로 알림 on/off 사용자 선택의 영역
+      note_notice = models.BooleanField(default=True) # 쪽지 알림 on/off 사용자 선택의 영역
+      notice_tree = models.BooleanField(default=True) # False 시 새로운 내용이 있음
+      notice_note = models.BooleanField(default=True) # False 시 새로운 내용이 있음
+  # 벽난로(댓글)
+  class UserComment(models.Model):
+      read = models.BooleanField(default=False) # 읽음은 True, 안 읽음은 False로 처리
+  # 쪽지
+  class Notes(models.Model):
+      read = models.BooleanField(default=False) # 읽음은 True, 안 읽음은 False로 처리
+  ```
+
+  - views.py (쪽지 보내는 곳과, 벽난로(댓글) 다는 곳에 아래의 설정 추가)
+
+  ```python
+  @login_required
+  def send(request, pk):
+      # -------중략--------
+      if to_user.note_notice: # 만약 받는 사람의 알림이 켜져 있다면,
+          to_user.notice_note = False # 받는 사람의 새로운 내용이 있다는 것을 표시
+          to_user.save() # 저장
+  ```
+
+  - html 설정
+
+  ```html
+  <li class="nav-item dropdown d-flex align-items-center">
+    {% if request.user.tree_notice or request.user.note_notice %}
+      {% if request.user.notice_tree and request.user.notice_note %}
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{% static "images/종.png" %}" alt="" style="width: 20px; height:20px;">
+        </a>
+        <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
+          <li class="p-3 dropdown-item">새로운 알림이 <br> 없어요😊</li>
+        </ul>
+      {% else %}
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="apen(event)">
+          <img class="bell" src="{% static "images/종2.png" %}" alt="" style="width: 20px; height:20px;">
+        </a>
+        {% csrf_token %}
+        <ul class="dropdown-menu p-0" id="dropul" style="background: rgba(0, 0, 0, 0.0); border: none;">
+        </ul>
+      {% endif %}
+    {% else %}
+      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        🔕
+      </a>
+      <ul class="dropdown-menu p-0" style="background: rgba(0, 0, 0, 0.0); border: none;">
+        <li class="p-3 dropdown-item">알림을 켜두면 <br>새로운 알림을 <br> 받을 수 있어요😊</li>
+      </ul>
+    {% endif %}
+  </li>
+  ```
+
+  - JavaScript
+
+  ```javascript
+  function apen(event) {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    axios({
+      method: 'post',
+      url: '/accounts/notice/',
+      headers: {'X-CSRFToken': csrftoken},
+    })
+    .then(response => {
+      const items = response.data.items
+      const dropul= document.querySelector("#dropul")
+      removeAllchild(dropul)
+      function removeAllchild(div) {
+        while (div.hasChildNodes()) {
+          div.removeChild(div.firstChild);
+        }
+      };
+      if (items.length > 0) {
+        for (let i=0; i<items.length; i++) {
+          let time = moment(items[i][0]).add(9, 'hours').format('YYYY년 MM월 D일, a h:mm:ss');
+          if (items[i][1][2] === 'card') {
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            a.classList='dropdown-item mt-3'
+            a.href = `{% url 'cards:usercard_detail' 1 %}`
+            a.href = a.href.replace('1', items[i][1][3])
+            const p = document.createElement('p')
+            const h6 = document.createElement('h6')
+            h6.innerText = time
+            p.innerText = `${items[i][1][1]} 님이 벽난로 ${items[i][1][0]} 을 남겼어요.`
+            p.className = 'mb-0'
+            a.appendChild(h6)
+            a.appendChild(p)
+            li.appendChild(a)
+            dropul.appendChild(li)
+          }
+          else {
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            a.classList='dropdown-item mt-3'
+            a.href = `{% url 'notes:detail' 1 %}`
+            a.href = a.href.replace('1', items[i][1][3])
+            const p = document.createElement('p')
+            const h6 = document.createElement('h6')
+            h6.innerText = time
+            p.innerText = `${items[i][1][1]} 님이 ${items[i][1][0]} 쪽지를 보냈어요.`
+            p.className = 'mb-0'
+            a.appendChild(h6)
+            a.appendChild(p)
+            li.appendChild(a)
+            dropul.appendChild(li)
+          }
+        }
+      }
+      else {
+        const li = document.createElement('li')
+        li.classList = 'p-3 dropdown-item'
+        li.innerText = '알림이 없어요😊'
+        dropul.appendChild(li)
+      }
+    })
+  }
+  ```
+
+  - 데이터 가져오는 views.py
+
+  ```python
+  @login_required
+  def notice(request):
+      if request.method == "POST":
+          dic = {}
+          if request.user.tree_notice:
+              if UserCard.objects.filter(user=request.user).exists():
+                  card = request.user.usercard
+                  false_comments = card.usercomment_set.filter(read=False)
+                  for i in false_comments:
+                      if i.created_at not in dic:
+                          dic[i.created_at.strftime("%Y-%m-%dT%H:%M:%S")] = (
+                              i.content,
+                              i.user.nickname,
+                              "card",
+                              card.pk,
+                          ) # [시간, 내용, 보낸사람, 어디서 온건지, 알림을 클릭하면 보낼 곳의 데이터 전송]
+                      else: #시간을 조절하는 행동을 하고싶어서 해본... 없어도 로직의 문제는 없음
+                          dic[
+                              (i.created_at + datetime.timedelta(minutes=1)).strftime(
+                                  "%Y-%m-%dT%H:%M:%S"
+                              )
+                          ] = (
+                              i.content,
+                              i.user.nickname,
+                              "card",
+                              card.pk,
+                          )
+          if request.user.note_notice:
+              if request.user.user_to.filter(read=False).exists():
+                  false_notes = request.user.user_to.filter(read=False)
+                  for i in false_notes:
+                      if i.created_at not in dic:
+                          dic[i.created_at.strftime("%Y-%m-%dT%H:%M:%S")] = (
+                              i.title,
+                              i.from_user.nickname,
+                              "note",
+                              i.pk,
+                          )
+                      else: # 마찬가지로 시간을 조절한 행동
+                          dic[
+                              (i.created_at + datetime.timedelta(minutes=1)).strftime(
+                                  "%Y-%m-%dT%H:%M:%S"
+                              )
+                          ] = (i.title, i.from_user.nickname, "note", i.pk)
+          dic = sorted(dic.items(), reverse=True) #시간 순으로 정렬
+          if not dic:
+              request.user.notice_tree = True
+              request.user.notice_note = True
+              request.user.save()
+          return JsonResponse({"items": dic})
+      else:
+          messages.error(request, "그렇게는 접근할 수 없어요.😥")
+          return redirect("meetings:index")
+  ```
 
 ## 새로써본 기능
 
 - API, SCSS
 
 ## 프로젝트 느낀 점
+
+- API 문서를 읽는 방법에 대해 계속 읽어보니 어느정도 API 사용법에 대해 알게됐고, SCSS 문법에 대해서도 배울 수 있어서 좋았습니다. 
+
+  기존에 axios를 쓴다 하면 팔로우, 댓글, 좋아요 정도만 사용했었는데 다양하게 사용해보니 너무 편하다라는 것을 느낄 수 있었고,
+
+  짧은 시간안에 인터넷 및 같은 팀원들의 코드를 보며 다른 사람들의 생각을 많이 배울 수 있었습니다.
+
+  많은 것을 구현하진 못했지만, 내가 원하는 기능을 내가 만들 수 있다는 것에 너무 좋았습니다.
