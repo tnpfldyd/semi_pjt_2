@@ -37,10 +37,12 @@
 
 - Python, Django, HTML, CSS, Bootstrap5, JavaScript
 
-## 맡은 기능 소개
+## 맡은 역할 및 기능 소개
 
-- 이용환
-
-## 프로젝트 역할
+- 이용환(BE, 팀장)
+  - notes app, vocies app, shoppings app
+  - 카카오톡 회원가입, 로그인, 로그아웃
+  - 팔로우, 차단
+  - 댓글, 쪽지 알림 기능
 
 ## 프로젝트 느낀 점
