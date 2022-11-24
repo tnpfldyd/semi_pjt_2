@@ -945,7 +945,7 @@
 
 ## 새로써본 기능
 
-- API, SCSS
+- API, SCSS, templatetags
 
 ## 프로젝트 느낀 점
 
